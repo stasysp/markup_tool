@@ -1,7 +1,12 @@
-#include "markup_backend/pipeline.h"
+#include <iostream>
+
+#include "markup_backend/markup.h"
 
 int main() {
-    run_pipeline();
+    // run_pipeline();
+
+    std::cout << "Hello World!" << std::endl;
+
     return 0;
 }
 
