@@ -33,8 +33,6 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 add_definitions(-DBOOST_TEST_DYN_LINK)
 add_executable(${PROJECT_UNIT_TESTS_NAME} ${UNIT_TESTS_SRC_FILES} ${SRC_FILES})  #  ${SRC_FILES}
 
-message(${PROJECT_UNIT_TESTS_NAME} ${Boost_LIBRARIES})
-
 target_link_libraries(${PROJECT_UNIT_TESTS_NAME} ${Boost_LIBRARIES} ${OpenCV_LIBS})
 
 enable_testing()

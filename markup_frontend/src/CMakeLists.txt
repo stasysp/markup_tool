@@ -1,0 +1,28 @@
+set(Qt5_CMAKE_DIR /usr/local/opt/qt/lib/cmake)
+
+set(Qt5Widgets_DIR ${Qt5_CMAKE_DIR}/Qt5Widgets)
+
+# include_directories(/usr/local/opt/qt/include)
+# set(Qt5Widgets_DIR /usr/local/opt/qt/lib/cmake/Qt5Widgets)
+
+find_package (Qt5Widgets REQUIRED)
+# find_package (Qt5Declarative)
+
+set(HEADERS_DIR ${CMAKE_SOURCE_DIR}/markup_frontend/include)
+include_directories(${HEADERS_DIR})
+
+include_directories(${Qt5Widgets_INCLUDE_DIRS})
+# include_directories(${Qt5Declarative_INCLUDE_DIRS})
+
+
+add_library(markup_frontend
+        framecontrol.cpp
+        framemarkup.cpp
+        frameview.cpp
+        maincontrolpanel.cpp
+        markupwidget.cpp
+        scaledbox.cpp
+        timelinecontrol.cpp
+        application.cpp)
+
+target_link_libraries(markup_frontend ${Qt5Widgets_LIBRARIES})
