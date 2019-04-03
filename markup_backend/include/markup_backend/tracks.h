@@ -2,7 +2,8 @@
 
 class TrackContainer {
 public:
-    TrackContainer() = delete;
+    // TrackContainer() = delete;
+    TrackContainer() = default;
     explicit TrackContainer(size_t video_length);
     // void add_track(Track);
     // get all detections at frame_index
@@ -13,6 +14,6 @@ public:
     // Delete tracks
     // Re-id tracks
 private:
-    size_t video_length_;
+    // std::vector<std::vector<>>
     // tracks
 };

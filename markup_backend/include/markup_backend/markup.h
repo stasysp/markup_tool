@@ -4,6 +4,7 @@
 
 #include "markup_backend/nn_model.h"
 #include "markup_backend/tracks.h"
+#include "markup_backend/video.h"
 
 struct PipelineRunParams {
     std::string detector_model_path;
@@ -19,7 +20,7 @@ public:
 
     }
 
-    TracksContainer run(const Video& video);
+    TrackContainer run(const Video& video);
 
 private:
     Detector detector_;
