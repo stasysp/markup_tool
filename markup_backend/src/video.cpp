@@ -1,4 +1,4 @@
-#include "opencv2/highgui.hpp"
+#include "opencv2/highgui/highgui.hpp"
 #include "boost/filesystem.hpp"
 
 #include "markup_backend/video.h"
