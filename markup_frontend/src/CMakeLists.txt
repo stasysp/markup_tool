@@ -8,14 +8,16 @@ set(Qt5Widgets_DIR ${Qt5_CMAKE_DIR}/Qt5Widgets)
 find_package (Qt5Widgets REQUIRED)
 # find_package (Qt5Declarative)
 
-set(HEADERS_DIR ${CMAKE_SOURCE_DIR}/markup_frontend/include)
-include_directories(${HEADERS_DIR})
+set(FRONTEND_HEADERS_DIR ${CMAKE_SOURCE_DIR}/markup_frontend/include)
+include_directories(${FRONTEND_HEADERS_DIR})
 
 include_directories(${Qt5Widgets_INCLUDE_DIRS})
 # include_directories(${Qt5Declarative_INCLUDE_DIRS})
 
+file(GLOB FRONTEND_HEADERS ${FRONTEND_HEADERS_DIR}/markup_frontend/*.h)
 
 add_library(markup_frontend
+        ${FRONTEND_HEADERS}
         framecontrol.cpp
         framemarkup.cpp
         frameview.cpp
@@ -23,6 +25,7 @@ add_library(markup_frontend
         markupwidget.cpp
         scaledbox.cpp
         timelinecontrol.cpp
-        application.cpp)
+        application.cpp
+        )
 
 target_link_libraries(markup_frontend ${Qt5Widgets_LIBRARIES})

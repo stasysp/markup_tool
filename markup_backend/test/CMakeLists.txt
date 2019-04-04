@@ -3,7 +3,7 @@
 # Project settings
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ".")
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -stdlib=libc++")
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -stdlib=libc++")
 
 # Dependencies
 find_package(Boost COMPONENTS filesystem system unit_test_framework REQUIRED)

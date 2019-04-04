@@ -6,7 +6,7 @@
 
 class MainControlPanel : public QWidget
 {
-    Q_OBJECT
+    // Q_OBJECT
 public:
     explicit MainControlPanel(QWidget *parent = nullptr);
 

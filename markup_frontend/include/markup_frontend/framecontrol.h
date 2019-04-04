@@ -8,7 +8,9 @@
 
 class FrameControl : public QWidget
 {
-    Q_OBJECT
+
+    // https://stackoverflow.com/questions/1095298/gcc-c-linker-errors-undefined-reference-to-vtable-for-xxx-undefined-refere
+    // Q_OBJECT
 public:
     explicit FrameControl(QWidget *parent = nullptr);
 
