@@ -5,6 +5,11 @@ set(Qt5Widgets_DIR ${Qt5_CMAKE_DIR}/Qt5Widgets)
 # include_directories(/usr/local/opt/qt/include)
 # set(Qt5Widgets_DIR /usr/local/opt/qt/lib/cmake/Qt5Widgets)
 
+# Backend vvvvvvvvv
+find_package(OpenCV REQUIRED)
+include_directories(${OpenCV_INCLUDE_DIRS})
+# ^^^^^^^^^^^^^^^^^
+
 find_package (Qt5Widgets REQUIRED)
 # find_package (Qt5Declarative)
 

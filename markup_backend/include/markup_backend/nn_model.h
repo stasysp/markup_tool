@@ -5,6 +5,7 @@
 
 #include <opencv2/core/core.hpp>
 
+#include "markup_backend/definitions.h"
 
 
 class NNModel {
@@ -16,12 +17,6 @@ private:
     // model
 };
 
-struct Detection {
-    size_t frame;
-    int id = -1;
-    cv::Rect bbox;
-    float confidence;
-};
 
 class Detector : public NNModel {
 public:
