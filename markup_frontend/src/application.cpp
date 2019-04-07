@@ -13,7 +13,7 @@ int run_application(int argc, char *argv[]) {
 
     // test backend vvvvvvvvvvvvv
     {
-        DummyTrackContainer track_container = make_dummy_track();
+        TrackContainer track_container = make_dummy_track();
     }
     // ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

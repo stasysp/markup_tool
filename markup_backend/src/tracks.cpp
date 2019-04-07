@@ -1,6 +1,6 @@
 #include "markup_backend/tracks.h"
 
-DummyTrackContainer make_dummy_track() {
-    return DummyTrackContainer();
+TrackContainer make_dummy_track() {
+    return TrackContainer(5);
 }
 

@@ -11,7 +11,7 @@ TrackContainer MarkUp::run(const Video& video) {
     }
 
     TrackContainer tracks = assign_tracks(video_detections, id_model_);*/
-    TrackContainer tracks;
+    TrackContainer tracks(5);
     return tracks;
 }
 

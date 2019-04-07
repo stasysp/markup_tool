@@ -5,6 +5,7 @@
 #include <string>
 
 #include "markup_backend/definitions.h"
+#include "markup_backend/tracks.h"
 
 
 // "Read from det.txt from MOT16 data
@@ -53,27 +54,35 @@ std::vector<std::vector<Detection>> read_mot16_detections(const std::string& det
     return read_detections;
 };
 
-// "Read from det.txt from MOT16 data
-std::vector<std::vector<Detection>> read_mot16_tracks(const std::string& tracks_filepath) {
+// Read from det.txt from MOT16 data
+std::unique_ptr<TrackContainer> read_dummy_trackcontainer(const std::string& tracks_filepath) {
     // https://stackoverflow.com/questions/7868936/read-file-line-by-line-using-ifstream-in-c
+
     char comma;
+    size_t pedestrian = 1;
+    size_t min_det_frame = 0;
+    size_t max_det_frame = 5;
+
+    // TrackContainer aligned_tracks(max_det_frame);
+    std::unique_ptr<TrackContainer> read_tracks(new TrackContainer(max_det_frame));
 
     std::ifstream tracks_stream(tracks_filepath);
     if (!tracks_stream.is_open()) {
         std::cerr << "File not found:" << tracks_filepath;
-        return std::vector<std::vector<Detection>>();
+        return nullptr;
     }
-
-    std::vector<std::vector<Detection>> read_detections;
 
     std::string line;
     std::unique_ptr<Track> track = nullptr;
-    while (std::getline(det_file, line))
+    while (std::getline(tracks_stream, line))
     {
+        // if (line.empty()) break;
+
         std::istringstream iss(line);
         Detection det;
         size_t object_type;
-        if (!(det_file
+
+        if (!(iss
                 >> det.frame >> comma
                 >> det.id >> comma
                 >> det.bbox.x >> comma
@@ -83,27 +92,26 @@ std::vector<std::vector<Detection>> read_mot16_tracks(const std::string& tracks_
                 >> det.confidence >> comma
                 >> object_type)) { break; } // error
 
-        if ()
+        if (object_type != pedestrian) {
+            continue;
+        }
 
 
         det.frame -= 1;  // Frame indices starts from 1
 
         if (det.frame == 0) {
+            if (track != nullptr) {
+                read_tracks->add_track(*track);
+            }
             track = std::make_unique<Track>(det.id);
         }
 
-        // process pair (a,b)
-        if (det.frame == read_detections.size()) {
-            read_detections.emplace_back(std::vector<Detection>());
-        }
-
-        if (det.frame < read_detections.size()) {
-            read_detections[det.frame].push_back(det);
+        if (det.frame < max_det_frame) {
+            track->push_back(det);
         } else {
-            std::cerr << "File corrupted:" << det_filepath;
-            return std::vector<std::vector<Detection>>();
+            continue;
         }
     }
 
-    return read_detections;
+    return read_tracks;
 };
