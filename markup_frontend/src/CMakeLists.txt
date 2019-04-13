@@ -23,6 +23,10 @@ include_directories(${Qt5Widgets_INCLUDE_DIRS})
 
 file(GLOB FRONTEND_HEADERS ${FRONTEND_HEADERS_DIR}/markup_frontend/*.h)
 
+set(BACKEND_HEADERS_DIR ${CMAKE_SOURCE_DIR}/markup_backend/include)
+include_directories(${BACKEND_HEADERS_DIR})
+# link_directories(${CMAKE_SOURCE_DIR}/markup_backend/src)
+
 add_library(markup_frontend
         ${FRONTEND_HEADERS}
         framecontrol.cpp
@@ -36,4 +40,5 @@ add_library(markup_frontend
         application.cpp
         )
 
-target_link_libraries(markup_frontend ${Qt5Widgets_LIBRARIES})
+
+target_link_libraries(markup_frontend markup_backend ${Qt5Widgets_LIBRARIES})

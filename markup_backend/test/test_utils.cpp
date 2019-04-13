@@ -14,6 +14,7 @@ BOOST_AUTO_TEST_SUITE(utils_suit)
 
 BOOST_AUTO_TEST_CASE(read_det_from_file)
         {
+
                 std::string det_filepath = "../../../markup_tool/data/test/MOT16-04/gt/gt.txt";
 
                 std::unique_ptr<TrackContainer> detected_tracks;
@@ -24,7 +25,8 @@ BOOST_AUTO_TEST_CASE(read_det_from_file)
 
                 BOOST_CHECK(!detected_tracks->empty());
 
-                BOOST_CHECK_EQUAL(detected_tracks->get_track(10000000), nullptr);
+                // BOOST_CHECK_EQUAL(detected_tracks->get_track(10000000), nullptr);
+                BOOST_CHECK(detected_tracks->get_track(10000000) == nullptr);
 
                 std::unique_ptr<Track> track;
                 size_t test_track_index = 1;
@@ -45,6 +47,7 @@ BOOST_AUTO_TEST_CASE(read_det_from_file)
                 for (const auto& detection : frame_detections) {
                         BOOST_CHECK_EQUAL(detection.frame, frame_index);
                 }
+
         }
 
 BOOST_AUTO_TEST_SUITE_END()

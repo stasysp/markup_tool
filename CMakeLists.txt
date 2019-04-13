@@ -11,8 +11,10 @@ set(CMAKE_CXX_STANDARD 14)
 include_directories(${CMAKE_SOURCE_DIR}/markup_backend/include/)
 include_directories(${CMAKE_SOURCE_DIR}/markup_frontend/include/)
 
-add_subdirectory(markup_frontend)
 add_subdirectory(markup_backend)
+add_subdirectory(markup_frontend)
+
+add_dependencies(markup_frontend markup_backend)
 
 add_executable(main main.cpp)
 target_link_libraries(main markup_backend markup_frontend)
