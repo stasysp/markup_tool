@@ -1,3 +1,5 @@
+set(CMAKE_AUTOMOC ON)
+
 set(Qt5_CMAKE_DIR /usr/local/opt/qt/lib/cmake)
 
 set(Qt5Widgets_DIR ${Qt5_CMAKE_DIR}/Qt5Widgets)

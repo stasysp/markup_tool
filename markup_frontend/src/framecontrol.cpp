@@ -6,6 +6,7 @@
 FrameControl::FrameControl(QWidget *parent) : QWidget(parent)
 {
     QVBoxLayout *vlayout = new QVBoxLayout(this);
+
     btn1 = new QPushButton("Add new bounding box");
     btn2 = new QPushButton("Select bounding box");
     btn3 = new QPushButton("Delete bounding box");
@@ -25,3 +26,8 @@ FrameControl::FrameControl(QWidget *parent) : QWidget(parent)
     vlayout->addWidget(btn7);
     vlayout->addWidget(timeline);
 }
+
+void FrameControl::slot_set_nframes(int nframes) {
+    timeline->setNumberOfFrames(nframes);
+}
+

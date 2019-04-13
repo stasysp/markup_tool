@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QPushButton>
+#include <QDir>
 
 #include "maincontrolpanel.h"
 #include "frameview.h"
@@ -10,13 +11,17 @@
 
 class MarkupWidget : public QWidget
 {
-    // Q_OBJECT
+    Q_OBJECT
 
 public:
     MarkupWidget(QWidget *parent = nullptr);
 
+    signals:
+            void send_nframes(int nframes);
+    void send_reset();
+
 private slots:
-    // void load_file();
+            void slot_set_path(QDir dir);
 
 private:
     MainControlPanel *maincontrol = nullptr;
@@ -24,6 +29,9 @@ private:
     FrameView *frameviewdown = nullptr;
     FrameControl *framecontrolup = nullptr;
     FrameControl *framecontroldown = nullptr;
+
+    // добавить проверку существования???
+    QDir imagiesdir;
 };
 
 #endif // WIDGET_H

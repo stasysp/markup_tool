@@ -14,7 +14,5 @@ include_directories(${CMAKE_SOURCE_DIR}/markup_frontend/include/)
 add_subdirectory(markup_frontend)
 add_subdirectory(markup_backend)
 
-message("FAILED:" markup_frontend)
-
 add_executable(main main.cpp)
 target_link_libraries(main markup_backend markup_frontend)

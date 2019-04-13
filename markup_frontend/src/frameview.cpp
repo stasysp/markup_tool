@@ -7,7 +7,7 @@
 #include "markup_frontend/scaledbox.h"
 
 FrameView::FrameView(QWidget *parent) :
-    QGraphicsView (parent)
+        QGraphicsView (parent)
 {
     markup.add(5, ScaledBBox{0.1, 0.2, 0.5, 0.7});
     markup.add(13, ScaledBBox{0.8, 0.9, 0.2, 0.6});
@@ -43,4 +43,8 @@ void FrameView::paintEvent(QPaintEvent *event) {
         this->fitInView(scene->itemsBoundingRect(),Qt::KeepAspectRatio);
     }
     QGraphicsView::paintEvent(event);
+}
+
+void FrameView::loadimagebypath(QString path) {
+    image = QPixmap(path);
 }

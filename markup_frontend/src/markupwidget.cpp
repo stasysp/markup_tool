@@ -5,9 +5,10 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QFileDialog>
+#include <QDebug>
 
 MarkupWidget::MarkupWidget(QWidget *parent)
-    : QWidget(parent)
+        : QWidget(parent)
 {
     maincontrol = new MainControlPanel(this);
     frameviewup = new FrameView(this);
@@ -28,13 +29,25 @@ MarkupWidget::MarkupWidget(QWidget *parent)
     fcontlayout->addWidget(framecontrolup);
     fcontlayout->addWidget(framecontroldown);
 
-    // connect(loadimage, &QPushButton::clicked, this, &MarkupWidget::load_file);
+    connect(maincontrol, &MainControlPanel::send_path, this, &MarkupWidget::slot_set_path);
+    connect(this, &MarkupWidget::send_nframes, framecontrolup, &FrameControl::slot_set_nframes);
+    connect(this, &MarkupWidget::send_nframes, framecontroldown, &FrameControl::slot_set_nframes);
 }
 
-/*void MarkupWidget::load_file() {
-    auto path = QFileDialog::getOpenFileName(this, "Open Dialog", "",
-                                             "*.png *.jpg *.bmp *.JPG");
-    if (path.isEmpty()) return;
-    QPixmap image(path);
-    frameviewup->setScaledPixmap(image);
-}*/
+void MarkupWidget::slot_set_path(QDir dir) {
+    if (imagiesdir != dir) {
+        qDebug() << "dir set as : " << imagiesdir;
+        imagiesdir = dir;
+
+        emit send_reset();
+    }
+
+    imagiesdir.setFilter(QDir::Files | QDir::Hidden | QDir::NoSymLinks);   //устанавливаем фильтр выводимых файлов/папок (см ниже)
+    // dir.setSorting(QDir::Size | QDir::Reversed);   //устанавливаем сортировку "от меньшего к большему"
+    QFileInfoList list = imagiesdir.entryInfoList();     //получаем список файлов директории
+    emit send_nframes(list.size());
+    // for (int i = 0; i < list.size(); ++i) {
+    //     QFileInfo fileInfo = list.at(i);
+    //     qDebug() << fileInfo.fileName();
+    // }
+}

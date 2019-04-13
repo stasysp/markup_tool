@@ -16,6 +16,9 @@ public:
 
     void setScaledPixmap(const QPixmap &pixmap);
 
+private:
+    void loadimagebypath(QString path);
+
 protected:
     void keyPressEvent(QKeyEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
