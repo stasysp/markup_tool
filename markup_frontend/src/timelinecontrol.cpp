@@ -4,6 +4,7 @@
 #include <QStyle>
 
 #include "markup_frontend/timelinecontrol.h"
+#include "markup_frontend/framecontrol.h"
 
 TimeLineControl::TimeLineControl(QWidget *parent) : QWidget(parent)
 {
@@ -20,9 +21,8 @@ TimeLineControl::TimeLineControl(QWidget *parent) : QWidget(parent)
 
     currentframenumber = new QLCDNumber(this);
     currentframenumber->setDigitCount(6);
-    currentframenumber->display(0);
 
-    setNumberOfFrames(1);
+    setTimelineProperties(0, 100);
 
     QVBoxLayout *vlayout = new QVBoxLayout(this);
 
@@ -41,34 +41,19 @@ TimeLineControl::TimeLineControl(QWidget *parent) : QWidget(parent)
     connect(oneframeforward, &QAbstractButton::clicked, this, &TimeLineControl::slot_oneframeforward);
     connect(onesecondforward, &QAbstractButton::clicked, this, &TimeLineControl::slot_onesecondforward);
 
-    connect(this, &TimeLineControl::send_framechanged, this, &TimeLineControl::slot_setsliderposition);
-    connect(slider, &QSlider::valueChanged, this, &TimeLineControl::slot_setlcdvalue);
+    connect(slider, &QSlider::valueChanged, this, &TimeLineControl::slot_sliderchanged);
 }
 
-void TimeLineControl::trymoveframe(int nframes) {
-    int tryframe = currentframenumber->value() + nframes;
-    if (tryframe < 0) tryframe = 0;
-    if (tryframe >= numberofframes) tryframe = numberofframes - 1;
-    currentframenumber->display(tryframe);
+void TimeLineControl::slot_onesecondback() { emit send_frameidx(slider->value()-framespersecond); }
+void TimeLineControl::slot_oneframeback() { emit send_frameidx(slider->value()-1); }
+void TimeLineControl::slot_oneframeforward() { emit send_frameidx(slider->value()+1); }
+void TimeLineControl::slot_onesecondforward() { emit send_frameidx(slider->value()+framespersecond); }
+void TimeLineControl::slot_sliderchanged(int frameidx) { emit send_frameidx(frameidx); }
 
-    emit send_framechanged();
+void TimeLineControl::setTimelineProperties(int frameidx, int nframes) {
+    slider->setMaximum(nframes-1);
+    slider->setValue(frameidx);
+    currentframenumber->display(frameidx);
 }
 
-void TimeLineControl::slot_onesecondback() { trymoveframe(-framespersecond); }
-void TimeLineControl::slot_oneframeback() { trymoveframe(-1); }
-void TimeLineControl::slot_oneframeforward() { trymoveframe(1); }
-void TimeLineControl::slot_onesecondforward() { trymoveframe(framespersecond); }
-
-void TimeLineControl::slot_setsliderposition() {
-    slider->setValue(currentframenumber->value());
-}
-
-void TimeLineControl::slot_setlcdvalue() {
-    currentframenumber->display(slider->value());
-}
-
-void TimeLineControl::setNumberOfFrames(int nframes) {
-    numberofframes = nframes;
-    slider->setMaximum(numberofframes-1);
-}
 

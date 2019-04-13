@@ -10,29 +10,23 @@ class TimeLineControl : public QWidget
 {
     Q_OBJECT
 public:
-    TimeLineControl(QWidget *parent = nullptr);
-
-    void setNumberOfFrames(int nframes);
-
-private:
-    void trymoveframe(int nframes);
+    explicit TimeLineControl(QWidget *parent = nullptr);
 
     signals:
-            void send_framenumber(int fnumber);
-    void send_framechanged();
+            // void send_addframeidx(int move);
+            void send_frameidx(int fnumber);
 
-public slots:
+private slots:
             void slot_onesecondback();
     void slot_oneframeback();
     void slot_oneframeforward();
     void slot_onesecondforward();
+    void slot_sliderchanged(int frameidx);
 
-private slots:
-            void slot_setsliderposition();
-    void slot_setlcdvalue();
+public slots:
+            void setTimelineProperties(int frameidx, int nframes);
 
 private:
-    size_t numberofframes = 5; // set on video load...
     size_t framespersecond = 50; // set on video load...
 
     QSlider *slider = nullptr;
@@ -42,5 +36,6 @@ private:
     QAbstractButton *oneframeforward = nullptr;
     QAbstractButton *onesecondforward = nullptr;
 };
+
 
 #endif // TIMELINECONTROL_H

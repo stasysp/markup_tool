@@ -2,12 +2,12 @@
 #define WIDGET_H
 
 #include <QWidget>
-#include <QPushButton>
+// #include <QPushButton>
 #include <QDir>
 
 #include "maincontrolpanel.h"
-#include "frameview.h"
-#include "framecontrol.h"
+#include "framewithcontrol.h"
+
 
 class MarkupWidget : public QWidget
 {
@@ -25,13 +25,17 @@ private slots:
 
 private:
     MainControlPanel *maincontrol = nullptr;
-    FrameView *frameviewup = nullptr;
-    FrameView *frameviewdown = nullptr;
-    FrameControl *framecontrolup = nullptr;
-    FrameControl *framecontroldown = nullptr;
+    // FrameView *frameviewup = nullptr;
+    // FrameView *frameviewdown = nullptr;
+    // FrameControl *framecontrolup = nullptr;
+    // FrameControl *framecontroldown = nullptr;
+
+    FrameWithControl *fwcup = nullptr;
+    FrameWithControl *fwcdn = nullptr;
 
     // добавить проверку существования???
     QDir imagiesdir;
 };
+
 
 #endif // WIDGET_H

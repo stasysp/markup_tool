@@ -1,5 +1,4 @@
 #include "markup_frontend/markupwidget.h"
-#include "markup_frontend/frameview.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -11,27 +10,21 @@ MarkupWidget::MarkupWidget(QWidget *parent)
         : QWidget(parent)
 {
     maincontrol = new MainControlPanel(this);
-    frameviewup = new FrameView(this);
-    frameviewdown = new FrameView(this);
-    framecontrolup = new FrameControl(this);
-    framecontroldown = new FrameControl(this);
+    fwcup = new FrameWithControl(this);
+    fwcdn = new FrameWithControl(this);
 
     QHBoxLayout *hlayout = new QHBoxLayout(this);
-    QVBoxLayout* framelayout = new QVBoxLayout;
-    QVBoxLayout* fcontlayout = new QVBoxLayout;
+    QVBoxLayout* fwclayout = new QVBoxLayout;
 
     hlayout->addWidget(maincontrol);
-    hlayout->addLayout(framelayout);
-    hlayout->addLayout(fcontlayout);
+    hlayout->addLayout(fwclayout);
 
-    framelayout->addWidget(frameviewup);
-    framelayout->addWidget(frameviewdown);
-    fcontlayout->addWidget(framecontrolup);
-    fcontlayout->addWidget(framecontroldown);
+    fwclayout->addWidget(fwcup);
+    fwclayout->addWidget(fwcdn);
 
     connect(maincontrol, &MainControlPanel::send_path, this, &MarkupWidget::slot_set_path);
-    connect(this, &MarkupWidget::send_nframes, framecontrolup, &FrameControl::slot_set_nframes);
-    connect(this, &MarkupWidget::send_nframes, framecontroldown, &FrameControl::slot_set_nframes);
+    // connect(this, &MarkupWidget::send_nframes, framecontrolup, &FrameControl::slot_set_nframes);
+    // connect(this, &MarkupWidget::send_nframes, framecontroldown, &FrameControl::slot_set_nframes);
 }
 
 void MarkupWidget::slot_set_path(QDir dir) {

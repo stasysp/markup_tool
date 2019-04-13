@@ -4,11 +4,12 @@
 #include <QWidget>
 #include <QGraphicsView>
 #include <QPushButton>
+#include <QString>
 #include "framemarkup.h"
 
 class FrameView : public QGraphicsView
 {
-    // Q_OBJECT
+    Q_OBJECT
 
 public:
     explicit FrameView(QWidget* parent = nullptr);

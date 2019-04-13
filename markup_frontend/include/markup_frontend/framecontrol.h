@@ -5,19 +5,20 @@
 
 #include "timelinecontrol.h"
 
+
 class FrameControl : public QWidget
 {
-    // https://stackoverflow.com/questions/1095298/gcc-c-linker-errors-undefined-reference-to-vtable-for-xxx-undefined-refere
-    // Q_OBJECT
+    Q_OBJECT
 public:
     explicit FrameControl(QWidget *parent = nullptr);
 
     signals:
+            void send_newframeidx(int frameidx);
 
 public slots:
-            void slot_set_nframes(int nframes);
+            void slot_setnewframeidx(int frameidx);
 
-private:
+public:
     QPushButton *btn1 = nullptr;
     QPushButton *btn2 = nullptr;
     QPushButton *btn3 = nullptr;

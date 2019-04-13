@@ -26,6 +26,7 @@ file(GLOB FRONTEND_HEADERS ${FRONTEND_HEADERS_DIR}/markup_frontend/*.h)
 add_library(markup_frontend
         ${FRONTEND_HEADERS}
         framecontrol.cpp
+        framewithcontrol.cpp
         framemarkup.cpp
         frameview.cpp
         maincontrolpanel.cpp
