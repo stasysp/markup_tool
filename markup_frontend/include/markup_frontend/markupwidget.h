@@ -16,26 +16,11 @@ class MarkupWidget : public QWidget
 public:
     MarkupWidget(QWidget *parent = nullptr);
 
-    signals:
-            void send_nframes(int nframes);
-    void send_reset();
-
-private slots:
-            void slot_set_path(QDir dir);
-
 private:
     MainControlPanel *maincontrol = nullptr;
-    // FrameView *frameviewup = nullptr;
-    // FrameView *frameviewdown = nullptr;
-    // FrameControl *framecontrolup = nullptr;
-    // FrameControl *framecontroldown = nullptr;
 
     FrameWithControl *fwcup = nullptr;
     FrameWithControl *fwcdn = nullptr;
-
-    // добавить проверку существования???
-    QDir imagiesdir;
 };
-
 
 #endif // WIDGET_H

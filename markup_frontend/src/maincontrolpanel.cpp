@@ -6,6 +6,7 @@
 #include <QFileInfoList>
 
 #include "markup_frontend/maincontrolpanel.h"
+#include "markup_backend/markup.h"
 
 MainControlPanel::MainControlPanel(QWidget *parent) : QWidget(parent)
 {

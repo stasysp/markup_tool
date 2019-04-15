@@ -16,15 +16,14 @@ public:
     ~FrameView();
 
     void setScaledPixmap(const QPixmap &pixmap);
+    void loadimagebypath(QString path);
 
 private:
-    void loadimagebypath(QString path);
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
-
     void paintEvent(QPaintEvent *event) override;
 
 private:

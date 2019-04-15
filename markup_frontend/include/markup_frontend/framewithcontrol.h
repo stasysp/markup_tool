@@ -14,13 +14,17 @@ public:
     explicit FrameWithControl(QWidget *parent = nullptr);
     int getFrameIdx() const { return frameidx; }
 
-    signals:
-            void send_framechanged(int frameidx);
+signals:
+    void send_framechanged(int frameidx);
 
 public slots:
-            void setFrameIdx(int idx);
+    void setFrameIdx(int idx);
     void addFrameIdx(int move);
     void doOnFrameChange();
+    void setPath(QDir path);
+
+private:
+    void reset();
 
 private:
     // вообще-то эта фигня должна быть optional...
@@ -28,7 +32,7 @@ private:
     // пока стоит как заглушка...
     // нужно определять по числу кардов в видео...
     int n_frames = 100;
-    QDir path;
+    QDir img_path;
 
     FrameView *frameview = nullptr;
     FrameControl *framecontrol = nullptr;
