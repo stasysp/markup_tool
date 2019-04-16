@@ -17,6 +17,7 @@ import argparse
 
 import os
 import time
+import json
 
 '''
 config_path='config/yolov3.cfg'
@@ -242,7 +243,8 @@ def process_video(tracker, detector, imgs_dir,
     imgs_list = os.listdir(imgs_dir)
     imgs_list.sort()
 
-    tracked_detections = []
+    tracked_detections = {}
+    tracked_detections['tracks'] = []
     for img_name in imgs_list:
         if not img_name.endswith(supported_extensions):
             continue
@@ -270,13 +272,16 @@ def process_video(tracker, detector, imgs_dir,
             color = [i * 255 for i in color]
             cls = classes[int(cls_pred)]
             if detector.classes[int(cls_pred)] in return_classes:
+                tracked_detections['tracks'].append({'frame' : img_name.split('.')[0], 'id': obj_id,
+                                           'class' : cls_pred, 'x' : x1, 'y' : y1, 'width' : box_w, 'height' : box_h,
+                                           'confidence' : 1.})
+
+        return tracked_detections
 
 
-    pass
-
-
-def write_tracks():
-    pass
+def write_tracks(tracked_detections, fname):
+    with open(fname + '.json', 'w') as outfile:
+        json.dump(tracked_detections, outfile)
 
 
 if __name__ == '__main__':
@@ -298,5 +303,5 @@ if __name__ == '__main__':
     detector = make_detector(args.detector_type, args.model_dir, non_maximum_suppression)
     tracker = Sort()
 
-    process_video(tracker, detector, args.imgs_dir)
-    pass
+    tracked_detections = process_video(tracker, detector, args.imgs_dir)
+    write_tracks(tracked_detections, args.imgs_dir.split('/')[-1])
