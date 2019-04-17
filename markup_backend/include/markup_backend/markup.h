@@ -6,6 +6,10 @@
 #include "markup_backend/tracks.h"
 #include "markup_backend/video.h"
 
+// https://github.com/nlohmann/json
+#include <nlohmann/json.hpp> // conda install -c conda-forge nlohmann_json
+using json = nlohmann::json;
+
 struct PipelineRunParams {
     std::string detector_model_path;
     std::string id_model_path; // maybe path to python file?
@@ -26,6 +30,12 @@ public:
         std::string command = "python ";
         command += python_script_path;
         system(command.c_str());
+    }
+    json ReadTracks() {
+        std::ifstream f("tracks.json");
+        json tracks;
+        f >> tracks;
+        retunr tracks;
     }
     
 private:
