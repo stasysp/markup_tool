@@ -8,7 +8,7 @@
 
 struct PipelineRunParams {
     std::string detector_model_path;
-    std::string id_model_path;
+    std::string id_model_path; // maybe path to python file?
 };
 
 class MarkUp {
@@ -21,7 +21,13 @@ public:
     }
 
     TrackContainer run(const Video& video);
-
+    void RunModel(const std::string python_script_path) {
+        // create json with tracks
+        std::string command = "python ";
+        command += python_script_path;
+        system(command.c_str());
+    }
+    
 private:
     Detector detector_;
     IDModel id_model_;
