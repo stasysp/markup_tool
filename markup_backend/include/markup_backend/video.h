@@ -23,22 +23,21 @@ private:
 class Video {
 public:
     Video() = delete;
-    explicit Video(const std::string& dir_path);
+    explicit Video(const std::string& dir_path, size_t fps=25);
 
     const std::vector<std::string>& get_frame_names() const {
-        return sequence;
+        return sequence_;
     }
 
     cv::Mat get_frame(size_t index) const;
 
     size_t size() const {
-        return sequence.size();
+        return sequence_.size();
     }
 
-    // iterators begin end
-    // get_frame(index)
+    // Make iterators
 private:
-    std::vector<std::string> sequence;
-
-    size_t fps;
+    std::vector<std::string> sequence_;
+    std::string dir_path_;
+    size_t fps_;
 };
