@@ -17,84 +17,8 @@ import argparse
 
 import os
 import time
-import json
+# import json
 
-'''
-config_path='config/yolov3.cfg'
-weights_path='config/yolov3.weights'
-class_path='config/coco.names'
-
-# img_size=416
-# conf_thres=0.8
-# nms_thres=0.4
-
-# model = Darknet(config_path, img_size=img_size)
-# tracker = Sort()
-# model.load_weights(weights_path)
-# model.cuda()
-# model.eval()
-classes = utils.load_classes(class_path)
-Tensor = torch.FloatTensor  # torch.cuda.FloatTensor
-
-def detect_image(img):
-    ratio = min(img_size/img.size[0], img_size/img.size[1])
-    imw = round(img.size[0] * ratio)
-    imh = round(img.size[1] * ratio)
-    img_transforms = transforms.Compose([ transforms.Resize((imh, imw)),
-         transforms.Pad((max(int((imh-imw)/2),0), max(int((imw-imh)/2),0), max(int((imh-imw)/2),0), max(int((imw-imh)/2),0)),
-                        (128,128,128)),
-         transforms.ToTensor(),
-         ])
-    image_tensor = img_transforms(img).float()
-    image_tensor = image_tensor.unsqueeze_(0)
-    input_img = Variable(image_tensor.type(Tensor))
-    with torch.no_grad():
-        detections = model(input_img)
-        detections = utils.non_max_suppression(detections, 80, conf_thres, nms_thres)
-    return detections[0]'''
-
-'''
-cmap = plt.get_cmap('tab20b')
-colors = [cmap(i)[:3] for i in np.linspace(0, 1, 20)]
-
-
-for frame in frames:
-    if not frame.endswith('.jpg'):
-        continue
-
-    frame = cv2.imread(os.path.join(data_dir, frame))
-    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    pilimg = Image.fromarray(frame)
-    detections = detect_image(pilimg)
-
-    img = np.array(pilimg)
-    pad_x = max(img.shape[0] - img.shape[1], 0) * (img_size / max(img.shape))
-    pad_y = max(img.shape[1] - img.shape[0], 0) * (img_size / max(img.shape))
-    unpad_h = img_size - pad_y
-    unpad_w = img_size - pad_x
-    if detections is not None:
-
-        unique_labels = detections[:, -1].cpu().unique()
-        n_cls_preds = len(unique_labels)
-        for x1, y1, x2, y2, obj_id, cls_pred in tracked_objects:
-            box_h = int(((y2 - y1) / unpad_h) * img.shape[0])
-            box_w = int(((x2 - x1) / unpad_w) * img.shape[1])
-            y1 = int(((y1 - pad_y // 2) / unpad_h) * img.shape[0])
-            x1 = int(((x1 - pad_x // 2) / unpad_w) * img.shape[1])
-
-            color = colors[int(obj_id) % len(colors)]
-            color = [i * 255 for i in color]
-            cls = classes[int(cls_pred)]
-            if 'person'==cls:
-                cv2.rectangle(frame, (x1, y1), (x1+box_w, y1+box_h), color, 4)
-                cv2.rectangle(frame, (x1, y1-35), (x1+len(cls)*19+60, y1), color, -1)
-                cv2.putText(frame, cls + "-" + str(int(obj_id)), (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 3)
-
-    fig=plt.figure(figsize=(12, 8))
-    plt.title("Video Stream")
-    plt.imshow(frame)
-    plt.show()
-'''
 
 class NonMaximumSuppression:
     def __init__(self, num_classes=80,
@@ -232,22 +156,54 @@ def load_img(filepath):
     pil_img = Image.fromarray(frame)
     return pil_img, frame.shape
 
+
+class BBox:
+    def __init__(self, x, y, width, height):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+
+
 class Detection:
-    def __init__(self):
-        self.bbox_x = None
-        self.x = None
+    def __init__(self, frame_index, bbox, id, confidence):
+        self.bbox = bbox
+        self.id = id
+        self.confidence = confidence
+        self.frame_index = frame_index
+
+    def as_string(self):
+        return ','.join(map(str, [
+            self.frame_index,
+            self.id,
+            self.bbox.x,
+            self.bbox.y,
+            self.bbox.width,
+            self.bbox.height,
+            self.confidence,
+            0  # dummy object type
+        ]))
+
 
 def process_video(tracker, detector, imgs_dir,
                   supported_extensions=('.png', '.jpg'),
-                  return_classes=['person']):
+                  return_classes=['person'],
+                  debug_dir=None):
+
+    cmap = plt.get_cmap('tab20b')
+    colors = [cmap(i)[:3] for i in np.linspace(0, 1, 20)]
+
     imgs_list = os.listdir(imgs_dir)
     imgs_list.sort()
 
-    tracked_detections = {}
-    tracked_detections['tracks'] = []
-    for img_name in imgs_list:
-        if not img_name.endswith(supported_extensions):
-            continue
+    tracked_detections = []
+
+    def valid_extention(img_name):
+        return img_name.endswith(supported_extensions)
+
+    imgs_list = filter(valid_extention, imgs_list)
+
+    for frame_index, img_name in enumerate(imgs_list):
 
         img, shape = load_img(os.path.join(imgs_dir, img_name))
         frame_detections = detector.apply(img)
@@ -260,48 +216,64 @@ def process_video(tracker, detector, imgs_dir,
 
         print("tracked:", tracked_objects.shape)
 
+        if debug_dir is not None:
+            img = np.array(img)
+            print('shape:', img.shape)
+            img = img[:, :, ::-1].copy()  # rgb -> bgr
+
         for x1, y1, x2, y2, obj_id, cls_pred in tracked_objects:
-            box_h = int(((y2 - y1) / unpad_h) * img.shape[0])
-            box_w = int(((x2 - x1) / unpad_w) * img.shape[1])
-            y1 = int(((y1 - pad_y // 2) / unpad_h) * img.shape[0])
-            x1 = int(((x1 - pad_x // 2) / unpad_w) * img.shape[1])
+            box_h = int(((y2 - y1) / unpad_h) * shape[0])
+            box_w = int(((x2 - x1) / unpad_w) * shape[1])
+            y1 = int(((y1 - pad_y // 2) / unpad_h) * shape[0])
+            x1 = int(((x1 - pad_x // 2) / unpad_w) * shape[1])
 
-
-
-            color = colors[int(obj_id) % len(colors)]
-            color = [i * 255 for i in color]
-            cls = classes[int(cls_pred)]
             if detector.classes[int(cls_pred)] in return_classes:
-                tracked_detections['tracks'].append({'frame' : img_name.split('.')[0], 'id': obj_id,
-                                           'class' : cls_pred, 'x' : x1, 'y' : y1, 'width' : box_w, 'height' : box_h,
-                                           'confidence' : 1.})
+                detection = Detection(frame_index, BBox(x1, y1, box_w, box_h), obj_id, confidence=1.)
+                tracked_detections.append(detection)
 
-        return tracked_detections
+                if debug_dir is not None:
+                    color = colors[int(obj_id) % len(colors)]
+                    color = [int(i * 255) for i in color]
+
+                    cv2.rectangle(img, (x1, y1), (x1 + box_w, y1 + box_h), color=tuple(color), thickness=4)
+                    # cv2.rectangle(img, (x1, y1 - 35), (x1 + len(cls) * 19 + 60, y1), color, -1)
+                    cv2.putText(img, "id_{}".format(int(obj_id)), (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                                (255, 255, 255), 3)
+
+        if debug_dir is not None:
+            cv2.imwrite(os.path.join(debug_dir, img_name), img)
+
+    return tracked_detections
 
 
-def write_tracks(tracked_detections, fname):
-    with open(fname + '.json', 'w') as outfile:
-        json.dump(tracked_detections, outfile)
+def write_tracks(filepath, tracked_detections):
+    with open(filepath, 'w') as f:
+        f.write('\n'.join([detection.as_string() for detection in tracked_detections]))
+
 
 
 if __name__ == '__main__':
-    # parser = argparse.ArgumentParser(description='Process some integers.')
-    # parser.add_argument('--model_dir', default='', type=str, help='Where to find model files?')
-    # parser.add_argument('--imgs_dir', type=str, help='Where to find the imgs?')
-    # parser.add_argument('--detector_type', nargs='?', default='yolo3', type=str, help='Which model to use?')
-    # parser.add_argument('--debug_dir', nargs='?', default=None, type=str, help='Store images with detections.')
-    # args = parser.parse_args()
-    class Args:
-        pass
-    args = Args()
-    args.model_dir = '/Users/user/SHAD/ML_project/markup_tool/data/models/yolo3'
-    args.imgs_dir = '/Users/user/SHAD/ML_project/markup_tool/data/test/MOT16-04/img1'
-    args.detector_type = 'yolo3'
+    parser = argparse.ArgumentParser(description='Process some integers.')
+    parser.add_argument('--model_dir', default='', type=str, help='Where to find model files?')
+    parser.add_argument('--imgs_dir', type=str, help='Where to find the imgs?')
+    parser.add_argument('--tracks_filepath', type=str, help='Where to save the tracks?')
+    parser.add_argument('--detector_type', nargs='?', default='yolo3', type=str, help='Which model to use?')
+    parser.add_argument('--debug_dir', nargs='?', default=None, type=str, help='Store images with detections.')
+    args = parser.parse_args()
+
+    # class Args:
+    #     pass
+    # args = Args()
+    # args.model_dir = '/Users/user/SHAD/ML_project/markup_tool/data/models/yolo3'
+    # args.imgs_dir = '/Users/user/SHAD/ML_project/markup_tool/data/test/MOT16-04/img1'
+    # args.tracks_filepath = '/Users/user/SHAD/ML_project/build/tracks.txt'
+    # args.debug_dir = '/Users/user/SHAD/ML_project/build/debug_detections'
+    # args.detector_type = 'yolo3'
 
     non_maximum_suppression = NonMaximumSuppression()
 
     detector = make_detector(args.detector_type, args.model_dir, non_maximum_suppression)
     tracker = Sort()
 
-    tracked_detections = process_video(tracker, detector, args.imgs_dir)
-    write_tracks(tracked_detections, args.imgs_dir.split('/')[-1])
+    tracked_detections = process_video(tracker, detector, args.imgs_dir, debug_dir=args.debug_dir)
+    write_tracks(args.tracks_filepath, tracked_detections)
