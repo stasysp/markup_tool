@@ -58,7 +58,7 @@ void MainControlPanel::slot_loadtracks() {
 
 void MainControlPanel::slot_run() {
     qDebug() << "run tracking...";
-    // call some backend-function (run)
+    emit send_run();
 }
 
 void MainControlPanel::slot_play() {
