@@ -12,8 +12,11 @@ public:
     QMap<int, ScaledBBox>::const_iterator begin() const;
     QMap<int, ScaledBBox>::const_iterator end() const;
 
+    void set_new_markup(QMap<int, ScaledBBox> newmarkup);
+
     void add(int track_id, ScaledBBox bbox);
     void remove(int track_id);
+    void clear();
 
 private:
     QMap<int, ScaledBBox> bboxes;

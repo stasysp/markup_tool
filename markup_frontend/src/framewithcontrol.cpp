@@ -35,6 +35,8 @@ void FrameWithControl::doOnFrameChange() {
     QFileInfoList img_list = img_path.entryInfoList();     //получаем список файлов директории
     QString file_name = img_list[frameidx].filePath();
     frameview->loadimagebypath(file_name);
+
+    emit send_framechanged(this);
 }
 
 void FrameWithControl::setPath(QDir path) {
@@ -51,4 +53,12 @@ void FrameWithControl::reset() {
     n_frames = img_list.size();
     frameidx = 0;
     doOnFrameChange();
+}
+
+void FrameWithControl::setMarkup(QMap<int, ScaledBBox> markup) {
+    frameview->slot_set_markup(markup);
+}
+
+void FrameWithControl::testdebug() {
+    qDebug() << "debug";
 }

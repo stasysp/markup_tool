@@ -18,6 +18,9 @@ public:
     void setScaledPixmap(const QPixmap &pixmap);
     void loadimagebypath(QString path);
 
+public slots:
+    void slot_set_markup(QMap<int, ScaledBBox> newmarkup);
+
 private:
 
 protected:

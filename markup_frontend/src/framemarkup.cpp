@@ -20,3 +20,11 @@ void FrameMarkup::remove(int track_id) {
         bboxes.erase(iter);
     }
 }
+
+void FrameMarkup::clear() {
+    bboxes.clear();
+}
+
+void FrameMarkup::set_new_markup(QMap<int, ScaledBBox> newmarkup) {
+    bboxes = std::move(newmarkup);
+}

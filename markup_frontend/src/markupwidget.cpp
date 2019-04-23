@@ -28,6 +28,9 @@ MarkupWidget::MarkupWidget(QWidget *parent)
 
     connect(maincontrol, &MainControlPanel::send_run, this, &MarkupWidget::slot_run);
 
+    connect(fwcup, &FrameWithControl::send_framechanged, this, &MarkupWidget::slot_framechanged);
+    connect(fwcdn, &FrameWithControl::send_framechanged, this, &MarkupWidget::slot_framechanged);
+
     params = new PipelineRunParams();
 }
 
@@ -42,4 +45,19 @@ void MarkupWidget::slot_run() {
     Video video(str);
     trackcontainer = markup->run(video);
     qDebug() << "run finished...";
+}
+
+void MarkupWidget::slot_framechanged(FrameWithControl *fwc) {
+    qDebug() << fwc;
+    int frameidx = fwc->getFrameIdx();
+    QMap<int, ScaledBBox> bboxes;
+    qDebug() << "slot_framechanged";
+    for (auto det : trackcontainer->get_detections(frameidx)) {
+        bboxes[det.id] = ScaledBBox(det);
+        //qDebug() << det.id;
+    }
+    qDebug() << bboxes.size();
+    fwc->testdebug();
+    fwc->setMarkup(bboxes);
+    //update();
 }

@@ -48,3 +48,12 @@ void FrameView::paintEvent(QPaintEvent *event) {
 void FrameView::loadimagebypath(QString path) {
     image = QPixmap(path);
 }
+
+void FrameView::slot_set_markup(QMap<int, ScaledBBox> newmarkup) {
+
+    QMap<int, ScaledBBox>::const_iterator iter = newmarkup.constBegin();
+    while (iter != newmarkup.constEnd()) {
+        // markup.add(iter.key(), iter.value());
+        ++iter;
+    }
+}

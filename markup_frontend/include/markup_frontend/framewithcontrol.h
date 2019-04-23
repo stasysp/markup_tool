@@ -15,7 +15,7 @@ public:
     int getFrameIdx() const { return frameidx; }
 
 signals:
-    void send_framechanged(int frameidx);
+    void send_framechanged(FrameWithControl* fwc);
 
 public slots:
     void setFrameIdx(int idx);
@@ -23,13 +23,16 @@ public slots:
     void doOnFrameChange();
     void setPath(QDir path);
 
+    void setMarkup(QMap<int,ScaledBBox> markup);
+
+    void testdebug();
+
 private:
     void reset();
 
 private:
     // вообще-то эта фигня должна быть optional...
     int frameidx = 0;
-    // пока стоит как заглушка...
     // нужно определять по числу кардов в видео...
     int n_frames = 100;
     QDir img_path;

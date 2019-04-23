@@ -19,6 +19,7 @@ public:
 
 public slots:
     void slot_set_video_path(QDir path);
+    void slot_framechanged(FrameWithControl *fwc);
     void slot_run();
 
 private:
