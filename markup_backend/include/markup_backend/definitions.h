@@ -8,3 +8,4 @@ struct Detection {
     cv::Rect bbox;
     float confidence;
 };
+

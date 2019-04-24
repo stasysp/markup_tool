@@ -12,9 +12,9 @@ int run_application(int argc, char *argv[]) {
     markup.show();
 
     // test backend vvvvvvvvvvvvv
-    {
+    /* {
         TrackContainer track_container = make_dummy_track();
-    }
+    } */
     // ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return a.exec();

@@ -35,6 +35,8 @@ public:
         return sequence_.size();
     }
 
+    // TODO: frame.size()
+
     // Make iterators
 private:
     std::vector<std::string> sequence_;

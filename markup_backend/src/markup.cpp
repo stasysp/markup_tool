@@ -6,7 +6,7 @@
 #include "markup_backend/nn_model.h"
 #include "markup_backend/markup.h"
 
-TrackContainer MarkUp::run(const Video& video) {
+std::unique_ptr<TrackContainer> MarkUp::run(const Video& video) {
     if (boost::filesystem::exists(params_.tmp_video_dir)) {
         boost::filesystem::remove_all(params_.tmp_video_dir);
     }
@@ -29,12 +29,18 @@ TrackContainer MarkUp::run(const Video& video) {
         cv::imwrite((boost::filesystem::path(params_.tmp_video_dir) / boost::filesystem::path(filename)).string(), img);
     }
 
+    std::string tracks_filepath
+        = (boost::filesystem::path(params_.tmp_video_dir) / boost::filesystem::path(params_.tracks_filename)).string();
+
     std::string delimiter = " ";
     std::string command = "python" + delimiter;
-    command += params_.tracker_model_path + delimiter;
-    command += params_.tmp_video_dir + delimiter;
-    command += params_.tmp_video_dir + delimiter;
-    system(command.c_str());
+    command += "--model_dir" + delimiter + params_.tracker_model_path + delimiter;
+    command += "--imgs_dir" + delimiter + params_.tmp_video_dir + delimiter;
+    command += "--tracks_filepath" + delimiter + tracks_filepath + delimiter;
+
+    std::cout << "test:" << command << std::endl;
+
+    // system(command.c_str());
 
 
 }

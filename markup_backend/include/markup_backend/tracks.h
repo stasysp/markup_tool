@@ -22,7 +22,14 @@ public:
     std::list<Detection>::const_iterator begin() const;
     std::list<Detection>::const_iterator end() const;
 
-    std::unique_ptr<Detection> get_detection(size_t frame_idx) ;
+    std::unique_ptr<Detection> get_detection(size_t frame_idx);
+    std::unique_ptr<Detection> get_last_detection() {
+        if (detections_.empty()) {
+            return nullptr;
+        }
+
+        return std::make_unique<Detection>(detections_.back());
+    }
 
 private:
     std::list<Detection> detections_;
@@ -45,11 +52,11 @@ class TrackContainer {
 public:
     TrackContainer() = delete;
 
-    explicit TrackContainer(size_t video_length);
+    TrackContainer(size_t video_length);
 
     void add_track(const Track& track);
 
-    std::unique_ptr<Track> get_track(size_t id) const;
+    std::unique_ptr<Track> get_track(size_t id);
 
     std::vector<Detection> get_detections(size_t frame_idx) const;
 
@@ -57,6 +64,10 @@ public:
     size_t get_num_tracks() const;
 
     bool empty() const;
+
+    bool save(const std::string& filepath);
+
+    bool load(const std::string& filepath);
 
     // void add_track(Track);
     // get all detections at frame_index
@@ -72,6 +83,6 @@ private:
     size_t video_len_;
     std::set<Track, TrackComparator> tracks_;
     std::vector<std::set<const Detection*, DetectionComparator>> timeline_;
+    size_t pedestrian_class_ = 1;
 };
 
-TrackContainer make_dummy_track();

@@ -1,8 +1,8 @@
+#include <fstream>
+
 #include "markup_backend/tracks.h"
 
-TrackContainer make_dummy_track() {
-    return TrackContainer(5);
-}
+
 
 // ---------------- class Track --------------------------
 
@@ -33,7 +33,7 @@ std::list<Detection>::const_iterator Track::end() const {
 }
 
 std::unique_ptr<Detection> Track::get_detection(size_t frame_idx) {
-    for (const auto& detection : detections_) {
+    for (auto& detection : detections_) {
         if (detection.frame == frame_idx) {
             return std::make_unique<Detection>(detection);
         }
@@ -47,6 +47,8 @@ TrackContainer::TrackContainer(size_t video_length) {
     this->video_len_ = video_length;
     timeline_.resize(this->video_len_);
 }
+
+
 
 void TrackContainer::add_track(const Track& track) {
     // Checks
@@ -62,11 +64,10 @@ void TrackContainer::add_track(const Track& track) {
     }
 }
 
-std::unique_ptr<Track> TrackContainer::get_track(size_t id) const {
-
-    for (const auto& track : tracks_) {
-        if (track.get_id() == id) {
-            return std::make_unique<Track>(track);
+std::unique_ptr<Track> TrackContainer::get_track(size_t id) {
+    for (auto track_iter = tracks_.begin(); track_iter != tracks_.end(); ++track_iter) {
+        if (track_iter->get_id() == id) {
+            return std::make_unique<Track>(*track_iter);
         }
     }
 
@@ -74,7 +75,9 @@ std::unique_ptr<Track> TrackContainer::get_track(size_t id) const {
 }
 
 std::vector<Detection> TrackContainer::get_detections(size_t frame_idx) const {
-    assert(frame_idx < video_len_);
+    if (frame_idx >= video_len_) {
+        return std::vector<Detection>();
+    }
 
     std::vector<Detection> detections;
     for (const auto& detection_ptr : timeline_[frame_idx]) {
@@ -93,4 +96,83 @@ size_t TrackContainer::get_num_tracks() const {
 
 bool TrackContainer::empty() const {
     return tracks_.size() == 0;
+}
+
+bool TrackContainer::load(const std::string& filepath) {
+    char comma;
+
+    std::ifstream stream_(filepath);
+    if (!stream_.is_open()) {
+        std::cerr << "File not found:" << filepath;
+        return false;
+    }
+
+    std::string line;
+    while (std::getline(stream_, line))
+    {
+        // if (line.empty()) break;
+
+        std::istringstream iss(line);
+        Detection det;
+        size_t object_type;
+
+        if (!(iss
+                >> det.frame >> comma
+                >> det.id >> comma
+                >> det.bbox.x >> comma
+                >> det.bbox.y >> comma
+                >> det.bbox.width >> comma
+                >> det.bbox.height >> comma
+                >> det.confidence >> comma
+                >> object_type)) { break; } // error
+
+        if (object_type != pedestrian_class_) {
+            continue;
+        }
+
+        det.frame -= 1;  // Frame indices starts from 1
+
+        std::unique_ptr<Track> track = this->get_track(det.id);
+
+        if (track == nullptr) {
+            Track new_track(det.id);
+            this->add_track(new_track);
+            track = this->get_track(det.id);
+            assert(track != nullptr);
+        }
+
+        std::unique_ptr<Detection> last_detection = track->get_last_detection();
+        if (last_detection != nullptr) {
+            assert(last_detection->frame < det.frame);
+        }
+
+        track->push_back(det);
+    }
+
+    return true;
+}
+
+bool TrackContainer::save(const std::string& filepath) {
+    char comma = ',';
+
+    std::ofstream stream_(filepath);
+    if (!stream_.is_open()) {
+        std::cerr << "File not found:" << filepath;
+        return false;
+    }
+
+    for (size_t frame_index = 0; frame_index < this->get_video_len(); ++frame_index) {
+        std::vector<Detection> detections = get_detections(frame_index);
+
+        for (const auto& det : detections) {
+            stream_ << det.frame << comma
+                    << det.id << comma
+                    << det.bbox.x << comma
+                    << det.bbox.y << comma
+                    << det.bbox.width << comma
+                    << det.bbox.height << comma
+                    << det.confidence << comma
+                    << pedestrian_class_ << std::endl;
+        }
+    }
 }

@@ -27,7 +27,7 @@ public:
             id_model_(params.id_model_path) { */
     }
 
-    TrackContainer run(const Video& video);
+    std::unique_ptr<TrackContainer> run(const Video& video);
 
     /* json ReadTracks() {
         std::ifstream f("tracks.json");
