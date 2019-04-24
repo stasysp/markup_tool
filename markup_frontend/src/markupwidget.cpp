@@ -40,10 +40,12 @@ void MarkupWidget::slot_set_video_path(QDir path) {
 }
 
 void MarkupWidget::slot_run() {
-    markup = new MarkUp(*params);
+    qDebug() << "Rewrite using new MarkUp interface";
+    assert(false);
+    // markup = new MarkUp(*params);
     std::string str = std::string(path.path().toUtf8().constData());
     Video video(str);
-    trackcontainer = markup->run(video);
+    // trackcontainer = markup->run(video);
     qDebug() << "run finished...";
 }
 
