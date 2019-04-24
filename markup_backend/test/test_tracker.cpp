@@ -29,5 +29,30 @@ BOOST_AUTO_TEST_CASE(markup)
     // BOOST_CHECK_NO_THROW(track_container = mark_up->run(*video));
 }
 
+BOOST_AUTO_TEST_CASE(tracks)
+{
+    std::unique_ptr<Track> track;
+    BOOST_CHECK_NO_THROW(track = std::make_unique<Track>(42));
+
+    Detection det;
+    det.frame = 0;
+    det.id = 42;
+
+    BOOST_CHECK_NO_THROW(track->push_back(det));
+    std::unique_ptr<Detection> det_ptr;
+    BOOST_CHECK_NO_THROW(det_ptr = track->get_detection(1));
+    BOOST_CHECK_EQUAL(det_ptr, nullptr);
+
+    for (size_t i = 0; i < 10; ++i) {
+        BOOST_CHECK_NO_THROW(det_ptr = track->get_detection(0));
+        BOOST_CHECK(det_ptr != nullptr);
+
+        BOOST_CHECK_EQUAL(det_ptr->frame, 0);
+        BOOST_CHECK_EQUAL(det_ptr->id, det.id);
+    }
+
+
+}
+
 BOOST_AUTO_TEST_SUITE_END()
 
