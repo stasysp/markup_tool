@@ -42,6 +42,7 @@ matrix:
            - python-yaml
            - lcov
            - libopencv-dev
+           - qt5-default
          sources: &precise_latest_boost_sources
            - ubuntu-toolchain-r-test
            - llvm-toolchain-precise-3.7
