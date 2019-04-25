@@ -18,5 +18,7 @@ add_subdirectory(markup_frontend)
 
 add_dependencies(markup_frontend markup_backend)
 
+find_package(Qt5Widgets)
+
 add_executable(main main.cpp)
 target_link_libraries(main markup_backend markup_frontend)
