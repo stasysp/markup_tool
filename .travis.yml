@@ -32,7 +32,7 @@ matrix:
       compiler: gcc
       addons:
        apt:
-         packages: &precise_latest_boost_packages
+         packages: #&precise_latest_boost_packages
            - gcc-4.8
            - g++-4.8
            #- gcov-4.9
@@ -43,7 +43,7 @@ matrix:
            - lcov
            - libopencv-dev
            - qt5-default
-         sources: &precise_latest_boost_sources
+         sources: #&precise_latest_boost_sources
            - ubuntu-toolchain-r-test
            - llvm-toolchain-precise-3.7
     
