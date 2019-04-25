@@ -34,7 +34,7 @@ matrix:
        apt:
          packages: &precise_latest_boost_packages
            - gcc #-4.8
-           - g++ #-4.8
+           - g++-4.9
            #- gcov-4.9
            - clang #-3.7
            - valgrind
