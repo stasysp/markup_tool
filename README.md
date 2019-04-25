@@ -1,4 +1,4 @@
-# markup_tool
+# Automatic Video Markup Tool
 
 ## Installation
 - Install compiller
