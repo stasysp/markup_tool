@@ -1,4 +1,5 @@
 #include <QHBoxLayout>
+#include <QDebug>
 
 #include "markup_frontend/framewithcontrol.h"
 
@@ -31,4 +32,33 @@ void FrameWithControl::addFrameIdx(int move) {
 
 void FrameWithControl::doOnFrameChange() {
     framecontrol->timeline->setTimelineProperties(frameidx, n_frames);
+    QFileInfoList img_list = img_path.entryInfoList();     //получаем список файлов директории
+    QString file_name = img_list[frameidx].filePath();
+    frameview->loadimagebypath(file_name);
+
+    emit send_framechanged(this);
+}
+
+void FrameWithControl::setPath(QDir path) {
+    if (img_path != path) {
+        img_path = path;
+        img_path.setFilter(QDir::Files | QDir::NoSymLinks);   //устанавливаем фильтр выводимых файлов/папок (см ниже)
+        reset();
+        // qDebug() << "dir set as : " << img_path;
+    }
+}
+
+void FrameWithControl::reset() {
+    QFileInfoList img_list = img_path.entryInfoList();     //получаем список файлов директории
+    n_frames = img_list.size();
+    frameidx = 0;
+    doOnFrameChange();
+}
+
+void FrameWithControl::setMarkup(QMap<int, ScaledBBox> markup) {
+    frameview->slot_set_markup(markup);
+}
+
+void FrameWithControl::testdebug() {
+    qDebug() << "debug";
 }
