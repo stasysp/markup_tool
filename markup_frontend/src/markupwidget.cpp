@@ -34,13 +34,14 @@ MarkupWidget::MarkupWidget(QWidget *parent)
 
 // тут нужно передавать путь в бекэнд... но сейчас некуда...
 void MarkupWidget::slot_set_video_path(QDir path) {
-    markup->set_video(std::string(path.path().toUtf8().constData()));
+    markup.set_video(std::string(path.path().toUtf8().constData()));
+    qDebug() << "video path...";
     path = path;
 }
 
 void MarkupWidget::slot_run() {
     qDebug() << "Rewrite using new MarkUp interface";
-    markup->run();
+    markup.run();
     qDebug() << "run finished...";
 }
 
@@ -51,7 +52,7 @@ void MarkupWidget::slot_framechanged(FrameWithControl *fwc) {
     qDebug() << "slot_framechanged";
     std::vector<Detection>* detections = nullptr;
 
-    markup->get_frame(frameidx, detections);
+    markup.get_frame(frameidx, detections);
 
     qDebug() << "get frame succesfull...";
 

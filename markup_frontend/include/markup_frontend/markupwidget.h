@@ -29,8 +29,8 @@ private:
     FrameWithControl *fwcdn = nullptr;
 
     // проверить возможность удаления...
-    QDir path;
-    MarkUp *markup = nullptr;
+    // QDir path;
+    MarkUp markup;
 };
 
 #endif // WIDGET_H
