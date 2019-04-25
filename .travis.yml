@@ -72,5 +72,5 @@ script:
     ############################################################################
      - mkdir -p build
      - cd build
-     - cmake .. -DCMAKE_PREFIX_PATH=$(brew --prefix qt5)
+     - cmake ..
      - make
