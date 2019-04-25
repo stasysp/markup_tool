@@ -3,6 +3,7 @@
 ## Installation
 ```Shell
 git clone https://github.com/stasysp/markup_tool
+mkdir build-dir 
 ```
 ```Shell
 mkdir build-dir 
