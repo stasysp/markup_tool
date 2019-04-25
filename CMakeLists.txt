@@ -6,6 +6,7 @@ set(CMAKE_CXX_COMPILER "g++")
 project(markup_tool)
 
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")  #  -stdlib=libc++
+cmake_minimum_required(VERSION 3.14.0)
 set(CMAKE_CXX_STANDARD 14)
 #set(CMAKE_PREFIX_PATH "C:\\Qt\\Qt5.0.1\\5.0.1\\msvc2010\\")
 #set(CMAKE_PREFIX_PATH $ENV{HOME}/Qt5.5.0/5.5/gcc_64)
