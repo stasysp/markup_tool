@@ -28,10 +28,9 @@ private:
     FrameWithControl *fwcup = nullptr;
     FrameWithControl *fwcdn = nullptr;
 
+    // проверить возможность удаления...
     QDir path;
-    PipelineRunParams *params = nullptr;
     MarkUp *markup = nullptr;
-    std::unique_ptr<TrackContainer> trackcontainer = nullptr;
 };
 
 #endif // WIDGET_H

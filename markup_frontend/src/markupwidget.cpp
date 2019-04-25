@@ -30,22 +30,17 @@ MarkupWidget::MarkupWidget(QWidget *parent)
 
     connect(fwcup, &FrameWithControl::send_framechanged, this, &MarkupWidget::slot_framechanged);
     connect(fwcdn, &FrameWithControl::send_framechanged, this, &MarkupWidget::slot_framechanged);
-
-    params = new PipelineRunParams();
 }
 
 // тут нужно передавать путь в бекэнд... но сейчас некуда...
 void MarkupWidget::slot_set_video_path(QDir path) {
+    markup->set_video(std::string(path.path().toUtf8().constData()));
     path = path;
 }
 
 void MarkupWidget::slot_run() {
     qDebug() << "Rewrite using new MarkUp interface";
-    assert(false);
-    // markup = new MarkUp(*params);
-    std::string str = std::string(path.path().toUtf8().constData());
-    Video video(str);
-    // trackcontainer = markup->run(video);
+    markup->run();
     qDebug() << "run finished...";
 }
 
@@ -54,7 +49,13 @@ void MarkupWidget::slot_framechanged(FrameWithControl *fwc) {
     int frameidx = fwc->getFrameIdx();
     QMap<int, ScaledBBox> bboxes;
     qDebug() << "slot_framechanged";
-    for (auto det : trackcontainer->get_detections(frameidx)) {
+    std::vector<Detection>* detections = nullptr;
+
+    markup->get_frame(frameidx, detections);
+
+    qDebug() << "get frame succesfull...";
+
+    for (auto det : *detections) {
         bboxes[det.id] = ScaledBBox(det);
         //qDebug() << det.id;
     }
