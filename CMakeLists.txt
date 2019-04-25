@@ -8,7 +8,7 @@ project(markup_tool)
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")  #  -stdlib=libc++
 set(CMAKE_CXX_STANDARD 14)
 #set(CMAKE_PREFIX_PATH "C:\\Qt\\Qt5.0.1\\5.0.1\\msvc2010\\")
-set(CMAKE_PREFIX_PATH $ENV{HOME}/Qt5.5.0/5.5/gcc_64)
+#set(CMAKE_PREFIX_PATH $ENV{HOME}/Qt5.5.0/5.5/gcc_64)
 
 include_directories(${CMAKE_SOURCE_DIR}/markup_backend/include/)
 include_directories(${CMAKE_SOURCE_DIR}/markup_frontend/include/)
