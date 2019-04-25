@@ -14,4 +14,8 @@ cd build-dir
 cmake ..
 make
 ```
-
+- Run app
+```Shell
+cd build-dir
+./main
+```
