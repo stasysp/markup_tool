@@ -25,6 +25,7 @@ FrameControl::FrameControl(QWidget *parent) : QWidget(parent)
     vlayout->addWidget(btn6);
     vlayout->addWidget(btn7);
     vlayout->addWidget(timeline);
+    timeline->setTimelineProperties(0,0);
 
     connect(timeline, &TimeLineControl::send_frameidx, this, &FrameControl::slot_setnewframeidx);
 }

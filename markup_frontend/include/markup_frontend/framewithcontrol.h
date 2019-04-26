@@ -31,10 +31,8 @@ private:
     void reset();
 
 private:
-    // вообще-то эта фигня должна быть optional...
     int frameidx = 0;
-    // нужно определять по числу кардов в видео...
-    int n_frames = 100;
+    int n_frames = 0;
     QDir img_path;
 
     FrameView *frameview = nullptr;

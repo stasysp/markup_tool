@@ -15,6 +15,7 @@ FrameWithControl::FrameWithControl(QWidget *parent) : QWidget(parent)
 
     connect(framecontrol, &FrameControl::send_newframeidx,
             this, &FrameWithControl::setFrameIdx);
+    // reset();
 }
 
 void FrameWithControl::setFrameIdx(int idx) {
