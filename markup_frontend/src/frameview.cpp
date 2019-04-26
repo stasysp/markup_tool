@@ -9,10 +9,10 @@
 FrameView::FrameView(QWidget *parent) :
         QGraphicsView (parent)
 {
-    markup.add(5, ScaledBBox{0.1, 0.2, 0.5, 0.7});
-    markup.add(13, ScaledBBox{0.8, 0.9, 0.2, 0.6});
-    markup.add(2, ScaledBBox{0.5, 0.6, 0.7, 0.8});
-    markup.add(10, ScaledBBox{0.4, 0.7, 0.3, 0.9});
+    // markup.add(5, ScaledBBox{0.1, 0.2, 0.5, 0.7});
+    // markup.add(13, ScaledBBox{0.8, 0.9, 0.2, 0.6});
+    // markup.add(2, ScaledBBox{0.5, 0.6, 0.7, 0.8});
+    // markup.add(10, ScaledBBox{0.4, 0.7, 0.3, 0.9});
 }
 
 FrameView::~FrameView() {}
@@ -50,7 +50,6 @@ void FrameView::loadimagebypath(QString path) {
 }
 
 void FrameView::slot_set_markup(QMap<int, ScaledBBox> newmarkup) {
-
     QMap<int, ScaledBBox>::const_iterator iter = newmarkup.constBegin();
     while (iter != newmarkup.constEnd()) {
         // markup.add(iter.key(), iter.value());
