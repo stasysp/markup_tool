@@ -83,11 +83,11 @@ public:
 
         // track_container_ = this->run_pipeline(*video_);
 
-        if (boost::filesystem::exists(params_.debug_gt_tacks)) {
+        /* if (boost::filesystem::exists(params_.debug_gt_tacks)) {
             // TODO: Exceptions
             std::cout << "No debug tracks:" << params_.debug_gt_tacks << std::endl;
             return false;
-        }
+        }*/
 
         track_container_ = read_dummy_trackcontainer(params_.debug_gt_tacks);
 

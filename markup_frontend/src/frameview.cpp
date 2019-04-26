@@ -52,7 +52,7 @@ void FrameView::loadimagebypath(QString path) {
 void FrameView::slot_set_markup(QMap<int, ScaledBBox> newmarkup) {
     QMap<int, ScaledBBox>::const_iterator iter = newmarkup.constBegin();
     while (iter != newmarkup.constEnd()) {
-        // markup.add(iter.key(), iter.value());
+        markup.add(iter.key(), iter.value());
         ++iter;
     }
 }
