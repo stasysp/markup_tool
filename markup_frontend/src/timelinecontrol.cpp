@@ -51,7 +51,7 @@ void TimeLineControl::slot_onesecondforward() { emit send_frameidx(slider->value
 void TimeLineControl::slot_sliderchanged(int frameidx) { emit send_frameidx(frameidx); }
 
 void TimeLineControl::setTimelineProperties(int frameidx, int nframes) {
-    slider->setMaximum(nframes-1);
+    slider->setMaximum(std::max(0, nframes-1));
     slider->setValue(frameidx);
     currentframenumber->display(frameidx);
 }
