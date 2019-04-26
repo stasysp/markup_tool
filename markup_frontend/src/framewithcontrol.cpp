@@ -45,7 +45,6 @@ void FrameWithControl::setPath(QDir path) {
         img_path = path;
         img_path.setFilter(QDir::Files | QDir::NoSymLinks);   //устанавливаем фильтр выводимых файлов/папок (см ниже)
         reset();
-        // qDebug() << "dir set as : " << img_path;
     }
 }
 

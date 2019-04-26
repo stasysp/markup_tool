@@ -15,7 +15,6 @@ public:
     explicit FrameView(QWidget* parent = nullptr);
     ~FrameView();
 
-    void setScaledPixmap(const QPixmap &pixmap);
     void loadimagebypath(QString path);
 
 public slots:
