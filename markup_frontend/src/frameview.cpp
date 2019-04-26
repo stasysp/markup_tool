@@ -3,29 +3,17 @@
 #include <QGridLayout>
 #include <QMouseEvent>
 #include <QGraphicsScene>
+#include <QDebug>
 
 #include "markup_frontend/scaledbox.h"
 
 FrameView::FrameView(QWidget *parent) :
-        QGraphicsView (parent)
-{
-    // markup.add(5, ScaledBBox{0.1, 0.2, 0.5, 0.7});
-    // markup.add(13, ScaledBBox{0.8, 0.9, 0.2, 0.6});
-    // markup.add(2, ScaledBBox{0.5, 0.6, 0.7, 0.8});
-    // markup.add(10, ScaledBBox{0.4, 0.7, 0.3, 0.9});
-}
+        QGraphicsView (parent) {}
 
 FrameView::~FrameView() {}
 
-void FrameView::setScaledPixmap(const QPixmap &pixmap) {
-    image = pixmap;
-    update();
-}
-
 void FrameView::mousePressEvent(QMouseEvent *event) {}
-
 void FrameView::mouseReleaseEvent(QMouseEvent *event) {}
-
 void FrameView::keyPressEvent(QKeyEvent *event) {}
 
 void FrameView::paintEvent(QPaintEvent *event) {
@@ -47,9 +35,12 @@ void FrameView::paintEvent(QPaintEvent *event) {
 
 void FrameView::loadimagebypath(QString path) {
     image = QPixmap(path);
+    QPaintEvent *event = new QPaintEvent(QRect());
+    paintEvent(event);
 }
 
 void FrameView::slot_set_markup(QMap<int, ScaledBBox> newmarkup) {
+    markup.clear();
     QMap<int, ScaledBBox>::const_iterator iter = newmarkup.constBegin();
     while (iter != newmarkup.constEnd()) {
         markup.add(iter.key(), iter.value());
