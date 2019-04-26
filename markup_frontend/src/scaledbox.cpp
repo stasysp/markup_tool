@@ -1,15 +1,36 @@
 #include "markup_frontend/scaledbox.h"
+#include <iostream>
 
 ScaledBBox::ScaledBBox(float pxmin, float pymin, float pxmax, float pymax) :
     pxmin(pxmin), pymin(pymin), pxmax(pxmax), pymax(pymax) {}
 
 ScaledBBox::ScaledBBox(const Detection& det) {
-    float img_height = 480.;
-    float img_width = 640.;
+    float img_height = 1080.;
+    float img_width = 1920.;
     pxmin = float(det.bbox.x) / img_width;
     pymin = float(det.bbox.y) / img_height;
     pxmax = float(det.bbox.x + det.bbox.width) / img_width;
     pymax = float(det.bbox.y + det.bbox.height) / img_height;
+
+    if (pxmin < 0) {
+        std::cout << "pxmin < 0";
+        pxmin = 0;
+    }
+
+    if (pymin < 0) {
+        std::cout << "pymin < 0";
+        pymin = 0;
+    }
+
+    if (pxmax > 1) {
+        std::cout << "pxmax > 1";
+        pxmax = 1;
+    }
+
+    if (pymax > 1) {
+        std::cout << "pymax > 1";
+        pymax = 1;
+    }
 }
 
 QRect ScaledBBox::getScaledRect(int width, int height) const {
