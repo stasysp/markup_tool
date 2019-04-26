@@ -46,24 +46,21 @@ void MarkupWidget::slot_run() {
 }
 
 void MarkupWidget::slot_framechanged(FrameWithControl *fwc) {
-    qDebug() << fwc;
     int frameidx = fwc->getFrameIdx();
     QMap<int, ScaledBBox> bboxes;
-    qDebug() << "slot_framechanged" << frameidx;
     std::vector<Detection> detections;
+    qDebug() << fwc << "slot_framechanged" << frameidx;
 
     bool res = markup.get_frame(frameidx, &detections);
 
     if (res) {
         qDebug() << "get frame is succesfull...";
-
         for (auto det : detections) {
             bboxes[det.id] = ScaledBBox(det);
         }
-        qDebug() << bboxes.size();
-        fwc->testdebug();
         fwc->setMarkup(bboxes);
     } else {
         qDebug() << "get frame is not succesfull...";
+        fwc->setMarkup(bboxes);
     }
 }
