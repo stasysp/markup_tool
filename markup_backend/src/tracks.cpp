@@ -48,7 +48,9 @@ TrackContainer::TrackContainer(size_t video_length) {
     timeline_.resize(this->video_len_);
 }
 
-
+TrackContainer::TrackContainer(const std::string& tracks_filepath) {
+    assert(this->load(tracks_filepath));
+}
 
 void TrackContainer::add_track(const Track& track) {
     // Checks

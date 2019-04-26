@@ -14,6 +14,7 @@ struct PipelineRunParams {
     // std::string id_model_path; // maybe path to python file?
     std::string video_path = "";
     std::string tracker_model_path = "";
+    std::string weights_path = "";
     std::string tmp_video_dir = "/tmp/markup_video";
     std::string tmp_img_extention = ".png";
     size_t tmp_img_path_pad2length = 10;
@@ -23,6 +24,8 @@ struct PipelineRunParams {
 class MarkUp {
 public:
     bool get_frame(size_t frame_idx, std::vector<Detection>* detections) {
+        detections->clear();
+
         if (track_container_ == nullptr) {
             // TODO: Exceptions
             std::cout << "First compute tracks!" << std::endl;
@@ -39,6 +42,28 @@ public:
         *detections = track_container_->get_detections(frame_idx);
 
         return true;
+    }
+
+    bool set_model(const std::string& model_path,
+                   const std::string& weights_path) {
+        if (model_path.empty() || weights_path.empty()) {
+            return false;
+        }
+
+        if (!boost::filesystem::exists(model_path)) {
+            // TODO: Exceptions
+            std::cout << "File not found:" << model_path << std::endl;
+            return false;
+        }
+
+        if (!boost::filesystem::exists(weights_path)) {
+            // TODO: Exceptions
+            std::cout << "File not found:" << weights_path << std::endl;
+            return false;
+        }
+
+        params_.tracker_model_path = model_path;
+        params_.weights_path = weights_path;
     }
 
     bool set_video(const std::string& filepath) {
@@ -67,6 +92,12 @@ public:
     bool run() {
         track_container_.reset(nullptr);
 
+        if (!boost::filesystem::exists(params_.tracker_model_path)) {
+            // TODO: Exceptions
+            std::cout << "Model doesnt exist:" << params_.tracker_model_path << std::endl;
+            return false;
+        }
+
         if (video_ == nullptr) {
             // TODO: Exceptions
             std::cout << "Set Video first!" << std::endl;
@@ -89,6 +120,18 @@ public:
     }
     bool detete_bbox(size_t track_idx, size_t frame_idx) {
         return true;
+    }
+
+    size_t get_video_len() const {
+        if (video_ == nullptr) {
+            return 0;
+        } else {
+            return video_->size();
+        }
+    }
+
+    PipelineRunParams get_params() const {
+        return params_;
     }
 
 private:

@@ -1,6 +1,4 @@
-from models import *
-from utils import utils
-from sort import Sort
+
 
 import os, sys, time, datetime, random
 import cv2
@@ -19,6 +17,9 @@ import os
 import time
 # import json
 
+from models import *
+from utils import utils
+from sort import Sort
 
 class NonMaximumSuppression:
     def __init__(self, num_classes=80,
@@ -254,25 +255,46 @@ def write_tracks(filepath, tracked_detections):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process some integers.')
-    parser.add_argument('--model_dir', default='', type=str, help='Where to find model files?')
+    parser.add_argument('--config_dir', type=str, help='Where to find weights?')
     parser.add_argument('--imgs_dir', type=str, help='Where to find the imgs?')
     parser.add_argument('--tracks_filepath', type=str, help='Where to save the tracks?')
     parser.add_argument('--detector_type', nargs='?', default='yolo3', type=str, help='Which model to use?')
     parser.add_argument('--debug_dir', nargs='?', default=None, type=str, help='Store images with detections.')
     args = parser.parse_args()
 
-    # class Args:
-    #     pass
-    # args = Args()
-    # args.model_dir = '/Users/user/SHAD/ML_project/markup_tool/data/models/yolo3'
-    # args.imgs_dir = '/Users/user/SHAD/ML_project/markup_tool/data/test/MOT16-04/img1'
-    # args.tracks_filepath = '/Users/user/SHAD/ML_project/build/tracks.txt'
-    # args.debug_dir = '/Users/user/SHAD/ML_project/build/debug_detections'
-    # args.detector_type = 'yolo3'
+    '''class Args:
+        pass
+    args = Args()
+    args.config_dir = '/Users/user/SHAD/ML_project/markup_tool/data/models/yolo3'
+    args.imgs_dir = '/Users/user/SHAD/ML_project/markup_tool/data/test/MOT16-04/img1'
+    args.tracks_filepath = '/Users/user/SHAD/ML_project/build/tracks.txt'
+    args.debug_dir = '/Users/user/SHAD/ML_project/build/debug_detections'
+    args.detector_type = 'yolo3'
+    '''
+
+    '''
+    class Args:
+        pass
+    args = Args()
+    base_dir = '/home/user/Desktop/ml_project'
+    # args.config_dir = os.path.join(base_dir, '/markup_tool/data/models/yolo3')
+    # args.imgs_dir = os.path.join(base_dir, '/markup_tool/data/test/MOT16-04/img1')
+    # args.tracks_filepath = os.path.join(base_dir, '/tracks.txt')
+    # args.debug_dir = os.path.join(base_dir, 'debug_detections')
+    args.config_dir = '/home/user/Desktop/ml_project/markup_tool/data/models/yolo3'
+    args.imgs_dir = '/home/user/Desktop/ml_project/markup_tool/data/test/MOT16-04/img1'
+    args.tracks_filepath = '/home/user/Desktop/ml_project/tracks.txt'
+    args.debug_dir = '/home/user/Desktop/ml_project/debug_detections'
+    args.detector_type = 'yolo3'
+    '''
+
+    assert os.path.exists(args.config_dir), 'No such config dir: {}'.format(args.config_dir)
+    assert os.path.exists(args.imgs_dir), 'No such img dir: {}'.format(args.imgs_dir)
+    # assert os.path.exists(args.tracks_filepath), 'No such tracks: {}'.format(args.tracks_filepath)
 
     non_maximum_suppression = NonMaximumSuppression()
 
-    detector = make_detector(args.detector_type, args.model_dir, non_maximum_suppression)
+    detector = make_detector(args.detector_type, args.config_dir, non_maximum_suppression)
     tracker = Sort()
 
     tracked_detections = process_video(tracker, detector, args.imgs_dir, debug_dir=args.debug_dir)
