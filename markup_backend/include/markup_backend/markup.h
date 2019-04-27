@@ -5,6 +5,7 @@
 #include "markup_backend/nn_model.h"
 #include "markup_backend/tracks.h"
 #include "markup_backend/video.h"
+#include "markup_backend/utils.h"
 
 #include <boost/filesystem.hpp>
 // using namespace boost::filesystem;
@@ -16,6 +17,7 @@ struct PipelineRunParams {
     std::string tracker_model_path = "";
     std::string weights_path = "";
     std::string tmp_video_dir = "/tmp/markup_video";
+    std::string debug_gt_tacks = "../markup_tool/data/test/MOT16-04/gt/gt.txt";
     std::string tmp_img_extention = ".png";
     size_t tmp_img_path_pad2length = 10;
     std::string tracks_filename = "tracks.txt";
@@ -24,6 +26,12 @@ struct PipelineRunParams {
 class MarkUp {
 public:
     bool get_frame(size_t frame_idx, std::vector<Detection>* detections) {
+        if (detections == nullptr) {
+            // TODO: Exceptions
+            std::cout << "No return container 'detections' provided!" << std::endl;
+            return false;
+        }
+
         detections->clear();
 
         if (track_container_ == nullptr) {
@@ -106,7 +114,15 @@ public:
             return false;
         }
 
-        track_container_ = this->run_pipeline(*video_);
+        // track_container_ = this->run_pipeline(*video_);
+
+        /* if (boost::filesystem::exists(params_.debug_gt_tacks)) {
+            // TODO: Exceptions
+            std::cout << "No debug tracks:" << params_.debug_gt_tacks << std::endl;
+            return false;
+        }*/
+
+        track_container_ = read_dummy_trackcontainer(params_.debug_gt_tacks);
 
         return true;
     }

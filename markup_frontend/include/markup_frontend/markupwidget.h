@@ -21,6 +21,8 @@ public slots:
     void slot_set_video_path(QDir path);
     void slot_framechanged(FrameWithControl *fwc);
     void slot_run();
+    void slot_delete_bbox(int track_id, int frameidx);
+    void slot_delete_track(int track_id);
 
 private:
     MainControlPanel *maincontrol = nullptr;
@@ -28,10 +30,9 @@ private:
     FrameWithControl *fwcup = nullptr;
     FrameWithControl *fwcdn = nullptr;
 
-    QDir path;
-    PipelineRunParams *params = nullptr;
-    MarkUp *markup = nullptr;
-    std::unique_ptr<TrackContainer> trackcontainer = nullptr;
+    // проверить возможность удаления...
+    // QDir path;
+    MarkUp markup;
 };
 
 #endif // WIDGET_H

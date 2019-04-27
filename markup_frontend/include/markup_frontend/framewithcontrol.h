@@ -16,25 +16,24 @@ public:
 
 signals:
     void send_framechanged(FrameWithControl* fwc);
+    void send_delete_bbox(int track_id, int frameidx);
+    void send_delete_track(int track_id);
 
 public slots:
+    void slot_delete_bbox();
+    void slot_delete_track();
     void setFrameIdx(int idx);
     void addFrameIdx(int move);
     void doOnFrameChange();
     void setPath(QDir path);
-
     void setMarkup(QMap<int,ScaledBBox> markup);
-
-    void testdebug();
 
 private:
     void reset();
 
 private:
-    // вообще-то эта фигня должна быть optional...
     int frameidx = 0;
-    // нужно определять по числу кардов в видео...
-    int n_frames = 100;
+    int n_frames = 0;
     QDir img_path;
 
     FrameView *frameview = nullptr;
