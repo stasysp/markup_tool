@@ -53,6 +53,7 @@ public:
     TrackContainer() = delete;
 
     TrackContainer(size_t video_length);
+    TrackContainer(const std::string& tracks_filepath);
 
     void add_track(const Track& track);
 
