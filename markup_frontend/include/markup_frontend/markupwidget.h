@@ -19,14 +19,15 @@ public:
 
 public slots:
     void slot_set_video_path(QDir path);
+    void slot_set_tracks_path(QString path);
     void slot_framechanged(FrameWithControl *fwc);
     void slot_run();
 
 private:
     MainControlPanel *maincontrol = nullptr;
 
-    FrameWithControl *fwcup = nullptr;
-    FrameWithControl *fwcdn = nullptr;
+    FrameWithControl *upper_frame_panel = nullptr;
+    FrameWithControl *down_frame_panel = nullptr;
 
     // проверить возможность удаления...
     // QDir path;

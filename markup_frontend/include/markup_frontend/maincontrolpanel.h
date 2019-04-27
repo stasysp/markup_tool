@@ -13,7 +13,8 @@ public:
     explicit MainControlPanel(QWidget *parent = nullptr);
 
 signals:
-    void send_path(QDir dir);
+    void send_video_path(QDir dir);
+    void send_tracks_path(QString path);
     void send_run();
 
 private slots:
