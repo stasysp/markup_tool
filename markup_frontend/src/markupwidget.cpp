@@ -70,7 +70,7 @@ void MarkupWidget::slot_framechanged(FrameWithControl *fwc) {
 }
 
 void MarkupWidget::slot_delete_bbox(int track_id, int frameidx) {
-    markup.detete_bbox(track_id, frameidx);
+    markup.delete_detection(track_id, frameidx);
     qDebug() << "delete bbox..." << track_id << frameidx;
 }
 
