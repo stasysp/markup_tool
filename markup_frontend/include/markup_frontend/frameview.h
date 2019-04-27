@@ -21,6 +21,7 @@ public slots:
     void slot_set_markup(QMap<int, ScaledBBox> newmarkup);
 
 private:
+    void set_scene();
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
@@ -29,6 +30,7 @@ protected:
     void paintEvent(QPaintEvent *event) override;
 
 private:
+    int counter = 0;
     QPixmap image;
     FrameMarkup markup;
     QGraphicsScene *scene = nullptr;
