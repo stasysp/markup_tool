@@ -17,10 +17,17 @@ void FrameView::mouseReleaseEvent(QMouseEvent *event) {}
 void FrameView::keyPressEvent(QKeyEvent *event) {}
 
 void FrameView::paintEvent(QPaintEvent *event) {
+    QGraphicsView::paintEvent(event);
+    qDebug() << "paint event #" << counter++;
+}
+
+void FrameView::set_scene() {
     // возможно, что эта логика избыточна и её можно заменить более простой
     if (!image.isNull()) {
+        if (scene != nullptr) {
+            delete scene;
+        }
         scene = new QGraphicsScene(this); // object defined in header
-        this->setScene(scene);
         scene->addPixmap(image);
         QPen pen(Qt::green, 10, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin);
 
@@ -28,9 +35,9 @@ void FrameView::paintEvent(QPaintEvent *event) {
             scene->addRect(iter->getScaledRect(scene->width(), scene->height()), pen);
         }
 
+        this->setScene(scene);
         this->fitInView(scene->itemsBoundingRect(),Qt::KeepAspectRatio);
     }
-    QGraphicsView::paintEvent(event);
 }
 
 void FrameView::loadimagebypath(QString path) {
@@ -46,4 +53,5 @@ void FrameView::slot_set_markup(QMap<int, ScaledBBox> newmarkup) {
         markup.add(iter.key(), iter.value());
         ++iter;
     }
+    set_scene();
 }
