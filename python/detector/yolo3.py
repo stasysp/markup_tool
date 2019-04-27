@@ -175,7 +175,7 @@ class Detection:
 
     def as_string(self):
         return ','.join(map(str, [
-            self.frame_index,
+            self.frame_index + 1,
             self.id,
             self.bbox.x,
             self.bbox.y,
@@ -202,7 +202,9 @@ def process_video(tracker, detector, imgs_dir,
     def valid_extention(img_name):
         return img_name.endswith(supported_extensions)
 
-    imgs_list = filter(valid_extention, imgs_list)
+    imgs_list = list(filter(valid_extention, imgs_list))
+
+    video_len = len(imgs_list)
 
     for frame_index, img_name in enumerate(imgs_list):
 
@@ -244,11 +246,12 @@ def process_video(tracker, detector, imgs_dir,
         if debug_dir is not None:
             cv2.imwrite(os.path.join(debug_dir, img_name), img)
 
-    return tracked_detections
+    return tracked_detections, video_len
 
 
-def write_tracks(filepath, tracked_detections):
+def write_tracks(filepath, video_len, tracked_detections):
     with open(filepath, 'w') as f:
+        f.write('{}\n'.format(video_len))
         f.write('\n'.join([detection.as_string() for detection in tracked_detections]))
 
 
@@ -297,5 +300,5 @@ if __name__ == '__main__':
     detector = make_detector(args.detector_type, args.config_dir, non_maximum_suppression)
     tracker = Sort()
 
-    tracked_detections = process_video(tracker, detector, args.imgs_dir, debug_dir=args.debug_dir)
-    write_tracks(args.tracks_filepath, tracked_detections)
+    tracked_detections, video_len = process_video(tracker, detector, args.imgs_dir, debug_dir=args.debug_dir)
+    write_tracks(args.tracks_filepath, video_len, tracked_detections)

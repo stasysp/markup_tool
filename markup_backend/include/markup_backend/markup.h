@@ -28,6 +28,8 @@ public:
     bool get_frame(size_t frame_idx, std::vector<Detection>* detections) {
         detections->clear();
 
+        detections->clear();
+
         if (track_container_ == nullptr) {
             // TODO: Exceptions
             std::cout << "First compute tracks!" << std::endl;
@@ -145,17 +147,67 @@ public:
         return true;
     }
 
-    bool split_track(size_t track_idx, size_t frame2split_idx) {
-        return true;
+    bool split_track(size_t track_id, size_t frame2split_idx) {
+        return false;
     }
-    bool unite_tracks(int track_idx_one, int track_idx_two) {
-        return true;
+
+    bool unite_tracks(int track_id_one, int track_id_two) {
+        return false;
     }
-    bool add_bbox() {
-        return true;
+
+    bool delete_track(size_t id) {
+        if (track_container_ == nullptr) {
+            // TODO: Exceptions
+            std::cout << "First compute tracks!" << std::endl;
+            return false;
+        }
+
+        if (this->track_container_->has_track(id)) {
+            // TODO: Exceptions
+            std::cout << "No such track found:" << id << std::endl;
+            return true;
+        }
+
+        return this->track_container_->delete_track(id);
     }
-    bool detete_bbox(size_t track_idx, size_t frame_idx) {
-        return true;
+
+    bool add_detection(const Detection& det) {
+        if (track_container_ == nullptr) {
+            // TODO: Exceptions
+            std::cout << "First compute tracks!" << std::endl;
+            return false;
+        }
+
+        if (this->track_container_->has_track(det.id)) {
+            // TODO: Exceptions
+            std::cout << "No such track found:" << det.id << std::endl;
+            return false;
+        }
+
+        if (det.frame >= track_container_->get_video_len()) {
+            // TODO: Exceptions
+            std::cout << "No such frame:" << det.frame
+                      << " Only has " << track_container_->get_video_len() << std::endl;
+            return false;
+        }
+
+        return this->track_container_->add_det2track(det.id, det);
+    }
+
+    bool delete_detection(size_t track_idx, size_t frame_idx) {
+        return false;
+    }
+
+    size_t get_video_len() const {
+        if (video_ == nullptr) {
+            return 0;
+        } else {
+            return video_->size();
+        }
+    }
+
+    PipelineRunParams get_params() const {
+        return params_;
     }
 
     size_t get_video_len() const {

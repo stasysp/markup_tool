@@ -14,11 +14,33 @@ FrameView::~FrameView() {}
 
 void FrameView::mousePressEvent(QMouseEvent *event) {}
 void FrameView::mouseReleaseEvent(QMouseEvent *event) {}
+void FrameView::mouseDoubleClickEvent(QMouseEvent *event) {
+    if (scene != nullptr) {
+        // нужно внимательно подумать про пересчёт координат...
+        // очень вероятно, что есть какие-то библиотечные функции
+        int mX = event->localPos().x();
+        int mY = event->localPos().y();
+        int W = this->size().width();
+        int H = this->size().height();
+        double aspectRatio = (double)(sceneRect().height()) / (double)(sceneRect().width());
+
+        qDebug() << mX << mY << W << H << aspectRatio;
+    }
+    trackOnFocus++;
+    set_scene();
+}
+
 void FrameView::keyPressEvent(QKeyEvent *event) {}
 
 void FrameView::paintEvent(QPaintEvent *event) {
     QGraphicsView::paintEvent(event);
     qDebug() << "paint event #" << counter++;
+}
+
+void FrameView::resizeEvent(QResizeEvent *event) {
+    QGraphicsView::resizeEvent(event);
+    set_scene();
+    // qDebug() << "resize event...";
 }
 
 void FrameView::set_scene() {
@@ -29,10 +51,17 @@ void FrameView::set_scene() {
         }
         scene = new QGraphicsScene(this); // object defined in header
         scene->addPixmap(image);
-        QPen pen(Qt::green, 10, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin);
 
         for (auto iter = markup.begin(); iter != markup.end(); ++iter) {
-            scene->addRect(iter->getScaledRect(scene->width(), scene->height()), pen);
+            int key = iter.key();
+            QColor color = QColor::fromHsv((67 * key) % 360, 255, 255, 127);
+            QPen pen(color, 10, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin);
+            QBrush brush(color);
+            if (key == trackOnFocus) {
+                scene->addRect(iter->getScaledRect(scene->width(), scene->height()), pen, brush);
+            } else {
+                scene->addRect(iter->getScaledRect(scene->width(), scene->height()), pen);
+            }
         }
 
         this->setScene(scene);
@@ -54,4 +83,8 @@ void FrameView::slot_set_markup(QMap<int, ScaledBBox> newmarkup) {
         ++iter;
     }
     set_scene();
+}
+
+int FrameView::getTrackOnFocus() {
+    return trackOnFocus;
 }
