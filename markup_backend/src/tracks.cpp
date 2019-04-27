@@ -75,7 +75,7 @@ void TrackContainer::add_track(const Track& track) {
     for (std::list<Detection>::iterator it = tracks_.back().begin(); it != tracks_.back().end(); ++it) {
         assert(it->frame < video_len_);
         assert(timeline_.size() == video_len_);
-        timeline_[it->frame].insert(&(*it));
+        timeline_[it->frame].push_back(&(*it));
     }
 
     /*for (auto& saved_track : tracks_) {
@@ -108,6 +108,33 @@ bool TrackContainer::has_track(size_t id) {
     return false;
 }
 
+bool TrackContainer::delete_track(size_t id) {
+    for (auto track_iter = tracks_.begin(); track_iter != tracks_.end(); ++track_iter) {
+        if (track_iter->get_id() == id) {
+            // Find the track
+
+            // Delete fast
+            for (const auto& det_iter : *track_iter) {
+                for (auto frame_ptr_it = timeline_[det_iter.frame].begin();
+                         frame_ptr_it != timeline_[det_iter.frame].end();
+                         ++frame_ptr_it) {
+                    if (id == (*frame_ptr_it)->id) {
+                        timeline_[det_iter.frame].erase(frame_ptr_it);
+                        break;
+                    }
+
+                }
+            }
+
+            // Delete the track;
+            tracks_.erase(track_iter);
+            return true;
+        }
+    }
+
+    return false;
+}
+
 bool TrackContainer::add_det2track(size_t track_id, const Detection& det) {
     assert (det.frame < video_len_);
     assert (video_len_ == timeline_.size());
@@ -115,7 +142,7 @@ bool TrackContainer::add_det2track(size_t track_id, const Detection& det) {
     for (auto track_iter = tracks_.begin(); track_iter != tracks_.end(); ++track_iter) {
         if (track_iter->get_id() == track_id) {
             Detection* det_ptr = track_iter->add(det);
-            timeline_[det.frame].insert(det_ptr);
+            timeline_[det.frame].push_back(det_ptr);
             return true;
         }
     }

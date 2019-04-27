@@ -59,6 +59,7 @@ public:
     void add_track(const Track& track);
     bool add_det2track(size_t track_id, const Detection& det);
     bool has_track(size_t id);
+    bool delete_track(size_t id);
 
     std::unique_ptr<Track> get_track(size_t id);
 
@@ -87,7 +88,8 @@ private:
     size_t video_len_;
     // std::set<Track, TrackComparator>
     std::list<Track> tracks_;
-    std::vector<std::set<const Detection*, DetectionComparator>> timeline_;
+    // std::vector<std::set<const Detection*, DetectionComparator>> timeline_;
+    std::vector<std::list<Detection*>> timeline_;
     size_t pedestrian_class_ = 1;
 };
 
