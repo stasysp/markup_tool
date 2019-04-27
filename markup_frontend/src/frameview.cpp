@@ -14,11 +14,25 @@ FrameView::~FrameView() {}
 
 void FrameView::mousePressEvent(QMouseEvent *event) {}
 void FrameView::mouseReleaseEvent(QMouseEvent *event) {}
+void FrameView::mouseDoubleClickEvent(QMouseEvent *event) {
+    if (scene != nullptr) {
+
+        qDebug() << "double click event..." << event->localPos();
+        qDebug() << scene->itemsBoundingRect().size() << this->size();
+    }
+}
+
 void FrameView::keyPressEvent(QKeyEvent *event) {}
 
 void FrameView::paintEvent(QPaintEvent *event) {
     QGraphicsView::paintEvent(event);
     qDebug() << "paint event #" << counter++;
+}
+
+void FrameView::resizeEvent(QResizeEvent *event) {
+    QGraphicsView::resizeEvent(event);
+    set_scene();
+    // qDebug() << "resize event...";
 }
 
 void FrameView::set_scene() {
@@ -29,10 +43,17 @@ void FrameView::set_scene() {
         }
         scene = new QGraphicsScene(this); // object defined in header
         scene->addPixmap(image);
-        QPen pen(Qt::green, 10, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin);
 
         for (auto iter = markup.begin(); iter != markup.end(); ++iter) {
-            scene->addRect(iter->getScaledRect(scene->width(), scene->height()), pen);
+            int key = iter.key();
+            QColor color = QColor::fromHsv((67 * key) % 360, 255, 255, 127);
+            QPen pen(color, 10, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin);
+            QBrush brush(color);
+            if (key == trackOnFocus) {
+                scene->addRect(iter->getScaledRect(scene->width(), scene->height()), pen, brush);
+            } else {
+                scene->addRect(iter->getScaledRect(scene->width(), scene->height()), pen);
+            }
         }
 
         this->setScene(scene);
