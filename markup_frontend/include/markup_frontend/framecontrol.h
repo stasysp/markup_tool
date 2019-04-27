@@ -19,13 +19,13 @@ public slots:
             void slot_setnewframeidx(int frameidx);
 
 public:
-    QPushButton *btn1 = nullptr;
-    QPushButton *btn2 = nullptr;
-    QPushButton *btn3 = nullptr;
-    QPushButton *btn4 = nullptr;
-    QPushButton *btn5 = nullptr;
-    QPushButton *btn6 = nullptr;
-    QPushButton *btn7 = nullptr;
+    QPushButton *btn_add_bbox = nullptr;
+    QPushButton *btn_sel_bbox = nullptr;
+    QPushButton *btn_del_bbox = nullptr;
+    QPushButton *btn_sel_track = nullptr;
+    QPushButton *btn_del_track = nullptr;
+    QPushButton *btn_unt_track = nullptr;
+    QPushButton *btn_spl_track = nullptr;
     TimeLineControl *timeline = nullptr;
 };
 

@@ -16,10 +16,18 @@ void FrameView::mousePressEvent(QMouseEvent *event) {}
 void FrameView::mouseReleaseEvent(QMouseEvent *event) {}
 void FrameView::mouseDoubleClickEvent(QMouseEvent *event) {
     if (scene != nullptr) {
+        // нужно внимательно подумать про пересчёт координат...
+        // очень вероятно, что есть какие-то библиотечные функции
+        int mX = event->localPos().x();
+        int mY = event->localPos().y();
+        int W = this->size().width();
+        int H = this->size().height();
+        double aspectRatio = (double)(sceneRect().height()) / (double)(sceneRect().width());
 
-        qDebug() << "double click event..." << event->localPos();
-        qDebug() << scene->itemsBoundingRect().size() << this->size();
+        qDebug() << mX << mY << W << H << aspectRatio;
     }
+    trackOnFocus++;
+    set_scene();
 }
 
 void FrameView::keyPressEvent(QKeyEvent *event) {}
@@ -75,4 +83,8 @@ void FrameView::slot_set_markup(QMap<int, ScaledBBox> newmarkup) {
         ++iter;
     }
     set_scene();
+}
+
+int FrameView::getTrackOnFocus() {
+    return trackOnFocus;
 }

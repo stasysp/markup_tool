@@ -29,7 +29,12 @@ MarkupWidget::MarkupWidget(QWidget *parent)
     connect(maincontrol, &MainControlPanel::send_run, this, &MarkupWidget::slot_run);
 
     connect(fwcup, &FrameWithControl::send_framechanged, this, &MarkupWidget::slot_framechanged);
+    connect(fwcup, &FrameWithControl::send_delete_bbox, this, &MarkupWidget::slot_delete_bbox);
+    connect(fwcup, &FrameWithControl::send_delete_track, this, &MarkupWidget::slot_delete_track);
+
     connect(fwcdn, &FrameWithControl::send_framechanged, this, &MarkupWidget::slot_framechanged);
+    connect(fwcdn, &FrameWithControl::send_delete_bbox, this, &MarkupWidget::slot_delete_bbox);
+    connect(fwcdn, &FrameWithControl::send_delete_track, this, &MarkupWidget::slot_delete_track);
 }
 
 // тут нужно передавать путь в бекэнд... но сейчас некуда...
@@ -62,4 +67,13 @@ void MarkupWidget::slot_framechanged(FrameWithControl *fwc) {
         // qDebug() << "get frame is not succesfull...";
         fwc->setMarkup(bboxes);
     }
+}
+
+void MarkupWidget::slot_delete_bbox(int track_id, int frameidx) {
+    markup.detete_bbox(track_id, frameidx);
+    qDebug() << "delete bbox..." << track_id << frameidx;
+}
+
+void MarkupWidget::slot_delete_track(int track_id) {
+    qDebug() << "delete track..." << track_id;
 }
