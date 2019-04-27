@@ -19,6 +19,7 @@ public:
 
 public slots:
     void slot_set_video_path(QDir path);
+    void slot_set_tracks_path(QString path);
     void slot_framechanged(FrameWithControl *fwc);
     void slot_run();
     void slot_delete_bbox(int track_id, int frameidx);
@@ -27,8 +28,8 @@ public slots:
 private:
     MainControlPanel *maincontrol = nullptr;
 
-    FrameWithControl *fwcup = nullptr;
-    FrameWithControl *fwcdn = nullptr;
+    FrameWithControl *upper_frame_panel = nullptr;
+    FrameWithControl *down_frame_panel = nullptr;
 
     // проверить возможность удаления...
     // QDir path;

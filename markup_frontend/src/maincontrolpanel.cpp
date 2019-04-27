@@ -38,7 +38,7 @@ MainControlPanel::MainControlPanel(QWidget *parent) : QWidget(parent)
 void MainControlPanel::slot_loadvideo() {
     auto path = QFileDialog::getExistingDirectory(this, "Open Folder with frames");
     QDir dir(path);
-    emit send_path(dir);
+    emit send_video_path(dir);
     // call some backend-function
 }
 
@@ -51,7 +51,8 @@ void MainControlPanel::slot_loadmodel() {
 
 void MainControlPanel::slot_loadtracks() {
     auto path = QFileDialog::getOpenFileName(this, "Open Tracks", "",
-                                             "*.tracks");
+                                             "*.txt");
+    emit send_tracks_path(path);
     qDebug() << "tracks path : " << path;
     // call some backend-function
 }

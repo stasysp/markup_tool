@@ -10,8 +10,8 @@ MarkupWidget::MarkupWidget(QWidget *parent)
         : QWidget(parent)
 {
     maincontrol = new MainControlPanel(this);
-    fwcup = new FrameWithControl(this);
-    fwcdn = new FrameWithControl(this);
+    upper_frame_panel = new FrameWithControl(this);
+    down_frame_panel = new FrameWithControl(this);
 
     QHBoxLayout *hlayout = new QHBoxLayout(this);
     QVBoxLayout* fwclayout = new QVBoxLayout;
@@ -19,12 +19,14 @@ MarkupWidget::MarkupWidget(QWidget *parent)
     hlayout->addWidget(maincontrol);
     hlayout->addLayout(fwclayout);
 
-    fwclayout->addWidget(fwcup);
-    fwclayout->addWidget(fwcdn);
+    fwclayout->addWidget(upper_frame_panel);
+    fwclayout->addWidget(down_frame_panel);
 
-    connect(maincontrol, &MainControlPanel::send_path, fwcup, &FrameWithControl::setPath);
-    connect(maincontrol, &MainControlPanel::send_path, fwcdn, &FrameWithControl::setPath);
-    connect(maincontrol, &MainControlPanel::send_path, this, &MarkupWidget::slot_set_video_path);
+    connect(maincontrol, &MainControlPanel::send_video_path, upper_frame_panel, &FrameWithControl::setPath);
+    connect(maincontrol, &MainControlPanel::send_video_path, down_frame_panel, &FrameWithControl::setPath);
+    connect(maincontrol, &MainControlPanel::send_video_path, this, &MarkupWidget::slot_set_video_path);
+
+    connect(maincontrol, &MainControlPanel::send_tracks_path, this, &MarkupWidget::slot_set_tracks_path);
 
     connect(maincontrol, &MainControlPanel::send_run, this, &MarkupWidget::slot_run);
 
@@ -37,9 +39,13 @@ MarkupWidget::MarkupWidget(QWidget *parent)
     connect(fwcdn, &FrameWithControl::send_delete_track, this, &MarkupWidget::slot_delete_track);
 }
 
-// тут нужно передавать путь в бекэнд... но сейчас некуда...
 void MarkupWidget::slot_set_video_path(QDir path) {
     markup.set_video(std::string(path.path().toUtf8().constData()));
+    path = path;
+}
+
+void MarkupWidget::slot_set_tracks_path(QString path) {
+    markup.set_tracks(std::string(path.toUtf8().constData()));
     path = path;
 }
 

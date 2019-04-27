@@ -42,8 +42,7 @@ BOOST_AUTO_TEST_CASE(read_det_from_file)
 
     std::string det_filepath = "../../../markup_tool/data/test/MOT16-04/gt/gt.txt";
     std::string video_filepath = "../../../markup_tool/data/test/MOT16-04/img1";
-    // std::string det_filepath = "../markup_tool/data/test/MOT16-04/gt/gt.txt";
-    // std::string video_filepath = "../markup_tool/data/test/MOT16-04/img1";
+
     std::string debug_detections_dir = "/tmp/detections";
     cv::Size test_img_size(1920, 1080);
 
