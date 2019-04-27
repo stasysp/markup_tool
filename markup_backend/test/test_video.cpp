@@ -1,4 +1,4 @@
-#define BOOST_TEST_MODULE BackendTests
+// #define BOOST_TEST_MODULE BackendTests
 
 #include <boost/test/unit_test.hpp>
 #include <boost/filesystem.hpp>

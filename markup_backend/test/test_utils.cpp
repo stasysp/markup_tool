@@ -42,6 +42,8 @@ BOOST_AUTO_TEST_CASE(read_det_from_file)
 
     std::string det_filepath = "../../../markup_tool/data/test/MOT16-04/gt/gt.txt";
     std::string video_filepath = "../../../markup_tool/data/test/MOT16-04/img1";
+    // std::string det_filepath = "../markup_tool/data/test/MOT16-04/gt/gt.txt";
+    // std::string video_filepath = "../markup_tool/data/test/MOT16-04/img1";
     std::string debug_detections_dir = "/tmp/detections";
     cv::Size test_img_size(1920, 1080);
 
@@ -80,7 +82,7 @@ BOOST_AUTO_TEST_CASE(read_det_from_file)
     // BOOST_CHECK(!frame_detections.empty());
     // for (const auto& detection : frame_detections) {
     //     BOOST_CHECK_EQUAL(detection.frame, frame_index);
-    // }
+    //}
 
     BOOST_CHECK_EQUAL(detected_tracks->get_video_len(), video->size());
 

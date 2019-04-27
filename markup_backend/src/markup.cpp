@@ -61,6 +61,8 @@ std::unique_ptr<TrackContainer> MarkUp::run_pipeline(const Video& video) {
 
     //
 
-    std::unique_ptr<TrackContainer> track_container(new TrackContainer(tracks_filepath));
+    // std::unique_ptr<TrackContainer> track_container(new TrackContainer(tracks_filepath));
+
+    return std::make_unique<TrackContainer>(tracks_filepath);
 }
 
