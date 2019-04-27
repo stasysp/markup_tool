@@ -27,10 +27,14 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
+
     void paintEvent(QPaintEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
     int counter = 0;
+    int trackOnFocus = 4;
     QPixmap image;
     FrameMarkup markup;
     QGraphicsScene *scene = nullptr;
