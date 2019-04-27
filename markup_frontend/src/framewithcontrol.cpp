@@ -15,7 +15,10 @@ FrameWithControl::FrameWithControl(QWidget *parent) : QWidget(parent)
 
     connect(framecontrol, &FrameControl::send_newframeidx,
             this, &FrameWithControl::setFrameIdx);
-    // reset();
+    connect(framecontrol->btn_del_bbox, &QPushButton::clicked,
+            this, &FrameWithControl::slot_delete_bbox);
+    connect(framecontrol->btn_del_track, &QPushButton::clicked,
+            this, &FrameWithControl::slot_delete_track);
 }
 
 void FrameWithControl::setFrameIdx(int idx) {
@@ -59,6 +62,10 @@ void FrameWithControl::setMarkup(QMap<int, ScaledBBox> markup) {
     frameview->slot_set_markup(markup);
 }
 
-void FrameWithControl::testdebug() {
-    qDebug() << "debug";
+void FrameWithControl::slot_delete_bbox() {
+    emit send_delete_bbox(frameview->getTrackOnFocus(), frameidx);
+}
+
+void FrameWithControl::slot_delete_track() {
+    emit send_delete_track(frameview->getTrackOnFocus());
 }

@@ -19,6 +19,7 @@ public:
 
 public slots:
     void slot_set_markup(QMap<int, ScaledBBox> newmarkup);
+    int getTrackOnFocus();
 
 private:
     void set_scene();
