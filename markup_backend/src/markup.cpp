@@ -5,8 +5,9 @@
 
 #include "markup_backend/nn_model.h"
 #include "markup_backend/markup.h"
+#include "markup_backend/utils.h"
 
-std::unique_ptr<TrackContainer> MarkUp::run(const Video& video) {
+std::unique_ptr<TrackContainer> MarkUp::run_pipeline(const Video& video) {
     if (boost::filesystem::exists(params_.tmp_video_dir)) {
         boost::filesystem::remove_all(params_.tmp_video_dir);
     }

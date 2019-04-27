@@ -22,25 +22,44 @@ MarkupWidget::MarkupWidget(QWidget *parent)
     fwclayout->addWidget(fwcup);
     fwclayout->addWidget(fwcdn);
 
-    connect(maincontrol, &MainControlPanel::send_path, this, &MarkupWidget::slot_set_path);
-    // connect(this, &MarkupWidget::send_nframes, framecontrolup, &FrameControl::slot_set_nframes);
-    // connect(this, &MarkupWidget::send_nframes, framecontroldown, &FrameControl::slot_set_nframes);
+    connect(maincontrol, &MainControlPanel::send_path, fwcup, &FrameWithControl::setPath);
+    connect(maincontrol, &MainControlPanel::send_path, fwcdn, &FrameWithControl::setPath);
+    connect(maincontrol, &MainControlPanel::send_path, this, &MarkupWidget::slot_set_video_path);
+
+    connect(maincontrol, &MainControlPanel::send_run, this, &MarkupWidget::slot_run);
+
+    connect(fwcup, &FrameWithControl::send_framechanged, this, &MarkupWidget::slot_framechanged);
+    connect(fwcdn, &FrameWithControl::send_framechanged, this, &MarkupWidget::slot_framechanged);
 }
 
-void MarkupWidget::slot_set_path(QDir dir) {
-    if (imagiesdir != dir) {
-        qDebug() << "dir set as : " << imagiesdir;
-        imagiesdir = dir;
+// тут нужно передавать путь в бекэнд... но сейчас некуда...
+void MarkupWidget::slot_set_video_path(QDir path) {
+    markup.set_video(std::string(path.path().toUtf8().constData()));
+    path = path;
+}
 
-        emit send_reset();
+void MarkupWidget::slot_run() {
+    qDebug() << "Rewrite using new MarkUp interface";
+    markup.run();
+    qDebug() << "run finished...";
+}
+
+void MarkupWidget::slot_framechanged(FrameWithControl *fwc) {
+    int frameidx = fwc->getFrameIdx();
+    QMap<int, ScaledBBox> bboxes;
+    std::vector<Detection> detections;
+    // qDebug() << fwc << "slot_framechanged" << frameidx;
+
+    bool res = markup.get_frame(frameidx, &detections);
+
+    if (res) {
+        // qDebug() << "get frame is succesfull...";
+        for (auto det : detections) {
+            bboxes[det.id] = ScaledBBox(det);
+        }
+        fwc->setMarkup(bboxes);
+    } else {
+        // qDebug() << "get frame is not succesfull...";
+        fwc->setMarkup(bboxes);
     }
-
-    imagiesdir.setFilter(QDir::Files | QDir::Hidden | QDir::NoSymLinks);   //устанавливаем фильтр выводимых файлов/папок (см ниже)
-    // dir.setSorting(QDir::Size | QDir::Reversed);   //устанавливаем сортировку "от меньшего к большему"
-    QFileInfoList list = imagiesdir.entryInfoList();     //получаем список файлов директории
-    emit send_nframes(list.size());
-    // for (int i = 0; i < list.size(); ++i) {
-    //     QFileInfo fileInfo = list.at(i);
-    //     qDebug() << fileInfo.fileName();
-    // }
 }

@@ -6,6 +6,7 @@
 #include <QFileInfoList>
 
 #include "markup_frontend/maincontrolpanel.h"
+#include "markup_backend/markup.h"
 
 MainControlPanel::MainControlPanel(QWidget *parent) : QWidget(parent)
 {
@@ -57,7 +58,7 @@ void MainControlPanel::slot_loadtracks() {
 
 void MainControlPanel::slot_run() {
     qDebug() << "run tracking...";
-    // call some backend-function (run)
+    emit send_run();
 }
 
 void MainControlPanel::slot_play() {

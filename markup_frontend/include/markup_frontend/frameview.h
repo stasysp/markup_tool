@@ -15,19 +15,22 @@ public:
     explicit FrameView(QWidget* parent = nullptr);
     ~FrameView();
 
-    void setScaledPixmap(const QPixmap &pixmap);
+    void loadimagebypath(QString path);
+
+public slots:
+    void slot_set_markup(QMap<int, ScaledBBox> newmarkup);
 
 private:
-    void loadimagebypath(QString path);
+    void set_scene();
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
-
     void paintEvent(QPaintEvent *event) override;
 
 private:
+    int counter = 0;
     QPixmap image;
     FrameMarkup markup;
     QGraphicsScene *scene = nullptr;

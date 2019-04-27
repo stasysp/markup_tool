@@ -2,12 +2,13 @@
 #define WIDGET_H
 
 #include <QWidget>
-// #include <QPushButton>
 #include <QDir>
 
 #include "maincontrolpanel.h"
 #include "framewithcontrol.h"
 
+#include "markup_backend/markup.h"
+#include "markup_backend/tracks.h"
 
 class MarkupWidget : public QWidget
 {
@@ -16,26 +17,20 @@ class MarkupWidget : public QWidget
 public:
     MarkupWidget(QWidget *parent = nullptr);
 
-    signals:
-            void send_nframes(int nframes);
-    void send_reset();
-
-private slots:
-            void slot_set_path(QDir dir);
+public slots:
+    void slot_set_video_path(QDir path);
+    void slot_framechanged(FrameWithControl *fwc);
+    void slot_run();
 
 private:
     MainControlPanel *maincontrol = nullptr;
-    // FrameView *frameviewup = nullptr;
-    // FrameView *frameviewdown = nullptr;
-    // FrameControl *framecontrolup = nullptr;
-    // FrameControl *framecontroldown = nullptr;
 
     FrameWithControl *fwcup = nullptr;
     FrameWithControl *fwcdn = nullptr;
 
-    // добавить проверку существования???
-    QDir imagiesdir;
+    // проверить возможность удаления...
+    // QDir path;
+    MarkUp markup;
 };
-
 
 #endif // WIDGET_H

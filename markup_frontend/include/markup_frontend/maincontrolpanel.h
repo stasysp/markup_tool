@@ -14,6 +14,7 @@ public:
 
 signals:
     void send_path(QDir dir);
+    void send_run();
 
 private slots:
     void slot_loadmodel();
