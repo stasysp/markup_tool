@@ -132,14 +132,34 @@ bool MarkUp::set_video(const std::string& filepath) {
     video_ = std::make_unique<Video>(params_.video_path);
 }
 
+bool MarkUp::set_tracks(const std::string& filepath) {
+    if (filepath.empty()) {
+        return false;
+    }
+
+    if (!boost::filesystem::exists(filepath)) {
+        // TODO: Exceptions
+        std::cout << "File not found:" << filepath << std::endl;
+        return false;
+    }
+
+    if (params_.tracks_path == filepath) {
+        return true;
+    }
+
+    track_container_.reset(nullptr);
+
+    params_.tracks_path = filepath;
+}
+
 bool MarkUp::run() {
     track_container_.reset(nullptr);
 
-    if (!boost::filesystem::exists(params_.tracker_model_path)) {
+    /*if (!boost::filesystem::exists(params_.tracker_model_path)) {
         // TODO: Exceptions
         std::cout << "Model doesnt exist:" << params_.tracker_model_path << std::endl;
         return false;
-    }
+    }*/
 
     if (video_ == nullptr) {
         // TODO: Exceptions
@@ -149,13 +169,13 @@ bool MarkUp::run() {
 
     // track_container_ = this->run_pipeline(*video_);
 
-    /* if (boost::filesystem::exists(params_.debug_gt_tacks)) {
+    /* if (boost::filesystem::exists(params_.tracks_path)) {
         // TODO: Exceptions
-        std::cout << "No debug tracks:" << params_.debug_gt_tacks << std::endl;
+        std::cout << "No debug tracks:" << params_.tracks_path << std::endl;
         return false;
     }*/
 
-    track_container_ = read_dummy_trackcontainer(params_.debug_gt_tacks);
+    track_container_ = read_dummy_trackcontainer(params_.tracks_path);
 
     return true;
 }
