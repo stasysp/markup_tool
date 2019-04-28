@@ -27,6 +27,7 @@ public slots:
     void doOnFrameChange();
     void setPath(QDir path);
     void setMarkup(QMap<int,ScaledBBox> markup);
+    void update();
 
 private:
     void reset();

@@ -46,6 +46,7 @@ void MarkupWidget::slot_set_video_path(QDir path) {
 void MarkupWidget::slot_run() {
     qDebug() << "Rewrite using new MarkUp interface";
     markup.run();
+    update();
     qDebug() << "run finished...";
 }
 
@@ -71,9 +72,17 @@ void MarkupWidget::slot_framechanged(FrameWithControl *fwc) {
 
 void MarkupWidget::slot_delete_bbox(int track_id, int frameidx) {
     markup.delete_detection(track_id, frameidx);
-    qDebug() << "delete bbox..." << track_id << frameidx;
+    update();
+    // qDebug() << "delete bbox..." << track_id << frameidx;
 }
 
 void MarkupWidget::slot_delete_track(int track_id) {
-    qDebug() << "delete track..." << track_id;
+    markup.delete_track(track_id);
+    update();
+    // qDebug() << "delete track..." << track_id;
+}
+
+void MarkupWidget::update() {
+    fwcup->update();
+    fwcdn->update();
 }

@@ -102,11 +102,11 @@ public:
     bool run() {
         track_container_.reset(nullptr);
 
-        if (!boost::filesystem::exists(params_.tracker_model_path)) {
+        /*if (!boost::filesystem::exists(params_.tracker_model_path)) {
             // TODO: Exceptions
             std::cout << "Model doesnt exist:" << params_.tracker_model_path << std::endl;
             return false;
-        }
+        }*/
 
         if (video_ == nullptr) {
             // TODO: Exceptions
@@ -142,10 +142,10 @@ public:
             return false;
         }
 
-        if (this->track_container_->has_track(id)) {
+        if (!this->track_container_->has_track(id)) {
             // TODO: Exceptions
             std::cout << "No such track found:" << id << std::endl;
-            return true;
+            return false;
         }
 
         return this->track_container_->delete_track(id);
