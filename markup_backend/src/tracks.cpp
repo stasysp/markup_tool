@@ -14,6 +14,16 @@ Detection* Track::push_back(const Detection& det) {
     return &detections_.back();
 }
 
+void Track::del(size_t frame_idx) {
+    for (auto it = this->detections_.begin();
+             it != this->detections_.end();
+             ++it) {
+        if (it->frame == frame_idx) {
+            this->detections_.erase(it);
+        }
+    }
+}
+
 Detection* Track::add(const Detection& det) {
     assert(det.id == id_);
 
@@ -262,4 +272,63 @@ bool TrackContainer::save(const std::string& filepath) {
                     << pedestrian_class_ << std::endl;
         }
     }
+}
+
+bool TrackContainer::unite_tracks(size_t id_A, size_t id_B) {
+    std::unique_ptr<Track> track_A = this->get_track(id_A);
+    if (track_A == nullptr) {
+        return false;
+    }
+
+    std::unique_ptr<Track> track_B = this->get_track(id_B);
+    if (track_B == nullptr) {
+        return false;
+    }
+
+    size_t new_id = std::min(track_A->get_id(), track_B->get_id());
+    Track united_tracks(new_id);
+
+    for (const auto& det : *track_A) {
+        auto det_cpy = det;
+        det_cpy.id = new_id;
+        united_tracks.push_back(det_cpy);
+    }
+
+    for (const auto& det : *track_B) {
+        auto det_cpy = det;
+        det_cpy.id = new_id;
+        united_tracks.add(det_cpy);
+    }
+
+    return true;
+}
+
+bool TrackContainer::delete_detection(size_t track_id, size_t frame_idx) {
+    if (!this->has_track(track_id)) {
+        return false;
+    }
+
+    if (frame_idx >= this->video_len_) {
+        return false;
+    }
+
+    assert(timeline_.size() == this->video_len_);
+
+    for (auto det_ptr_it = timeline_[frame_idx].begin();
+         det_ptr_it != timeline_[frame_idx].end();
+         ++det_ptr_it) {
+        if ((*det_ptr_it)->id == track_id) {
+            timeline_[frame_idx].erase(det_ptr_it);
+
+           break;
+        }
+    }
+
+    for (auto track_it = tracks_.begin(); track_it != tracks_.end(); ++track_it) {
+        if (track_it->get_id() == track_id) {
+            track_it->del(frame_idx);
+        }
+    }
+
+    return true;
 }
