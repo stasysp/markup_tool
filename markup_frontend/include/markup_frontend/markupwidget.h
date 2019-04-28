@@ -12,13 +12,14 @@
 
 class MarkupWidget : public QWidget
 {
-    Q_OBJECT
+Q_OBJECT
 
 public:
     MarkupWidget(QWidget *parent = nullptr);
 
 public slots:
     void slot_set_video_path(QDir path);
+    void slot_set_tracks_path(QString path);
     void slot_framechanged(FrameWithControl *fwc);
     void slot_run();
     void slot_delete_bbox(int track_id, int frameidx);

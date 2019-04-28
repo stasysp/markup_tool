@@ -17,7 +17,7 @@ struct PipelineRunParams {
     std::string tracker_model_path = "";
     std::string weights_path = "";
     std::string tmp_video_dir = "/tmp/markup_video";
-    std::string debug_gt_tacks = "../markup_tool/data/test/MOT16-04/gt/gt.txt";
+    std::string tracks_path = "";
     std::string tmp_img_extention = ".png";
     size_t tmp_img_path_pad2length = 10;
     std::string tracks_filename = "tracks.txt";
@@ -97,16 +97,34 @@ public:
         video_ = std::make_unique<Video>(params_.video_path);
     }
 
+    bool set_tracks(const std::string& filepath) {
+        if (filepath.empty()) {
+            return false;
+        }
 
+        if (!boost::filesystem::exists(filepath)) {
+            // TODO: Exceptions
+            std::cout << "File not found:" << filepath << std::endl;
+            return false;
+        }
+
+        if (params_.tracks_path == filepath) {
+            return true;
+        }
+
+        track_container_.reset(nullptr);
+
+        params_.tracks_path = filepath;
+    }
 
     bool run() {
         track_container_.reset(nullptr);
 
-        if (!boost::filesystem::exists(params_.tracker_model_path)) {
+        /*if (!boost::filesystem::exists(params_.tracker_model_path)) {
             // TODO: Exceptions
             std::cout << "Model doesnt exist:" << params_.tracker_model_path << std::endl;
             return false;
-        }
+        }*/
 
         if (video_ == nullptr) {
             // TODO: Exceptions
@@ -116,13 +134,13 @@ public:
 
         // track_container_ = this->run_pipeline(*video_);
 
-        /* if (boost::filesystem::exists(params_.debug_gt_tacks)) {
+        /* if (boost::filesystem::exists(params_.tracks_path)) {
             // TODO: Exceptions
-            std::cout << "No debug tracks:" << params_.debug_gt_tacks << std::endl;
+            std::cout << "No debug tracks:" << params_.tracks_path << std::endl;
             return false;
         }*/
 
-        track_container_ = read_dummy_trackcontainer(params_.debug_gt_tacks);
+        track_container_ = read_dummy_trackcontainer(params_.tracks_path);
 
         return true;
     }
