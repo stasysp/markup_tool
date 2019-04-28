@@ -15,6 +15,7 @@ public:
 
     Detection* push_back(const Detection& det);
     Detection* add(const Detection& det);
+    void del(size_t frame_idx);
     size_t get_id() const;
 
     std::list<Detection>::iterator begin();
@@ -60,6 +61,10 @@ public:
     bool add_det2track(size_t track_id, const Detection& det);
     bool has_track(size_t id);
     bool delete_track(size_t id);
+    bool delete_detection(size_t track_id, size_t frame_idx);
+    bool unite_tracks(size_t id_A, size_t id_B);
+    bool split_track(size_t track_id, size_t frame_idx);
+    size_t create_new_track(const Detection& det);
 
     std::unique_ptr<Track> get_track(size_t id);
 
@@ -74,17 +79,10 @@ public:
 
     bool load(const std::string& filepath);
 
-    // void add_track(Track);
-    // get all detections at frame_index
-    // iterate through all tracks
-    // Get track by id
-    // Merge tracks
     // Split tracks
-    // Delete tracks
     // Re-id tracks
 private:
-    // std::vector<std::vector<>>
-    // tracks
+    size_t get_new_id();
     size_t video_len_;
     // std::set<Track, TrackComparator>
     std::list<Track> tracks_;
