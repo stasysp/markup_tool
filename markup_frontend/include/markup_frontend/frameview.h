@@ -16,13 +16,12 @@ public:
     ~FrameView();
 
     void loadimagebypath(QString path);
+    void update();
 
 public slots:
     void slot_set_markup(QMap<int, ScaledBBox> newmarkup);
-    int getTrackOnFocus();
-
-private:
     void set_scene();
+    int getTrackOnFocus();
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;

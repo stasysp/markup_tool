@@ -69,3 +69,8 @@ void FrameWithControl::slot_delete_bbox() {
 void FrameWithControl::slot_delete_track() {
     emit send_delete_track(frameview->getTrackOnFocus());
 }
+
+void FrameWithControl::update() {
+    frameview->update();
+    qDebug() << "frameview set scene...";
+}

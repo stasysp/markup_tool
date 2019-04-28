@@ -27,13 +27,12 @@ public slots:
 
 private:
     MainControlPanel *maincontrol = nullptr;
-
     FrameWithControl *fwcup = nullptr;
     FrameWithControl *fwcdn = nullptr;
-
-    // проверить возможность удаления...
-    // QDir path;
     MarkUp markup;
+
+private:
+    void update();
 };
 
 #endif // WIDGET_H

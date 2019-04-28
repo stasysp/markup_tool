@@ -71,8 +71,8 @@ void FrameView::set_scene() {
 
 void FrameView::loadimagebypath(QString path) {
     image = QPixmap(path);
-    QPaintEvent *event = new QPaintEvent(QRect());
-    paintEvent(event);
+    //QPaintEvent *event = new QPaintEvent(QRect());
+    //paintEvent(event);
 }
 
 void FrameView::slot_set_markup(QMap<int, ScaledBBox> newmarkup) {
@@ -87,4 +87,10 @@ void FrameView::slot_set_markup(QMap<int, ScaledBBox> newmarkup) {
 
 int FrameView::getTrackOnFocus() {
     return trackOnFocus;
+}
+
+void FrameView::update() {
+    set_scene();
+    QPaintEvent *event = new QPaintEvent(QRect());
+    paintEvent(event);
 }
