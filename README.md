@@ -5,6 +5,7 @@
 ```Shell
 sudo apt-get update
 sudo apt-get install g++
+pip install torchvision, torch, numba, filterpy
 ```
 - Build app
 ```Shell
