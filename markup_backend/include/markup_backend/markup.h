@@ -37,15 +37,13 @@ public:
 
     bool run();
 
-    bool split_track(size_t track_id, size_t frame2split_idx) {
-        return false;
-    }
+    bool split_track(size_t track_id, size_t frame2split_idx);
 
     bool unite_tracks(size_t track_id_one, size_t track_id_two);
 
     bool delete_track(size_t id);
 
-    bool add_detection(const Detection& det);
+    size_t add_detection(const Detection& det);
 
     bool delete_detection(size_t track_id, size_t frame_idx);
 

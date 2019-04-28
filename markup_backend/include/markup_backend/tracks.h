@@ -63,6 +63,8 @@ public:
     bool delete_track(size_t id);
     bool delete_detection(size_t track_id, size_t frame_idx);
     bool unite_tracks(size_t id_A, size_t id_B);
+    bool split_track(size_t track_id, size_t frame_idx);
+    size_t create_new_track(const Detection& det);
 
     std::unique_ptr<Track> get_track(size_t id);
 
@@ -80,6 +82,7 @@ public:
     // Split tracks
     // Re-id tracks
 private:
+    size_t get_new_id();
     size_t video_len_;
     // std::set<Track, TrackComparator>
     std::list<Track> tracks_;

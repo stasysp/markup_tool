@@ -79,6 +79,28 @@ TrackContainer::TrackContainer(const std::string& tracks_filepath) {
     assert(this->load(tracks_filepath));
 }
 
+size_t TrackContainer::get_new_id() {
+    size_t max_id = 0;
+    for (const auto& track : this->tracks_) {
+        max_id = std::max(track.get_id(), max_id);
+    }
+
+    return max_id + 1;
+}
+
+size_t TrackContainer::create_new_track(const Detection& det) {
+    size_t new_id = this->get_new_id();
+    Detection new_det = det;
+    new_det.id = new_id;
+
+    Track new_track(new_id);
+    new_track.add(new_det);
+
+    this->add_track(new_track);
+
+    return new_id;
+}
+
 void TrackContainer::add_track(const Track& track) {
     // Checks
     tracks_.push_back(track);
@@ -116,6 +138,46 @@ bool TrackContainer::has_track(size_t id) {
         }
     }
     return false;
+}
+
+bool TrackContainer::split_track(size_t track_id, size_t frame_idx) {
+    std::list<Track>::iterator track_it;
+    for (track_it = this->tracks_.begin();
+             track_it != this->tracks_.end();
+             ++track_it) {
+        if (track_it->get_id() == track_id) {
+            break;
+        }
+    }
+
+    if (track_it == this->tracks_.end()) {
+        return false;
+    }
+
+    size_t new_id = get_new_id();
+    Track track_tail(new_id);
+
+    std::vector<size_t> frames2delete;
+    for (const auto& det : *track_it) {
+        if (det.frame >= frame_idx) {
+            Detection new_det = det;
+            new_det.id = new_id;
+            track_tail.push_back(new_det);
+            frames2delete.push_back(det.frame);
+        }
+    }
+
+    if (frames2delete.empty()) {
+        return true;
+    }
+
+    for (const auto& index : frames2delete) {
+        this->delete_detection(track_id, index);
+    }
+
+    this->add_track(track_tail);
+
+    return true;
 }
 
 bool TrackContainer::delete_track(size_t id) {

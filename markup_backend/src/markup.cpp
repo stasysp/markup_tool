@@ -218,7 +218,31 @@ bool MarkUp::delete_track(size_t id) {
     return this->track_container_->delete_track(id);
 }
 
-bool MarkUp::add_detection(const Detection& det) {
+bool MarkUp::split_track(size_t track_id, size_t frame2split_idx) {
+    if (track_container_ == nullptr) {
+        // TODO: Exceptions
+        std::cout << "First compute tracks!" << std::endl;
+        return false;
+    }
+
+    if (!this->track_container_->has_track(track_id)) {
+        // TODO: Exceptions
+        std::cout << "No such track found:" << track_id << std::endl;
+        return false;
+    }
+
+    if (frame2split_idx >= track_container_->get_video_len()) {
+        // TODO: Exceptions
+        std::cout << "No such frame:" << frame2split_idx
+                  << " Only has " << track_container_->get_video_len() << std::endl;
+        return false;
+    }
+
+    return this->track_container_->split_track(track_id, frame2split_idx);
+}
+
+
+size_t MarkUp::add_detection(const Detection& det) {
     if (track_container_ == nullptr) {
         // TODO: Exceptions
         std::cout << "First compute tracks!" << std::endl;
@@ -238,7 +262,10 @@ bool MarkUp::add_detection(const Detection& det) {
         return false;
     }
 
-    return this->track_container_->add_det2track(det.id, det);
+    // Return id of the new track!
+    return this->track_container_->create_new_track(det);
+
+    // return this->track_container_->add_det2track(det.id, det);
 }
 
 size_t MarkUp::get_video_len() const {
