@@ -20,6 +20,7 @@ void Track::del(size_t frame_idx) {
              ++it) {
         if (it->frame == frame_idx) {
             this->detections_.erase(it);
+            break;
         }
     }
 }
@@ -31,12 +32,19 @@ Detection* Track::add(const Detection& det) {
     for (det_iter = detections_.begin();
              det_iter != detections_.end();
              ++det_iter) {
-        if (det_iter->frame > det.frame) {
+
+        if (det_iter->frame >= det.frame) {
             break;
         }
     }
-    std::list<Detection>::iterator new_det = detections_.insert(det_iter, det);
-    return &(*new_det);
+
+    if (det_iter != detections_.end() && det_iter->frame == det.frame) {
+        *det_iter = det;
+        return &(*det_iter);
+    } else {
+        std::list<Detection>::iterator new_det = detections_.insert(det_iter, det);
+        return &(*new_det);
+    }
 }
 
 size_t Track::get_id() const {

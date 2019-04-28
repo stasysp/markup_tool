@@ -41,7 +41,9 @@ BOOST_AUTO_TEST_CASE(markup_logic)
 
     BOOST_CHECK(!mark_up->set_video(""));
     BOOST_CHECK(!mark_up->set_video("/tmp/deadbeaf"));
-    BOOST_CHECK(mark_up->set_video(video_path));
+    for (size_t i = 0; i < 50; ++i) {
+        BOOST_CHECK(mark_up->set_video(video_path));
+    }
     BOOST_CHECK_EQUAL(mark_up->get_video_len(), 5);
 
     // frame_idx >= track_container_->get_video_len()
