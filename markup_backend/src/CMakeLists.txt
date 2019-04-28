@@ -13,5 +13,5 @@ include_directories(${Boost_INCLUDE_DIRS})
 #         ${HEADERS_DIR}/markup_backend/video.h
 #         ${HEADERS_DIR}/markup_backend/markup.h)
 
-add_library(markup_backend markup.cpp video.cpp tracks.cpp utils.cpp)
+add_library(markup_backend markup.cpp video.cpp tracks.cpp utils.cpp track_container.cpp)
 target_link_libraries(markup_backend ${OpenCV_LIBS} ${Boost_LIBRARIES})
