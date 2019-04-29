@@ -41,9 +41,12 @@ BOOST_AUTO_TEST_CASE(markup_logic)
 
     BOOST_CHECK(!mark_up->set_video(""));
     BOOST_CHECK(!mark_up->set_video("/tmp/deadbeaf"));
-    for (size_t i = 0; i < 50; ++i) {
-        BOOST_CHECK(mark_up->set_video(video_path));
+    for (size_t i = 0; i < 1; ++i) {
+        bool ret;
+        BOOST_CHECK_NO_THROW(ret = mark_up->set_video(video_path));
+        BOOST_CHECK(ret);
     }
+
     BOOST_CHECK_EQUAL(mark_up->get_video_len(), 5);
 
     // frame_idx >= track_container_->get_video_len()
@@ -52,14 +55,14 @@ BOOST_AUTO_TEST_CASE(markup_logic)
     BOOST_CHECK(!mark_up->get_frame(not_real_index, &detections));
     BOOST_CHECK(detections.empty());
 
-    /*BOOST_CHECK(mark_up->run());
-    for (size_t frame_idx = 0; frame_idx < mark_up->get_video_len(); ++frame_idx) {
-        BOOST_CHECK(mark_up->get_frame(frame_idx, &detections));
-        BOOST_CHECK(!detections.empty());
-        for (const auto& det : detections) {
-            BOOST_CHECK_EQUAL(det.frame, frame_idx);
-        }
-    }*/
+    //BOOST_CHECK(mark_up->run());
+    //for (size_t frame_idx = 0; frame_idx < mark_up->get_video_len(); ++frame_idx) {
+    //    BOOST_CHECK(mark_up->get_frame(frame_idx, &detections));
+    //    BOOST_CHECK(!detections.empty());
+    //    for (const auto& det : detections) {
+    //        BOOST_CHECK_EQUAL(det.frame, frame_idx);
+    //    }
+    // }
 }
 
 BOOST_AUTO_TEST_SUITE_END()

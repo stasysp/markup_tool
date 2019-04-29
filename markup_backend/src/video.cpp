@@ -9,6 +9,7 @@ using namespace boost::filesystem;
 
 Video::Video(const std::string& dir_path, size_t fps) {
     dir_path_ = dir_path;
+    sequence_.clear();
 
     assert(exists(dir_path));
 

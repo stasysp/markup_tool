@@ -36,9 +36,12 @@ size_t TrackContainer::create_new_track(const Detection& det) {
 }
 
 void TrackContainer::add_track(const Track& track) {
+    assert(!this->has_track(track.get_id()));
+
     // Checks
     tracks_.push_back(track);
-    for (std::list<Detection>::iterator it = tracks_.back().begin(); it != tracks_.back().end(); ++it) {
+    for (std::list<Detection>::iterator it = tracks_.back().begin();
+            it != tracks_.back().end(); ++it) {
         assert(it->frame < video_len_);
         assert(timeline_.size() == video_len_);
         timeline_[it->frame].push_back(&(*it));

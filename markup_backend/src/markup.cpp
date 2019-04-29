@@ -55,8 +55,6 @@ std::unique_ptr<TrackContainer> MarkUp::run_pipeline(const Video& video) {
 
     assert(boost::filesystem::exists(tracks_filepath));
 
-    // std::unique_ptr<TrackContainer> track_container(new TrackContainer(tracks_filepath));
-
     return std::make_unique<TrackContainer>(tracks_filepath);
 }
 
@@ -130,6 +128,8 @@ bool MarkUp::set_video(const std::string& filepath) {
 
     params_.video_path = filepath;
     video_ = std::make_unique<Video>(params_.video_path);
+
+    return true;
 }
 
 bool MarkUp::set_tracks(const std::string& filepath) {
@@ -155,27 +155,27 @@ bool MarkUp::set_tracks(const std::string& filepath) {
 bool MarkUp::run() {
     track_container_.reset(nullptr);
 
-    /*if (!boost::filesystem::exists(params_.tracker_model_path)) {
-        // TODO: Exceptions
-        std::cout << "Model doesnt exist:" << params_.tracker_model_path << std::endl;
-        return false;
-    }*/
-
     if (video_ == nullptr) {
         // TODO: Exceptions
         std::cout << "Set Video first!" << std::endl;
         return false;
     }
 
-    // track_container_ = this->run_pipeline(*video_);
-
-    /* if (boost::filesystem::exists(params_.tracks_path)) {
+#if 0
+    if (!boost::filesystem::exists(params_.tracker_model_path)) {
+        // TODO: Exceptions
+        std::cout << "Model doesnt exist:" << params_.tracker_model_path << std::endl;
+        return false;
+    }
+    track_container_ = this->run_pipeline(*video_);
+#else
+    if (boost::filesystem::exists(params_.tracks_path)) {
         // TODO: Exceptions
         std::cout << "No debug tracks:" << params_.tracks_path << std::endl;
         return false;
-    }*/
-
+    }
     track_container_ = read_dummy_trackcontainer(params_.tracks_path);
+#endif
 
     return true;
 }
