@@ -53,6 +53,8 @@ std::unique_ptr<TrackContainer> MarkUp::run_pipeline(const Video& video) {
 
     system(command.c_str());
 
+    std::cout << "Run:" << command << std::endl;
+
     assert(boost::filesystem::exists(tracks_filepath));
 
     return std::make_unique<TrackContainer>(tracks_filepath);
