@@ -17,7 +17,7 @@ struct PipelineRunParams {
     std::string tracker_model_path = "";
     std::string weights_path = "";
     std::string tmp_video_dir = "/tmp/markup_video";
-    std::string tracks_path = "../markup_tool/data/test/MOT16-04/img1/";
+    std::string tracks_path = "../markup_tool/data/test/MOT16-04/gt/gt.txt";
     std::string tmp_img_extention = ".png";
     size_t tmp_img_path_pad2length = 10;
     std::string tracks_filename = "tracks.txt";
