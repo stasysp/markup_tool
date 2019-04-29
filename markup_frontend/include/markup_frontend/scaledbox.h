@@ -15,6 +15,8 @@ public:
     QRect getScaledRect(int width, int height) const;
     QRect getScaledRect(const QWidget* w) const;
 
+    bool isInside(float x, float y) const;
+
 private:
     float pxmin, pymin, pxmax, pymax;
 };
