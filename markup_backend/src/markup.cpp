@@ -161,7 +161,7 @@ bool MarkUp::run() {
         return false;
     }
 
-#if 0
+#if 1
     if (!boost::filesystem::exists(params_.tracker_model_path)) {
         // TODO: Exceptions
         std::cout << "Model doesnt exist:" << params_.tracker_model_path << std::endl;

@@ -86,6 +86,9 @@ BOOST_AUTO_TEST_CASE(track_operations)
         }
     }
 
+    BOOST_CHECK(track_container->has_track(2));
+    BOOST_CHECK(track_container->has_track(5));
+
     bool ret;
     BOOST_CHECK_NO_THROW(ret = track_container->delete_track(5));
     BOOST_CHECK(ret);
@@ -120,6 +123,9 @@ BOOST_AUTO_TEST_CASE(track_operations)
             det.frame = 2;
             track.push_back(det);
 
+            det.frame = 3;
+            track.push_back(det);
+
             BOOST_CHECK_NO_THROW(track_container->add_track(track));
         }
 
@@ -145,6 +151,46 @@ BOOST_AUTO_TEST_CASE(track_operations)
 
             BOOST_CHECK_EQUAL(frame_idx, video_len);
         }
+    }
+
+    {
+        size_t track_id = 2;
+        BOOST_CHECK(track_container->has_track(track_id));
+        BOOST_CHECK_EQUAL(track_container->get_video_len(), video_len);
+        for (size_t i = 0; i < track_container->get_video_len(); i += 2) {
+            BOOST_CHECK(track_container->delete_detection(track_id, i));
+        }
+
+        std::unique_ptr<Track> track;
+        BOOST_CHECK(track_container->has_track(track_id));
+        BOOST_CHECK_NO_THROW(track = track_container->get_track(track_id));
+        BOOST_CHECK(track != nullptr);
+
+        size_t frame_idx = 1;
+        for (const auto& det : *track) {
+            BOOST_CHECK_EQUAL(det.frame, frame_idx);
+            frame_idx += 2;
+        }
+        BOOST_CHECK_EQUAL(frame_idx - 2, 3);
+
+        BOOST_CHECK(track_container->has_track(track_id));
+        BOOST_CHECK_EQUAL(track_container->get_video_len(), video_len);
+        for (size_t i = 0; i < track_container->get_video_len(); i += 2) {
+            Detection det;
+            det.id = track_id;
+            det.frame = i;
+            BOOST_CHECK(track_container->add_det2track(track_id, det));
+        }
+
+        BOOST_CHECK(track_container->has_track(track_id));
+        BOOST_CHECK_NO_THROW(track = track_container->get_track(track_id));
+        BOOST_CHECK(track != nullptr);
+        frame_idx = 0;
+        for (const auto& det : *track) {
+            BOOST_CHECK_EQUAL(det.frame, frame_idx);
+            frame_idx++;
+        }
+        BOOST_CHECK_EQUAL(frame_idx, video_len);
     }
 }
 
