@@ -161,7 +161,7 @@ bool MarkUp::run() {
         return false;
     }
 
-#if 1
+#if 0
     if (!boost::filesystem::exists(params_.tracker_model_path)) {
         // TODO: Exceptions
         std::cout << "Model doesnt exist:" << params_.tracker_model_path << std::endl;
@@ -169,7 +169,7 @@ bool MarkUp::run() {
     }
     track_container_ = this->run_pipeline(*video_);
 #else
-    if (boost::filesystem::exists(params_.tracks_path)) {
+    if (!boost::filesystem::exists(params_.tracks_path)) {
         // TODO: Exceptions
         std::cout << "No debug tracks:" << params_.tracks_path << std::endl;
         return false;
