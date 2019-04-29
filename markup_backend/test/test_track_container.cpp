@@ -13,13 +13,83 @@ using namespace boost::filesystem;
 
 BOOST_AUTO_TEST_SUITE(track_container)
 
+BOOST_AUTO_TEST_CASE(split_track)
+{
+    size_t video_len = 5;
+    std::unique_ptr<TrackContainer> track_container;
+    BOOST_CHECK_NO_THROW(track_container = std::make_unique<TrackContainer>(video_len));
+
+    size_t track_id = 42;
+    {
+        Track track(track_id);
+        Detection det;
+        det.id = track_id;
+
+        det.frame = 1;
+        BOOST_CHECK_NO_THROW(track.push_back(det));
+
+        det.frame = 2;
+        BOOST_CHECK_NO_THROW(track.push_back(det));
+
+        det.frame = 3;
+        BOOST_CHECK_NO_THROW(track.push_back(det));
+
+        BOOST_CHECK_NO_THROW(track_container->add_track(track));
+    }
+
+    BOOST_CHECK(track_container->has_track(track_id));
+    BOOST_CHECK_EQUAL(track_container->get_num_tracks(), 1);
+
+    bool ret;
+    BOOST_CHECK_NO_THROW(ret = track_container->split_track(track_id, 0));
+    BOOST_CHECK(!ret);
+    BOOST_CHECK_EQUAL(track_container->get_num_tracks(), 1);
+    BOOST_CHECK(track_container->has_track(track_id));
+
+    BOOST_CHECK_NO_THROW(ret = track_container->split_track(track_id, 4));
+    BOOST_CHECK(!ret);
+    BOOST_CHECK_EQUAL(track_container->get_num_tracks(), 1);
+    BOOST_CHECK(track_container->has_track(track_id));
+
+    BOOST_CHECK_NO_THROW(ret = track_container->split_track(track_id, 2));
+    BOOST_CHECK(ret);
+    BOOST_CHECK_EQUAL(track_container->get_num_tracks(), 2);
+    BOOST_CHECK(track_container->has_track(track_id));
+    BOOST_CHECK(track_container->has_track(track_id + 1));
+
+    {
+        std::unique_ptr<Track> track;
+        size_t current_track_id = track_id;
+        BOOST_CHECK(track_container->has_track(current_track_id));
+        BOOST_CHECK_NO_THROW(track = track_container->get_track(current_track_id));
+
+        size_t frame_idx = 1;
+        for (const auto& det : *track) {
+            BOOST_CHECK_EQUAL(det.frame, frame_idx);
+            frame_idx++;
+        }
+    }
+
+    {
+        std::unique_ptr<Track> track;
+        size_t current_track_id = track_id + 1;
+        BOOST_CHECK(track_container->has_track(current_track_id));
+        BOOST_CHECK_NO_THROW(track = track_container->get_track(current_track_id));
+
+        size_t frame_idx = 2;
+        for (const auto& det : *track) {
+            BOOST_CHECK_EQUAL(det.frame, frame_idx);
+            frame_idx++;
+        }
+    }
+
+}
+
 BOOST_AUTO_TEST_CASE(track_operations)
 {
     size_t video_len = 4;
     std::unique_ptr<TrackContainer> track_container;
     BOOST_CHECK_NO_THROW(track_container = std::make_unique<TrackContainer>(video_len));
-
-
 
     {
         {

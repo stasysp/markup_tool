@@ -25,13 +25,8 @@ public:
     std::list<Detection>::const_iterator end() const;
 
     std::unique_ptr<Detection> get_detection(size_t frame_idx);
-    std::unique_ptr<Detection> get_last_detection() {
-        if (detections_.empty()) {
-            return nullptr;
-        }
-
-        return std::make_unique<Detection>(detections_.back());
-    }
+    std::unique_ptr<Detection> get_last_detection();
+    std::unique_ptr<Detection> get_first_detection();
 
 private:
     std::list<Detection> detections_;

@@ -11,11 +11,12 @@
 // using namespace boost::filesystem;
 
 struct PipelineRunParams {
-    // std::string detector_model_path;
-    // std::string id_model_path; // maybe path to python file?
-    std::string video_path = "";
-    std::string tracker_model_path = "";
-    std::string weights_path = "";
+    // Путь до видео которое процессится задается через интерфейс;
+    std::string video_path = "../markup_tool/data/test/MOT16-04/img1";
+    // Примеры путей
+    std::string tracker_model_path = "../markup_tool/python/detector/yolo3.py";
+    // Примеры путей
+    std::string weights_path = "../markup_tool/data/models/yolo3";
     std::string tmp_video_dir = "/tmp/markup_video";
     std::string tracks_path = "../markup_tool/data/test/MOT16-04/gt/gt.txt";
     std::string tmp_img_extention = ".png";
