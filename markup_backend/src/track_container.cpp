@@ -91,10 +91,34 @@ bool TrackContainer::split_track(size_t track_id, size_t frame_idx) {
         return false;
     }
 
+    size_t min_frame = (*track_it).get_first_detection()->frame;
+    size_t max_frame = (*track_it).get_last_detection()->frame;
+
+    if (frame_idx <= min_frame || frame_idx > max_frame) {
+        return false;
+    }
+
     size_t new_id = get_new_id();
+    Track track_head((*track_it).get_id());
     Track track_tail(new_id);
 
-    std::vector<size_t> frames2delete;
+    for (const auto& det : *track_it) {
+        if (det.frame < frame_idx) {
+            Detection new_det = det;
+            new_det.id = track_head.get_id();
+            track_head.push_back(new_det);
+        } else {
+            Detection new_det = det;
+            new_det.id = track_tail.get_id();
+            track_tail.push_back(new_det);
+        }
+    }
+
+    this->delete_track((*track_it).get_id());
+    this->add_track(track_head);
+    this->add_track(track_tail);
+
+    /*std::vector<size_t> frames2delete;
     for (const auto& det : *track_it) {
         if (det.frame >= frame_idx) {
             Detection new_det = det;
@@ -110,9 +134,9 @@ bool TrackContainer::split_track(size_t track_id, size_t frame_idx) {
 
     for (const auto& index : frames2delete) {
         this->delete_detection(track_id, index);
-    }
+    }*/
 
-    this->add_track(track_tail);
+
 
     return true;
 }

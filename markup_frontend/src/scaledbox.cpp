@@ -48,3 +48,7 @@ QRect ScaledBBox::getScaledRect(const QWidget* w) const {
 
     return QRect(topleft, bottomright);
 }
+
+bool ScaledBBox::isInside(float x, float y) const {
+    return (x >= pxmin) && (x <= pxmax) && (y >= pymin) && (y <= pymax);
+}

@@ -175,14 +175,14 @@ class Detection:
 
     def as_string(self):
         return ','.join(map(str, [
-            self.frame_index + 1,
-            self.id,
-            self.bbox.x,
-            self.bbox.y,
-            self.bbox.width,
-            self.bbox.height,
+            int(self.frame_index + 1),
+            int(self.id),
+            int(self.bbox.x),
+            int(self.bbox.y),
+            int(self.bbox.width),
+            int(self.bbox.height),
             self.confidence,
-            0  # dummy object type
+            int(1) # dummy pedestrian object type
         ]))
 
 

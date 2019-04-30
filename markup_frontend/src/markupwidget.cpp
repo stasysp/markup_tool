@@ -27,7 +27,7 @@ MarkupWidget::MarkupWidget(QWidget *parent)
     connect(maincontrol, &MainControlPanel::send_video_path, this, &MarkupWidget::slot_set_video_path);
 
     connect(maincontrol, &MainControlPanel::send_tracks_path, this, &MarkupWidget::slot_set_tracks_path);
-
+    connect(maincontrol, &MainControlPanel::send_savetracks, this, &MarkupWidget::slot_savetracks);
     connect(maincontrol, &MainControlPanel::send_run, this, &MarkupWidget::slot_run);
 
     connect(fwcup, &FrameWithControl::send_framechanged, this, &MarkupWidget::slot_framechanged);
@@ -45,8 +45,11 @@ void MarkupWidget::slot_set_video_path(QDir path) {
 }
 
 void MarkupWidget::slot_set_tracks_path(QString path) {
-    markup.set_tracks(std::string(path.toUtf8().constData()));
-    path = path;
+    markup.load_markup(std::string(path.toUtf8().constData()));
+}
+
+void MarkupWidget::slot_savetracks(QString path) {
+    markup.save_markup(std::string(path.toUtf8().constData()));
 }
 
 void MarkupWidget::slot_run() {

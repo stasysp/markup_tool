@@ -25,6 +25,22 @@ void Track::del(size_t frame_idx) {
     }
 }
 
+std::unique_ptr<Detection> Track::get_last_detection() {
+    if (detections_.empty()) {
+        return nullptr;
+    }
+
+    return std::make_unique<Detection>(detections_.back());
+}
+
+std::unique_ptr<Detection> Track::get_first_detection() {
+    if (detections_.empty()) {
+        return nullptr;
+    }
+
+    return std::make_unique<Detection>(detections_.front());
+}
+
 Detection* Track::add(const Detection& det) {
     assert(det.id == id_);
 

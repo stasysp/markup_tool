@@ -25,8 +25,13 @@ void FrameView::mouseDoubleClickEvent(QMouseEvent *event) {
         double aspectRatio = (double)(sceneRect().height()) / (double)(sceneRect().width());
 
         qDebug() << mX << mY << W << H << aspectRatio;
+
+        int get_track = markup.select_bbox(float(mX) / float(W), float(mY) / float(H));
+        if (get_track >= 0) {
+            trackOnFocus = get_track;
+        }
     }
-    trackOnFocus++;
+    // trackOnFocus++;
     set_scene();
 }
 

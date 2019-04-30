@@ -53,6 +53,8 @@ std::unique_ptr<TrackContainer> MarkUp::run_pipeline(const Video& video) {
 
     system(command.c_str());
 
+    std::cout << "Run:" << command << std::endl;
+
     assert(boost::filesystem::exists(tracks_filepath));
 
     return std::make_unique<TrackContainer>(tracks_filepath);
@@ -323,11 +325,11 @@ bool MarkUp::save_markup(const std::string& path2file) {
         return false;
     }
 
-    if (!boost::filesystem::exists(path2file)) {
+    /*if (!boost::filesystem::exists(path2file)) {
         // TODO: Exceptions
         std::cout << "No such file found:" << path2file << std::endl;
         return false;
-    }
+    }*/
 
     return track_container_->save(path2file);
 }

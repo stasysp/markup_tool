@@ -17,6 +17,7 @@ MainControlPanel::MainControlPanel(QWidget *parent) : QWidget(parent)
     loadmodel = new QPushButton("Load Model");
     loadvideo = new QPushButton("Load Video");
     loadtracks = new QPushButton("Load Tracks");
+    savetracks = new QPushButton("Save Tracks");
     run = new QPushButton("Run Object Tracking");
     play = new QPushButton("Play Video");
 
@@ -25,12 +26,14 @@ MainControlPanel::MainControlPanel(QWidget *parent) : QWidget(parent)
     layout->addWidget(loadmodel);
     layout->addWidget(loadvideo);
     layout->addWidget(loadtracks);
+    layout->addWidget(savetracks);
     layout->addWidget(run);
     layout->addWidget(play);
 
     connect(loadvideo, &QPushButton::clicked, this, &MainControlPanel::slot_loadvideo);
     connect(loadmodel, &QPushButton::clicked, this, &MainControlPanel::slot_loadmodel);
     connect(loadtracks, &QPushButton::clicked, this, &MainControlPanel::slot_loadtracks);
+    connect(savetracks, &QPushButton::clicked, this, &MainControlPanel::slot_savetracks);
     connect(run, &QPushButton::clicked, this, &MainControlPanel::slot_run);
     connect(play, &QPushButton::clicked, this, &MainControlPanel::slot_play);
 }
@@ -53,6 +56,14 @@ void MainControlPanel::slot_loadtracks() {
     auto path = QFileDialog::getOpenFileName(this, "Open Tracks", "",
                                              "*.txt");
     emit send_tracks_path(path);
+    qDebug() << "tracks path : " << path;
+    // call some backend-function
+}
+
+void MainControlPanel::slot_savetracks() {
+    auto path = QFileDialog::getSaveFileName(this, "Open Tracks", "",
+                                             "*.txt");
+    emit send_savetracks(path);
     qDebug() << "tracks path : " << path;
     // call some backend-function
 }
