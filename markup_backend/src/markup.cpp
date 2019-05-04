@@ -279,11 +279,13 @@ size_t MarkUp::get_video_len() const {
     }
 }
 
-cv::Size MarkUp::get_frame_shape() const {
+std::tuple<size_t, size_t> MarkUp::get_frame_shape() const {
     if (video_ == nullptr) {
-        return cv::Size(0, 0);
+        return std::tuple<size_t, size_t>(0, 0);
     } else {
-        return video_->get_shape();
+        cv::Size s = video_->get_shape();
+        std::tuple<size_t, size_t> sh(s.height, s.width);
+        return sh;
     }
 }
 
