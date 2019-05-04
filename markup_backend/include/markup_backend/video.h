@@ -32,7 +32,7 @@ public:
     cv::Mat get_frame(size_t index) const;
     
     cv::Size get_shape() const {
-        cv::Size s = get_frame(0).size();
+        return get_frame(0).size();
     }
     
     size_t size() const {
