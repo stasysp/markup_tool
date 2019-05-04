@@ -50,7 +50,7 @@ public:
     bool delete_detection(size_t track_id, size_t frame_idx);
 
     size_t get_video_len() const;
-    cv::Size get_shape() const;
+    cv::Size get_frame_shape() const;
 
     PipelineRunParams get_params() const;
 
