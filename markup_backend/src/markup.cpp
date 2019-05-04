@@ -281,8 +281,7 @@ size_t MarkUp::get_video_len() const {
 
 cv::Size MarkUp::get_frame_shape() const {
     if (video_ == nullptr) {
-        cv::Size a;
-        return a;
+        return cv::Size(0, 0);
     } else {
         return video_->get_shape();
     }
