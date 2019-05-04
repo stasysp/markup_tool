@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include <opencv2/core/core.hpp>
+#include <tuple>
 
 #include "markup_backend/nn_model.h"
 #include "markup_backend/tracks.h"
@@ -50,7 +50,7 @@ public:
     bool delete_detection(size_t track_id, size_t frame_idx);
 
     size_t get_video_len() const;
-    cv::Size get_frame_shape() const;
+    std::tuple<size_t, size_t> get_frame_shape() const;
 
     PipelineRunParams get_params() const;
 
