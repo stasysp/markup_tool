@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include <opencv2/highgui/highgui.hpp>
+#include <opencv2/core/core.hpp>
 #include "boost/filesystem.hpp"
 
 #include "markup_backend/nn_model.h"
@@ -275,6 +276,15 @@ size_t MarkUp::get_video_len() const {
         return 0;
     } else {
         return video_->size();
+    }
+}
+
+cv::Size MarkUp::get_frame_shape() const {
+    if (video_ == nullptr) {
+        cv::Size a;
+        return a;
+    } else {
+        return video_->get_shape();
     }
 }
 
