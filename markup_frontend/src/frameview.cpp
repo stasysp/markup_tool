@@ -14,6 +14,7 @@ FrameView::~FrameView() {}
 
 void FrameView::mousePressEvent(QMouseEvent *event) {}
 void FrameView::mouseReleaseEvent(QMouseEvent *event) {}
+
 void FrameView::mouseDoubleClickEvent(QMouseEvent *event) {
     if (scene != nullptr) {
         // нужно внимательно подумать про пересчёт координат...
@@ -31,7 +32,6 @@ void FrameView::mouseDoubleClickEvent(QMouseEvent *event) {
             trackOnFocus = get_track;
         }
     }
-    // trackOnFocus++;
     set_scene();
 }
 
@@ -45,10 +45,10 @@ void FrameView::paintEvent(QPaintEvent *event) {
 void FrameView::resizeEvent(QResizeEvent *event) {
     QGraphicsView::resizeEvent(event);
     set_scene();
-    // qDebug() << "resize event...";
 }
 
 void FrameView::set_scene() {
+    qDebug() << "set scene...";
     // возможно, что эта логика избыточна и её можно заменить более простой
     if (!image.isNull()) {
         if (scene != nullptr) {
@@ -96,6 +96,7 @@ int FrameView::getTrackOnFocus() {
 
 void FrameView::update() {
     set_scene();
-    QPaintEvent *event = new QPaintEvent(QRect());
+    qDebug() << "updete in frameview...";
+    QPaintEvent *event = new QPaintEvent(QRect(0,0,1920,1080));
     paintEvent(event);
 }

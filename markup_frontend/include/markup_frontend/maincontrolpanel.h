@@ -19,7 +19,7 @@ signals:
     void send_run();
 
 private slots:
-    void slot_loadmodel();
+    // void slot_loadmodel();
     void slot_loadvideo();
     void slot_loadtracks();
     void slot_savetracks();
@@ -28,7 +28,6 @@ private slots:
 
 private:
     QComboBox *selectmodel = nullptr;
-    QPushButton *loadmodel = nullptr;
     QPushButton *loadvideo = nullptr;
     QPushButton *loadtracks = nullptr;
     QPushButton *savetracks = nullptr;

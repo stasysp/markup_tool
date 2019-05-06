@@ -11,7 +11,9 @@ FrameWithControl::FrameWithControl(QWidget *parent) : QWidget(parent)
 
     QHBoxLayout *hlayout = new QHBoxLayout(this);
     hlayout->addWidget(frameview);
+    hlayout->setStretch(0, 1);
     hlayout->addWidget(framecontrol);
+    hlayout->setStretch(1, 0);
 
     connect(framecontrol, &FrameControl::send_newframeidx,
             this, &FrameWithControl::setFrameIdx);
@@ -19,6 +21,10 @@ FrameWithControl::FrameWithControl(QWidget *parent) : QWidget(parent)
             this, &FrameWithControl::slot_delete_bbox);
     connect(framecontrol->btn_del_track, &QPushButton::clicked,
             this, &FrameWithControl::slot_delete_track);
+    connect(framecontrol->btn_spl_track, &QPushButton::clicked,
+            this, &FrameWithControl::slot_split_track);
+    connect(framecontrol->btn_unt_track, &QPushButton::clicked,
+            this, &FrameWithControl::slot_unite_tracks);
 }
 
 void FrameWithControl::setFrameIdx(int idx) {
@@ -70,7 +76,16 @@ void FrameWithControl::slot_delete_track() {
     emit send_delete_track(frameview->getTrackOnFocus());
 }
 
+void FrameWithControl::slot_split_track() {
+    emit send_split_track(frameview->getTrackOnFocus(), frameidx);
+}
+
+void FrameWithControl::slot_unite_tracks() {
+    emit send_unite_tracks();
+}
+
 void FrameWithControl::update() {
+    emit send_framechanged(this);
     frameview->update();
-    qDebug() << "frameview set scene...";
+    qDebug() << "frameview UPDATE...";
 }

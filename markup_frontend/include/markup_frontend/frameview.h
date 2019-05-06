@@ -34,7 +34,7 @@ protected:
 
 private:
     int counter = 0;
-    int trackOnFocus = 4;
+    int trackOnFocus = -1;
     QPixmap image;
     FrameMarkup markup;
     QGraphicsScene *scene = nullptr;
