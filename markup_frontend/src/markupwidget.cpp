@@ -31,12 +31,14 @@ MarkupWidget::MarkupWidget(QWidget *parent)
     connect(maincontrol, &MainControlPanel::send_run, this, &MarkupWidget::slot_run);
 
     connect(fwcup, &FrameWithControl::send_framechanged, this, &MarkupWidget::slot_framechanged);
+    connect(fwcup, &FrameWithControl::send_add_bbox, this, &MarkupWidget::slot_add_bbox);
     connect(fwcup, &FrameWithControl::send_delete_bbox, this, &MarkupWidget::slot_delete_bbox);
     connect(fwcup, &FrameWithControl::send_delete_track, this, &MarkupWidget::slot_delete_track);
     connect(fwcup, &FrameWithControl::send_split_track, this, &MarkupWidget::slot_split_track);
     connect(fwcup, &FrameWithControl::send_unite_tracks, this, &MarkupWidget::slot_unite_tracks);
 
     connect(fwcdn, &FrameWithControl::send_framechanged, this, &MarkupWidget::slot_framechanged);
+    connect(fwcdn, &FrameWithControl::send_add_bbox, this, &MarkupWidget::slot_add_bbox);
     connect(fwcdn, &FrameWithControl::send_delete_bbox, this, &MarkupWidget::slot_delete_bbox);
     connect(fwcdn, &FrameWithControl::send_delete_track, this, &MarkupWidget::slot_delete_track);
     connect(fwcdn, &FrameWithControl::send_split_track, this, &MarkupWidget::slot_split_track);
@@ -79,6 +81,12 @@ void MarkupWidget::slot_framechanged(FrameWithControl *fwc) {
     }
 
     fwc->setMarkup(bboxes);
+}
+
+void MarkupWidget::slot_add_bbox(int frameidx, QRect bbox) {
+    markup.add_detection(frameidx, bbox.topLeft().x(), bbox.topLeft().y(),
+                         bbox.bottomRight().x(), bbox.bottomRight().y());
+    update();
 }
 
 void MarkupWidget::slot_delete_bbox(int track_id, int frameidx) {

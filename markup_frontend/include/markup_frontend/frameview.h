@@ -19,6 +19,9 @@ public:
     void loadimagebypath(QString path);
     void update();
 
+signals:
+    void send_add_bbox(QRect bbox);
+
 public slots:
     void slot_set_markup(QMap<int, ScaledBBox> newmarkup);
     void set_scene();
@@ -42,7 +45,7 @@ private:
     QGraphicsScene *scene = nullptr;
 
     // отрисовка временного прямоугольника...
-    QPainter painter;
+    // QPainter painter;
     QRect tempRect;
     bool mousePressed = false;
     bool drawStarted = false;

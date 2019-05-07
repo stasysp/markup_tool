@@ -25,6 +25,8 @@ FrameWithControl::FrameWithControl(QWidget *parent) : QWidget(parent)
             this, &FrameWithControl::slot_split_track);
     connect(framecontrol->btn_unt_track, &QPushButton::clicked,
             this, &FrameWithControl::slot_unite_tracks);
+    connect(frameview, &FrameView::send_add_bbox,
+            this, &FrameWithControl::slot_add_bbox);
 }
 
 void FrameWithControl::setFrameIdx(int idx) {
@@ -66,6 +68,10 @@ void FrameWithControl::reset() {
 
 void FrameWithControl::setMarkup(QMap<int, ScaledBBox> markup) {
     frameview->slot_set_markup(markup);
+}
+
+void FrameWithControl::slot_add_bbox(QRect bbox) {
+    emit send_add_bbox(frameidx, bbox);
 }
 
 void FrameWithControl::slot_delete_bbox() {

@@ -43,13 +43,14 @@ void FrameView::mousePressEvent(QMouseEvent *event) {
 
 void FrameView::mouseReleaseEvent(QMouseEvent *event) {
     mousePressed = false;
-    // а вот тут-то нужно вызывать функцию бекенда...
-    markup.add(-2, ScaledBBox(tempRect.topLeft(), getImagePoint(event)));
-    update();
+    // вот такое ощущение, что выбирается не тот конструктор, а второй параметр берётся как size...
+    tempRect.setBottomRight(getImagePoint(event));
+    send_add_bbox(tempRect);
 }
 
 void FrameView::mouseDoubleClickEvent(QMouseEvent *event) {
     // нужна ли эта проверка?
+    qDebug() << "double click...";
     if (scene != nullptr) {
         QPoint point = getImagePoint(event);
 
