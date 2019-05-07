@@ -8,6 +8,7 @@ FrameControl::FrameControl(QWidget *parent) : QWidget(parent)
     QVBoxLayout *vlayout = new QVBoxLayout(this);
 
     select = new QPushButton("Select");
+    select->setStyleSheet(getStyleSheet(true));
     btn_add_bbox = new QPushButton("Add new bounding box");
     btn_del_bbox = new QPushButton("Delete bounding box");
     btn_del_track = new QPushButton("Delete track");
@@ -33,3 +34,15 @@ void FrameControl::slot_setnewframeidx(int frameidx) {
     emit send_newframeidx(frameidx);
 }
 
+void FrameControl::slot_mode(bool isSelectMode) {
+    select->setStyleSheet(getStyleSheet(isSelectMode));
+    btn_add_bbox->setStyleSheet(getStyleSheet(!isSelectMode));
+}
+
+QString FrameControl::getStyleSheet(bool flag) {
+    if (flag) {
+        return "QPushButton {background-color: #A3C1DA}";
+    } else {
+        return "QPushButton {}";
+    }
+}
