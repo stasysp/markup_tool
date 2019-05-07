@@ -22,6 +22,7 @@ FrameControl::FrameControl(QWidget *parent) : QWidget(parent)
     vlayout->addWidget(btn_del_track);
     vlayout->addWidget(btn_unt_track);
     vlayout->addWidget(btn_spl_track);
+    vlayout->addStretch(1);
     vlayout->addWidget(timeline);
     timeline->setTimelineProperties(0,0);
 

@@ -29,7 +29,9 @@ void FrameMarkup::set_new_markup(QMap<int, ScaledBBox> newmarkup) {
     bboxes = std::move(newmarkup);
 }
 
-int FrameMarkup::select_bbox(float x, float y) {
+// это никуда не годится. нужно переписать.
+// в пердставленной реализации явные проблемы с перекрытием боксов
+int FrameMarkup::select_bbox(int x, int y) {
     for(auto det : bboxes.toStdMap()) {
         if (det.second.isInside(x, y)) {
             return det.first;

@@ -23,8 +23,11 @@ public slots:
     void slot_savetracks(QString path);
     void slot_framechanged(FrameWithControl *fwc);
     void slot_run();
+    void slot_add_bbox(int frameidx, QRect bbox);
     void slot_delete_bbox(int track_id, int frameidx);
     void slot_delete_track(int track_id);
+    void slot_split_track(int track_id, int frameidx);
+    void slot_unite_tracks();
 
 private:
     MainControlPanel *maincontrol = nullptr;

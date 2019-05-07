@@ -12,26 +12,53 @@ FrameView::FrameView(QWidget *parent) :
 
 FrameView::~FrameView() {}
 
-void FrameView::mousePressEvent(QMouseEvent *event) {}
-void FrameView::mouseReleaseEvent(QMouseEvent *event) {}
-void FrameView::mouseDoubleClickEvent(QMouseEvent *event) {
+QPoint FrameView::getImagePoint(QMouseEvent *event) {
     if (scene != nullptr) {
-        // нужно внимательно подумать про пересчёт координат...
-        // очень вероятно, что есть какие-то библиотечные функции
         int mX = event->localPos().x();
         int mY = event->localPos().y();
-        int W = this->size().width();
-        int H = this->size().height();
-        double aspectRatio = (double)(sceneRect().height()) / (double)(sceneRect().width());
+        int wW = this->size().width();
+        int wH = this->size().height();
+        int sW = sceneRect().width();
+        int sH = sceneRect().height();
 
-        qDebug() << mX << mY << W << H << aspectRatio;
+        double scale = std::max((double) sH / (double) wH, (double) sW / (double) wW);
 
-        int get_track = markup.select_bbox(float(mX) / float(W), float(mY) / float(H));
+        // подумать, проверить округления...
+        // детекции получаются точными. но вопрос с рамками. нужно проверить
+        int pX = sW / 2 + (int) (scale * (mX - wW / 2));
+        int pY = sH / 2 + (int) (scale * (mY - wH / 2));
+
+        return QPoint(pX, pY);
+    } else {
+        return QPoint();
+    }
+}
+
+void FrameView::mousePressEvent(QMouseEvent *event) {
+    mousePressed = true;
+    QPoint point = getImagePoint(event);
+    tempRect.setTopLeft(point);
+    tempRect.setBottomRight(point);
+}
+
+void FrameView::mouseReleaseEvent(QMouseEvent *event) {
+    mousePressed = false;
+    // вот такое ощущение, что выбирается не тот конструктор, а второй параметр берётся как size...
+    tempRect.setBottomRight(getImagePoint(event));
+    send_add_bbox(tempRect);
+}
+
+void FrameView::mouseDoubleClickEvent(QMouseEvent *event) {
+    // нужна ли эта проверка?
+    qDebug() << "double click...";
+    if (scene != nullptr) {
+        QPoint point = getImagePoint(event);
+
+        int get_track = markup.select_bbox(point.x(), point.y());
         if (get_track >= 0) {
             trackOnFocus = get_track;
         }
     }
-    // trackOnFocus++;
     set_scene();
 }
 
@@ -45,10 +72,10 @@ void FrameView::paintEvent(QPaintEvent *event) {
 void FrameView::resizeEvent(QResizeEvent *event) {
     QGraphicsView::resizeEvent(event);
     set_scene();
-    // qDebug() << "resize event...";
 }
 
 void FrameView::set_scene() {
+    qDebug() << "set scene...";
     // возможно, что эта логика избыточна и её можно заменить более простой
     if (!image.isNull()) {
         if (scene != nullptr) {
@@ -63,9 +90,9 @@ void FrameView::set_scene() {
             QPen pen(color, 10, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin);
             QBrush brush(color);
             if (key == trackOnFocus) {
-                scene->addRect(iter->getScaledRect(scene->width(), scene->height()), pen, brush);
+                scene->addRect(iter->getScaledRect(), pen, brush);
             } else {
-                scene->addRect(iter->getScaledRect(scene->width(), scene->height()), pen);
+                scene->addRect(iter->getScaledRect(), pen);
             }
         }
 
@@ -96,6 +123,7 @@ int FrameView::getTrackOnFocus() {
 
 void FrameView::update() {
     set_scene();
-    QPaintEvent *event = new QPaintEvent(QRect());
+    qDebug() << "updete in frameview...";
+    QPaintEvent *event = new QPaintEvent(QRect(0,0,1920,1080));
     paintEvent(event);
 }

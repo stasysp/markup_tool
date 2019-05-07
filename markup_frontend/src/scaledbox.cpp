@@ -1,16 +1,17 @@
 #include "markup_frontend/scaledbox.h"
 #include <iostream>
 
-ScaledBBox::ScaledBBox(float pxmin, float pymin, float pxmax, float pymax) :
+ScaledBBox::ScaledBBox(int pxmin, int pymin, int pxmax, int pymax) :
     pxmin(pxmin), pymin(pymin), pxmax(pxmax), pymax(pymax) {}
 
-ScaledBBox::ScaledBBox(const Detection& det) {
-    float img_height = 1080.;
-    float img_width = 1920.;
-    pxmin = float(det.bbox.x) / img_width;
-    pymin = float(det.bbox.y) / img_height;
-    pxmax = float(det.bbox.x + det.bbox.width) / img_width;
-    pymax = float(det.bbox.y + det.bbox.height) / img_height;
+ScaledBBox::ScaledBBox(QPoint topleft, QPoint bottomright) :
+    pxmin(topleft.x()), pymin(topleft.y()), pxmax(bottomright.x()), pymax(bottomright.y()) {}
+
+ScaledBBox::ScaledBBox(const Detection& det, int width, int height) {
+    pxmin = det.bbox.x;
+    pymin = det.bbox.y;
+    pxmax = det.bbox.x + det.bbox.width;
+    pymax = det.bbox.y + det.bbox.height;
 
     if (pxmin < 0) {
         std::cout << "pxmin < 0";
@@ -22,33 +23,26 @@ ScaledBBox::ScaledBBox(const Detection& det) {
         pymin = 0;
     }
 
-    if (pxmax > 1) {
+    // проверить эту логику!!!
+    if (width <= pxmax) {
         std::cout << "pxmax > 1";
-        pxmax = 1;
+        pxmax = width - 1;
     }
 
-    if (pymax > 1) {
+    if (height <= pymax) {
         std::cout << "pymax > 1";
-        pymax = 1;
+        pymax = height - 1;
     }
 }
 
-QRect ScaledBBox::getScaledRect(int width, int height) const {
-    QPoint topleft = QPoint(pxmin * width, pymin * height);
-    QPoint bottomright = QPoint(pxmax * width, pymax * height);
+QRect ScaledBBox::getScaledRect() const {
+    QPoint topleft = QPoint(pxmin, pymin);
+    QPoint bottomright = QPoint(pxmax, pymax);
 
     return QRect(topleft, bottomright);
 }
 
-QRect ScaledBBox::getScaledRect(const QWidget* w) const {
-    int width = w->width();
-    int height = w->height();
-    QPoint topleft = QPoint(pxmin * width, pymin * height);
-    QPoint bottomright = QPoint(pxmax * width, pymax * height);
-
-    return QRect(topleft, bottomright);
-}
-
-bool ScaledBBox::isInside(float x, float y) const {
+// и вот тут проверить логику... а лучше всего вообще переделать к херам...
+bool ScaledBBox::isInside(int x, int y) const {
     return (x >= pxmin) && (x <= pxmax) && (y >= pymin) && (y <= pymax);
 }

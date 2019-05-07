@@ -46,6 +46,7 @@ public:
     bool delete_track(size_t id);
 
     size_t add_detection(const Detection& det);
+    size_t add_detection(int frame, int xmin, int ymin, int xmax, int ymax);
 
     bool delete_detection(size_t track_id, size_t frame_idx);
 

@@ -5,6 +5,7 @@
 #include <QGraphicsView>
 #include <QPushButton>
 #include <QString>
+#include <QPoint>
 #include "framemarkup.h"
 
 class FrameView : public QGraphicsView
@@ -18,10 +19,14 @@ public:
     void loadimagebypath(QString path);
     void update();
 
+signals:
+    void send_add_bbox(QRect bbox);
+
 public slots:
     void slot_set_markup(QMap<int, ScaledBBox> newmarkup);
     void set_scene();
     int getTrackOnFocus();
+    QPoint getImagePoint(QMouseEvent *event);
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
@@ -34,10 +39,16 @@ protected:
 
 private:
     int counter = 0;
-    int trackOnFocus = 4;
+    int trackOnFocus = -1;
     QPixmap image;
     FrameMarkup markup;
     QGraphicsScene *scene = nullptr;
+
+    // отрисовка временного прямоугольника...
+    // QPainter painter;
+    QRect tempRect;
+    bool mousePressed = false;
+    bool drawStarted = false;
 };
 
 #endif // FRAMEVIEW_H

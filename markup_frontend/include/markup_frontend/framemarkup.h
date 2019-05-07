@@ -17,7 +17,7 @@ public:
     void add(int track_id, ScaledBBox bbox);
     void remove(int track_id);
     void clear();
-    int select_bbox(float x, float y);
+    int select_bbox(int x, int y);
 
 private:
     QMap<int, ScaledBBox> bboxes;

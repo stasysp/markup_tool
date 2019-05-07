@@ -165,7 +165,7 @@ bool MarkUp::run() {
         return false;
     }
 
-#if 0
+#if 1
     if (!boost::filesystem::exists(params_.tracker_model_path)) {
         // TODO: Exceptions
         std::cout << "Model doesnt exist:" << params_.tracker_model_path << std::endl;
@@ -270,6 +270,12 @@ size_t MarkUp::add_detection(const Detection& det) {
     return this->track_container_->create_new_track(det);
 
     // return this->track_container_->add_det2track(det.id, det);
+}
+
+// разобраться с этой грязью...
+size_t MarkUp::add_detection(int frame, int xmin, int ymin, int xmax, int ymax) {
+    Detection det{frame, -1, cv::Rect(xmin, ymin, xmax-xmin, ymax-ymin), 0.};
+    return add_detection(det);
 }
 
 size_t MarkUp::get_video_len() const {
