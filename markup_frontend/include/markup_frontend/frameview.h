@@ -5,6 +5,7 @@
 #include <QGraphicsView>
 #include <QPushButton>
 #include <QString>
+#include <QPoint>
 #include "framemarkup.h"
 
 class FrameView : public QGraphicsView
@@ -22,6 +23,7 @@ public slots:
     void slot_set_markup(QMap<int, ScaledBBox> newmarkup);
     void set_scene();
     int getTrackOnFocus();
+    QPoint getImagePoint(QMouseEvent *event);
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
@@ -38,6 +40,12 @@ private:
     QPixmap image;
     FrameMarkup markup;
     QGraphicsScene *scene = nullptr;
+
+    // отрисовка временного прямоугольника...
+    QPainter painter;
+    QRect tempRect;
+    bool mousePressed = false;
+    bool drawStarted = false;
 };
 
 #endif // FRAMEVIEW_H
