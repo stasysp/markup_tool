@@ -25,5 +25,5 @@ add_dependencies(markup_frontend markup_backend)
 
 find_package(Qt5Widgets)
 
-add_executable(main main.cpp)
-target_link_libraries(main markup_backend markup_frontend)
+add_executable(markup_tool main.cpp)
+target_link_libraries(markup_tool markup_backend markup_frontend)
