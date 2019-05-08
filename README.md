@@ -19,8 +19,8 @@ sudo apt-get install libboost-all-dev libopencv-dev qt5-default
 - Build app
 ```Shell
 git clone https://github.com/stasysp/markup_tool
-mkdir build-dir 
-cd build-dir
+mkdir build
+cd build
 cmake ..
 make
 ```
