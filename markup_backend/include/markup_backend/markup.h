@@ -13,13 +13,13 @@
 
 struct PipelineRunParams {
     // Путь до видео которое процессится задается через интерфейс;
-    std::string video_path = "../markup_tool/data/test/MOT16-04/img1";
+    std::string video_path = "data/test/MOT16-04/img1";
     // Примеры путей
-    std::string tracker_model_path = "../markup_tool/python/detector/yolo3.py";
+    std::string tracker_model_path = "python/detector/yolo3.py";
     // Примеры путей
-    std::string weights_path = "../markup_tool/data/models/yolo3";
+    std::string weights_path = "data/models/yolo3";
     std::string tmp_video_dir = "/tmp/markup_video";
-    std::string tracks_path = "../markup_tool/data/test/MOT16-04/gt/gt.txt";
+    std::string tracks_path = "data/test/MOT16-04/gt/gt.txt";
     std::string tmp_img_extention = ".png";
     size_t tmp_img_path_pad2length = 10;
     std::string tracks_filename = "tracks.txt";

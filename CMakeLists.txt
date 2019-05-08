@@ -27,3 +27,14 @@ find_package(Qt5Widgets)
 
 add_executable(markup_tool main.cpp)
 target_link_libraries(markup_tool markup_backend markup_frontend)
+
+file(COPY python DESTINATION .)
+file(COPY data DESTINATION .)
+
+set(YOLO_WEIGHTS data/models/yolo3/yolov3.weights)
+if (NOT EXISTS ${YOLO_WEIGHTS})
+    message("Downloading YOLOv3 weights")
+    file(DOWNLOAD
+        https://pjreddie.com/media/files/yolov3.weights
+        ${YOLO_WEIGHTS})
+endif()
