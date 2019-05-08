@@ -12,11 +12,12 @@ class FrameControl : public QWidget
 public:
     explicit FrameControl(QWidget *parent = nullptr);
 
-    signals:
-            void send_newframeidx(int frameidx);
+signals:
+    void send_newframeidx(int frameidx);
 
 public slots:
-            void slot_setnewframeidx(int frameidx);
+    void slot_setnewframeidx(int frameidx);
+    void slot_mode(bool isSelectMode);
 
 public:
     QPushButton *select = nullptr;
@@ -26,6 +27,9 @@ public:
     QPushButton *btn_unt_track = nullptr;
     QPushButton *btn_spl_track = nullptr;
     TimeLineControl *timeline = nullptr;
+
+private:
+    QString getStyleSheet(bool flag);
 };
 
 #endif // FRAMECONTROL_H

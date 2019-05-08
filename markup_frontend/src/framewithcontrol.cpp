@@ -15,8 +15,14 @@ FrameWithControl::FrameWithControl(QWidget *parent) : QWidget(parent)
     hlayout->addWidget(framecontrol);
     hlayout->setStretch(1, 0);
 
+    connect(frameview, &FrameView::send_mode,
+            framecontrol, &FrameControl::slot_mode);
     connect(framecontrol, &FrameControl::send_newframeidx,
             this, &FrameWithControl::setFrameIdx);
+    connect(framecontrol->select, &QPushButton::clicked,
+            frameview, &FrameView::slot_set_select_mode);
+    connect(framecontrol->btn_add_bbox, &QPushButton::clicked,
+            frameview, &FrameView::slot_set_addbbox_mode);
     connect(framecontrol->btn_del_bbox, &QPushButton::clicked,
             this, &FrameWithControl::slot_delete_bbox);
     connect(framecontrol->btn_del_track, &QPushButton::clicked,

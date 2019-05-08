@@ -35,31 +35,33 @@ QPoint FrameView::getImagePoint(QMouseEvent *event) {
 }
 
 void FrameView::mousePressEvent(QMouseEvent *event) {
-    mousePressed = true;
-    QPoint point = getImagePoint(event);
-    tempRect.setTopLeft(point);
-    tempRect.setBottomRight(point);
+    if (!isSelectMode) {
+        mousePressed = true;
+        QPoint point = getImagePoint(event);
+        tempRect.setTopLeft(point);
+        tempRect.setBottomRight(point);
+    }
 }
 
 void FrameView::mouseReleaseEvent(QMouseEvent *event) {
-    mousePressed = false;
-    // вот такое ощущение, что выбирается не тот конструктор, а второй параметр берётся как size...
-    tempRect.setBottomRight(getImagePoint(event));
-    send_add_bbox(tempRect);
+    if (mousePressed) {
+        mousePressed = false;
+        tempRect.setBottomRight(getImagePoint(event));
+        send_add_bbox(tempRect);
+    }
 }
 
 void FrameView::mouseDoubleClickEvent(QMouseEvent *event) {
     // нужна ли эта проверка?
-    qDebug() << "double click...";
-    if (scene != nullptr) {
+    if (isSelectMode && (scene != nullptr)) {
         QPoint point = getImagePoint(event);
 
         int get_track = markup.select_bbox(point.x(), point.y());
         if (get_track >= 0) {
             trackOnFocus = get_track;
         }
+        set_scene();
     }
-    set_scene();
 }
 
 void FrameView::keyPressEvent(QKeyEvent *event) {}

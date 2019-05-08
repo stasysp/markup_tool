@@ -8,6 +8,7 @@ FrameControl::FrameControl(QWidget *parent) : QWidget(parent)
     QVBoxLayout *vlayout = new QVBoxLayout(this);
 
     select = new QPushButton("Select");
+    select->setStyleSheet(getStyleSheet(true));
     btn_add_bbox = new QPushButton("Add new bounding box");
     btn_del_bbox = new QPushButton("Delete bounding box");
     btn_del_track = new QPushButton("Delete track");
@@ -18,11 +19,12 @@ FrameControl::FrameControl(QWidget *parent) : QWidget(parent)
 
     vlayout->addWidget(select);
     vlayout->addWidget(btn_add_bbox);
+    vlayout->addStretch(1);
     vlayout->addWidget(btn_del_bbox);
     vlayout->addWidget(btn_del_track);
     vlayout->addWidget(btn_unt_track);
     vlayout->addWidget(btn_spl_track);
-    vlayout->addStretch(1);
+    vlayout->addStretch(2);
     vlayout->addWidget(timeline);
     timeline->setTimelineProperties(0,0);
 
@@ -33,3 +35,15 @@ void FrameControl::slot_setnewframeidx(int frameidx) {
     emit send_newframeidx(frameidx);
 }
 
+void FrameControl::slot_mode(bool isSelectMode) {
+    select->setStyleSheet(getStyleSheet(isSelectMode));
+    btn_add_bbox->setStyleSheet(getStyleSheet(!isSelectMode));
+}
+
+QString FrameControl::getStyleSheet(bool flag) {
+    if (flag) {
+        return "QPushButton {background-color: #A3C1DA}";
+    } else {
+        return "QPushButton {}";
+    }
+}
