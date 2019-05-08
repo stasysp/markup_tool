@@ -26,7 +26,7 @@ make
 ```
 - Download weights
 ```Shell
-wget 
+wget https://pjreddie.com/media/files/yolov3.weights data/models/yolo3/yolov3.weights
 ```
 
 - From ../build-dir/ run app
