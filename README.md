@@ -1,12 +1,21 @@
 # Automatic Video Markup Tool
 
 ## Installation
-- Install compiller
+
+### Linux
+
+- Install building dependencies
 ```Shell
 sudo apt-get update
-sudo apt-get install g++
-pip install torchvision, torch, numba, filterpy, opencv-python
+sudo apt-get install g++ cmake git
 ```
+
+- Install app dependencies
+```Shell
+sudo pip3 install torchvision torch numba filterpy opencv-python
+sudo apt-get install libboost-all-dev libopencv-dev qt5-default
+```
+
 - Build app
 ```Shell
 git clone https://github.com/stasysp/markup_tool
@@ -15,8 +24,12 @@ cd build-dir
 cmake ..
 make
 ```
-- Run app
+- Download weights
 ```Shell
-cd build-dir
-./main
+wget 
+```
+
+- From ../build-dir/ run app
+```Shell
+./markup_tool
 ```
