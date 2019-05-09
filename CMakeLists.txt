@@ -18,12 +18,16 @@ set(CMAKE_CXX_STANDARD 14)
 include_directories(${CMAKE_SOURCE_DIR}/markup_backend/include/)
 include_directories(${CMAKE_SOURCE_DIR}/markup_frontend/include/)
 
+set(Qt5_CMAKE_DIR /usr/local/opt/qt/lib/cmake)
+set(Qt5Widgets_DIR ${Qt5_CMAKE_DIR}/Qt5Widgets)
+find_package(Qt5Widgets)
+
 add_subdirectory(markup_backend)
 add_subdirectory(markup_frontend)
 
 add_dependencies(markup_frontend markup_backend)
 
-find_package(Qt5Widgets)
+
 
 add_executable(markup_tool main.cpp)
 target_link_libraries(markup_tool markup_backend markup_frontend)
