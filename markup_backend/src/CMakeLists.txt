@@ -3,11 +3,15 @@
 find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
 
+find_package(Boost COMPONENTS filesystem system REQUIRED)
+include_directories(${Boost_INCLUDE_DIRS})
+
 set(HEADERS_DIR ${CMAKE_SOURCE_DIR}/markup_backend/include)
 include_directories(${HEADERS_DIR})
 
-find_package(Boost COMPONENTS filesystem system REQUIRED)
-include_directories(${Boost_INCLUDE_DIRS})
+
+# del
+message(${Boost_INCLUDE_DIRS})
 
 # set(HEADERS
 #         ${HEADERS_DIR}/markup_backend/video.h

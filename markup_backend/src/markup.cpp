@@ -109,6 +109,8 @@ bool MarkUp::set_model(const std::string& model_path,
 
     params_.tracker_model_path = model_path;
     params_.weights_path = weights_path;
+
+    return true;
 }
 
 bool MarkUp::set_video(const std::string& filepath) {
@@ -154,6 +156,7 @@ bool MarkUp::set_tracks(const std::string& filepath) {
     track_container_.reset(nullptr);
 
     params_.tracks_path = filepath;
+    return true;
 }
 
 bool MarkUp::run() {
@@ -273,7 +276,7 @@ size_t MarkUp::add_detection(const Detection& det) {
 }
 
 // разобраться с этой грязью...
-size_t MarkUp::add_detection(int frame, int xmin, int ymin, int xmax, int ymax) {
+size_t MarkUp::add_detection(size_t frame, int xmin, int ymin, int xmax, int ymax) {
     Detection det{frame, -1, cv::Rect(xmin, ymin, xmax-xmin, ymax-ymin), 0.};
     return add_detection(det);
 }
