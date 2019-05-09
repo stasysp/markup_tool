@@ -7,7 +7,7 @@
 - Install building dependencies
 ```Shell
 sudo apt-get update
-sudo apt-get install g++ cmake git
+sudo apt-get install g++ cmake git python3-pip
 ```
 
 - Install app dependencies
