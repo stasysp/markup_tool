@@ -1,35 +1,7 @@
-# Automatic Video Markup Tool
+# Pedestrian Tracking Markup Tool
 
-## Installation
+Nowadays, pedestrian tracking is an important task in such fields as autonomous driving and video surveilence. Although different Machine Learning and Deep Learning approaches thrived in this field they still need a lot of labeled data to be trained on. Manual data labeling becomes a new bottleneck in scaling up supervised learning approaches. In this simple mark-up tool we try to speed up performance of manual data labeling using semi-automation based on CNN networks and algorithmic track processing, but still leaving an opportunity to manually refine results of the automated tracking.
 
-### Linux
+For *installation instruction* and *user manual* please visit our beautiful [wiki] (https://github.com/stasysp/markup_tool/wiki)
 
-- Install building dependencies
-```Shell
-sudo apt-get update
-sudo apt-get install g++ cmake git python3-pip
-```
 
-- Install app dependencies
-```Shell
-sudo pip3 install torchvision torch numba filterpy opencv-python
-sudo apt-get install libboost-all-dev libopencv-dev qt5-default
-```
-
-- Build app
-```Shell
-git clone https://github.com/stasysp/markup_tool
-mkdir build
-cd build
-cmake ..
-make
-```
-- Download weights
-```Shell
-wget https://pjreddie.com/media/files/yolov3.weights data/models/yolo3/yolov3.weights
-```
-
-- From ../build-dir/ run app
-```Shell
-./markup_tool
-```
