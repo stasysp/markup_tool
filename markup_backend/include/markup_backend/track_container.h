@@ -36,6 +36,9 @@ public:
     bool unite_tracks(size_t id_A, size_t id_B);
     bool split_track(size_t track_id, size_t frame_idx);
     size_t create_new_track(const Detection& det);
+    std::vector<DetectionAndTrack> get_tracks_and_detections(size_t frame_idx_,
+                                                             size_t max_frames_before,
+                                                             size_t max_frames_after);
 
     std::unique_ptr<Track> get_track(size_t id);
 

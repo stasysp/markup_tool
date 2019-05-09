@@ -87,6 +87,35 @@ bool MarkUp::get_frame(size_t frame_idx, std::vector<Detection>* detections) con
     return true;
 }
 
+bool MarkUp::get_frame(size_t frame_idx,
+               std::vector<DetectionAndTrack>* detections,
+               size_t max_frames_before, size_t max_frames_after) const {
+    if (detections == nullptr) {
+        // TODO: Exceptions
+        std::cout << "No return container 'detections' provided!" << std::endl;
+        return false;
+    }
+
+    detections->clear();
+
+    if (track_container_ == nullptr) {
+        // TODO: Exceptions
+        std::cout << "First compute tracks!" << std::endl;
+        return false;
+    }
+
+    if (frame_idx >= track_container_->get_video_len()) {
+        // TODO: Exceptions
+        std::cout << "No such frame:" << frame_idx
+                  << " Only has " << track_container_->get_video_len() << std::endl;
+        return false;
+    }
+
+    *detections = track_container_->get_tracks_and_detections(frame_idx, max_frames_before, max_frames_after);
+
+    return true;
+}
+
 bool MarkUp::get_slice(size_t min_frame_idx, size_t max_frame_idx,
                 std::map<size_t, std::vector<Detection>>* tracks) const {
     if (tracks == nullptr) {

@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "markup_backend/nn_model.h"
+#include "markup_backend/definitions.h"
 #include "markup_backend/tracks.h"
 #include "markup_backend/video.h"
 #include "markup_backend/utils.h"
@@ -28,6 +28,10 @@ class MarkUp {
 public:
     bool get_frame(size_t frame_idx,
                    std::vector<Detection>* detections) const;
+
+    bool get_frame(size_t frame_idx,
+                   std::vector<DetectionAndTrack>* detections,
+                   size_t max_frames_before=10, size_t max_frames_after=10) const;
 
     // Returns [a, b)
     bool get_slice(size_t min_frame_idx, size_t max_frame_idx,
