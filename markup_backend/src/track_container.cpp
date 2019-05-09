@@ -194,6 +194,21 @@ std::vector<Detection> TrackContainer::get_detections(size_t frame_idx) const {
     return detections;
 }
 
+std::map<size_t, std::vector<Detection>> TrackContainer::get_slice(size_t min_frame_idx, size_t max_frame_idx) const {
+    std::map<size_t, std::vector<Detection>> tracks;
+
+    assert(min_frame_idx <= max_frame_idx);
+    assert(max_frame_idx < this->video_len_);
+
+    for (size_t frame_idx = min_frame_idx; frame_idx < max_frame_idx; ++frame_idx) {
+        for (const auto& det : this->get_detections(frame_idx)) {
+            tracks[det.id].push_back(det);
+        }
+    }
+
+    return tracks;
+}
+
 size_t TrackContainer::get_video_len() const {
     return video_len_;
 }

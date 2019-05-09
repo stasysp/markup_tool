@@ -27,7 +27,11 @@ struct PipelineRunParams {
 class MarkUp {
 public:
     bool get_frame(size_t frame_idx,
-                   std::vector<Detection>* detections);
+                   std::vector<Detection>* detections) const;
+
+    // Returns [a, b)
+    bool get_slice(size_t min_frame_idx, size_t max_frame_idx,
+                    std::map<size_t, std::vector<Detection>>* tracks) const;
 
     bool set_model(const std::string& model_path,
                    const std::string& weights_path);
@@ -56,6 +60,8 @@ public:
     bool load_markup(const std::string& path2file);
 
     bool save_markup(const std::string& path2file);
+
+
 
 private:
     PipelineRunParams params_;

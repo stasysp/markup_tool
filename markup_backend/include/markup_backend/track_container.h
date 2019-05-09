@@ -40,6 +40,8 @@ public:
 
     std::vector<Detection> get_detections(size_t frame_idx) const;
 
+    std::map<size_t, std::vector<Detection>> get_slice(size_t min_frame_idx, size_t max_frame_idx) const;
+
     size_t get_video_len() const;
     size_t get_num_tracks() const;
 
