@@ -43,11 +43,16 @@ void FrameView::mousePressEvent(QMouseEvent *event) {
     }
 }
 
+// осторожно! магическая константа - минимальная диагональ равна 30
 void FrameView::mouseReleaseEvent(QMouseEvent *event) {
     if (mousePressed) {
         mousePressed = false;
         tempRect.setBottomRight(getImagePoint(event));
-        send_add_bbox(tempRect);
+        int hypot_sqr = tempRect.height() * tempRect.height() +
+                tempRect.width() * tempRect.width();
+        if (1000 < hypot_sqr) {
+            send_add_bbox(tempRect);
+        }
     }
 }
 

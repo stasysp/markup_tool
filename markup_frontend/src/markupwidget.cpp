@@ -29,6 +29,7 @@ MarkupWidget::MarkupWidget(QWidget *parent)
     connect(maincontrol, &MainControlPanel::send_tracks_path, this, &MarkupWidget::slot_set_tracks_path);
     connect(maincontrol, &MainControlPanel::send_savetracks, this, &MarkupWidget::slot_savetracks);
     connect(maincontrol, &MainControlPanel::send_run, this, &MarkupWidget::slot_run);
+    connect(maincontrol, &MainControlPanel::send_move_all_frames, this, &MarkupWidget::slot_add_frame_idx_for_all_frameview);
 
     connect(fwcup, &FrameWithControl::send_framechanged, this, &MarkupWidget::slot_framechanged);
     connect(fwcup, &FrameWithControl::send_add_bbox, this, &MarkupWidget::slot_add_bbox);
@@ -123,6 +124,11 @@ void MarkupWidget::slot_interpolate() {
     markup.interpolate_track(fwcup->getTrackOnFocus(),
                              fwcup->getFrameIdx(), fwcdn->getFrameIdx());
     update();
+}
+
+void MarkupWidget::slot_add_frame_idx_for_all_frameview(int move) {
+    fwcup->addFrameIdx(move);
+    fwcdn->addFrameIdx(move);
 }
 
 void MarkupWidget::update() {
