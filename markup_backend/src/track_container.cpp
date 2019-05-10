@@ -384,8 +384,10 @@ bool TrackContainer::unite_tracks(size_t id_A, size_t id_B) {
         return false;
     }
 
-    size_t new_id = std::min(track_A->get_id(), track_B->get_id());
-    size_t delete_id = std::max(track_A->get_id(), track_B->get_id());
+    // size_t new_id = std::min(track_A->get_id(), track_B->get_id());
+    // size_t delete_id = std::max(track_A->get_id(), track_B->get_id());
+    size_t new_id = track_A->get_id();
+    size_t delete_id = track_B->get_id();
     Track united_tracks(new_id);
 
     for (const auto& det : *track_A) {
