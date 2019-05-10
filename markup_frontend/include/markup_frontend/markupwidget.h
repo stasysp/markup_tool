@@ -28,6 +28,7 @@ public slots:
     void slot_delete_track(int track_id);
     void slot_split_track(int track_id, int frameidx);
     void slot_unite_tracks();
+    void slot_interpolate();
 
 private:
     MainControlPanel *maincontrol = nullptr;

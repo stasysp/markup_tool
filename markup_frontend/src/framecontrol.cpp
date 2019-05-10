@@ -14,6 +14,7 @@ FrameControl::FrameControl(QWidget *parent) : QWidget(parent)
     btn_del_track = new QPushButton("Delete track");
     btn_unt_track = new QPushButton("Unite tracks");
     btn_spl_track = new QPushButton("Split track");
+    btn_interpolate = new QPushButton("Interpolate");
 
     timeline = new TimeLineControl();
 
@@ -24,6 +25,7 @@ FrameControl::FrameControl(QWidget *parent) : QWidget(parent)
     vlayout->addWidget(btn_del_track);
     vlayout->addWidget(btn_unt_track);
     vlayout->addWidget(btn_spl_track);
+    vlayout->addWidget(btn_interpolate);
     vlayout->addStretch(2);
     vlayout->addWidget(timeline);
     timeline->setTimelineProperties(0,0);

@@ -36,6 +36,7 @@ MarkupWidget::MarkupWidget(QWidget *parent)
     connect(fwcup, &FrameWithControl::send_delete_track, this, &MarkupWidget::slot_delete_track);
     connect(fwcup, &FrameWithControl::send_split_track, this, &MarkupWidget::slot_split_track);
     connect(fwcup, &FrameWithControl::send_unite_tracks, this, &MarkupWidget::slot_unite_tracks);
+    connect(fwcup, &FrameWithControl::send_interpolate, this, &MarkupWidget::slot_interpolate);
 
     connect(fwcdn, &FrameWithControl::send_framechanged, this, &MarkupWidget::slot_framechanged);
     connect(fwcdn, &FrameWithControl::send_add_bbox, this, &MarkupWidget::slot_add_bbox);
@@ -43,6 +44,7 @@ MarkupWidget::MarkupWidget(QWidget *parent)
     connect(fwcdn, &FrameWithControl::send_delete_track, this, &MarkupWidget::slot_delete_track);
     connect(fwcdn, &FrameWithControl::send_split_track, this, &MarkupWidget::slot_split_track);
     connect(fwcdn, &FrameWithControl::send_unite_tracks, this, &MarkupWidget::slot_unite_tracks);
+    connect(fwcdn, &FrameWithControl::send_interpolate, this, &MarkupWidget::slot_interpolate);
 }
 
 void MarkupWidget::slot_set_video_path(QDir path) {
@@ -113,6 +115,13 @@ void MarkupWidget::slot_split_track(int track_id, int frameidx) {
 
 void MarkupWidget::slot_unite_tracks() {
     markup.unite_tracks(fwcup->getTrackOnFocus(), fwcdn->getTrackOnFocus());
+    update();
+}
+
+void MarkupWidget::slot_interpolate() {
+    slot_unite_tracks();
+    markup.interpolate_track(fwcup->getTrackOnFocus(),
+                             fwcup->getFrameIdx(), fwcdn->getFrameIdx());
     update();
 }
 

@@ -31,6 +31,9 @@ FrameWithControl::FrameWithControl(QWidget *parent) : QWidget(parent)
             this, &FrameWithControl::slot_split_track);
     connect(framecontrol->btn_unt_track, &QPushButton::clicked,
             this, &FrameWithControl::slot_unite_tracks);
+    connect(framecontrol->btn_interpolate, &QPushButton::clicked,
+            this, &FrameWithControl::slot_interpolate);
+
     connect(frameview, &FrameView::send_add_bbox,
             this, &FrameWithControl::slot_add_bbox);
 }
@@ -94,6 +97,10 @@ void FrameWithControl::slot_split_track() {
 
 void FrameWithControl::slot_unite_tracks() {
     emit send_unite_tracks();
+}
+
+void FrameWithControl::slot_interpolate() {
+    emit send_interpolate();
 }
 
 void FrameWithControl::update() {
