@@ -330,6 +330,7 @@ bool TrackContainer::save(const std::string& filepath) {
                     << pedestrian_class_ << std::endl;
         }
     }
+    return true;
 }
 
 bool TrackContainer::unite_tracks(size_t id_A, size_t id_B) {
