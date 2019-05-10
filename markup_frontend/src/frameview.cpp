@@ -96,6 +96,15 @@ void FrameView::set_scene() {
             } else {
                 scene->addRect(iter->getScaledRect(), pen);
             }
+
+            auto track = iter->getTrackLine();
+            color = QColor::fromHsv((67 * key) % 360, 255, 255, 255);
+
+            int RADIUS = 6;
+            for (auto it = track.begin(); it != track.end(); ++it) {
+                scene->addEllipse(it->x() - RADIUS, it->y() - RADIUS,
+                                  2*RADIUS, 2*RADIUS, QPen(color, RADIUS));
+            }
         }
 
         this->setScene(scene);

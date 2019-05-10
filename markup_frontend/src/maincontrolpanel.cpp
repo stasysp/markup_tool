@@ -11,9 +11,9 @@
 
 MainControlPanel::MainControlPanel(QWidget *parent) : QWidget(parent)
 {
-    selectmodel = new QComboBox();
-    selectmodel->addItem("SSD");
-    selectmodel->addItem("DarkNet");
+    //selectmodel = new QComboBox();
+    //selectmodel->addItem("SSD");
+    //selectmodel->addItem("DarkNet");
 
     loadvideo = new QPushButton("Load Video");
     loadtracks = new QPushButton("Load Tracks");
@@ -21,7 +21,6 @@ MainControlPanel::MainControlPanel(QWidget *parent) : QWidget(parent)
     run = new QPushButton("Run Object Tracking");
     play = new QPushButton("Play Video");
 
-    // QGridLayout *layout = new QGridLayout(this);
     QVBoxLayout *layout = new QVBoxLayout(this);
     QLabel *lbl = new QLabel();
     lbl->setSizePolicy(QSizePolicy());
@@ -30,10 +29,10 @@ MainControlPanel::MainControlPanel(QWidget *parent) : QWidget(parent)
     int BIGSPACE = 2;
     int SMALLSPACE = 1;
 
-    layout->addStretch(SMALLSPACE);
-    layout->addWidget(lbl);
-    layout->addWidget(selectmodel);
-    layout->addStretch(BIGSPACE);
+    layout->addStretch(4 * SMALLSPACE);
+    //layout->addWidget(lbl);
+    //layout->addWidget(selectmodel);
+    //layout->addStretch(BIGSPACE);
     layout->addWidget(loadvideo);
     layout->addStretch(SMALLSPACE);
     layout->addWidget(loadtracks);

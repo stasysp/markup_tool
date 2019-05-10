@@ -72,11 +72,18 @@ void MarkupWidget::slot_run() {
 void MarkupWidget::slot_framechanged(FrameWithControl *fwc) {
     int frameidx = fwc->getFrameIdx();
     QMap<int, ScaledBBox> bboxes;
-    std::vector<Detection> detections;
+    std::vector<DetectionAndTrack> detections;
 
     if (markup.get_frame(frameidx, &detections)) {
         for (auto det : detections) {
-            bboxes[det.id] = ScaledBBox(det);
+            ScaledBBox bbox = ScaledBBox(det);
+            QVector<QPoint> track_line;
+            for (auto point : det.track) {
+                track_line.push_back(QPoint(point.x, point.y));
+            }
+            // qDebug() << track_line;
+            bbox.setTrackLine(track_line, det.get_first_frame_idx());
+            bboxes[det.track_id] = bbox;
         }
     }
 

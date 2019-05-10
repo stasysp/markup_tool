@@ -31,7 +31,7 @@ public:
 
     bool get_frame(size_t frame_idx,
                    std::vector<DetectionAndTrack>* detections,
-                   size_t max_frames_before=10, size_t max_frames_after=10) const;
+                   size_t max_frames_before=20, size_t max_frames_after=20) const;
 
     // Returns [a, b)
     bool get_slice(size_t min_frame_idx, size_t max_frame_idx,

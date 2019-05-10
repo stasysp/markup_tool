@@ -27,7 +27,7 @@ private slots:
     void slot_play();
 
 private:
-    QComboBox *selectmodel = nullptr;
+    //QComboBox *selectmodel = nullptr;
     QPushButton *loadvideo = nullptr;
     QPushButton *loadtracks = nullptr;
     QPushButton *savetracks = nullptr;

@@ -21,6 +21,14 @@ ScaledBBox::ScaledBBox(const Detection& det, int width, int height) :
     _checkSize();
 }
 
+ScaledBBox::ScaledBBox(const DetectionAndTrack& det, int width, int height) :
+    _width(width), _height(height) {
+    QPoint topleft(det.bbox.x, det.bbox.y);
+    QPoint bottomright(det.bbox.x + det.bbox.width, det.bbox.y + det.bbox.height);
+    bbox = QRect(topleft, bottomright);
+    _checkSize();
+}
+
 // проверить...
 void ScaledBBox::_checkSize() {
     if (bbox.left() < 0) bbox.setLeft(0);
