@@ -77,6 +77,46 @@ bool TrackContainer::has_track(size_t id) {
     return false;
 }
 
+bool TrackContainer::interpolate_track(size_t track_id, size_t from_frame_idx, size_t to_frame_idx) {
+    assert(from_frame_idx <= to_frame_idx);
+
+    auto track = this->get_track(track_id);
+
+    if (track == nullptr) {
+        return false;
+    }
+
+    auto from_det = track->get_detection(from_frame_idx);
+    if (from_det == nullptr) {
+        return false;
+    }
+
+    auto to_det = track->get_detection(to_frame_idx);
+    if (to_det == nullptr) {
+        return false;
+    }
+
+    assert(from_det->frame <= to_det->frame);
+
+
+    for (size_t frame_idx = from_frame_idx + 1; frame_idx < to_frame_idx; ++frame_idx) {
+        float alpha = float(frame_idx - from_frame_idx) / float(to_frame_idx - from_frame_idx + 1);
+        Detection new_det;
+
+        new_det.id = track_id;
+        new_det.frame = frame_idx;
+        new_det.bbox.x = int((1 - alpha) * from_det->bbox.x + alpha * to_det->bbox.x);
+        new_det.bbox.y = int((1 - alpha) * from_det->bbox.y + alpha * to_det->bbox.y);
+        new_det.bbox.width = int((1 - alpha) * from_det->bbox.width + alpha * to_det->bbox.width);
+        new_det.bbox.height = int((1 - alpha) * from_det->bbox.height + alpha * to_det->bbox.height);
+        new_det.confidence = (1 - alpha) * from_det->confidence + alpha * to_det->confidence;
+
+        this->add_det2track(track_id, new_det);
+    }
+
+    return true;
+}
+
 bool TrackContainer::split_track(size_t track_id, size_t frame_idx) {
     std::list<Track>::iterator track_it;
     for (track_it = this->tracks_.begin();

@@ -289,6 +289,33 @@ bool MarkUp::delete_track(size_t id) {
     return this->track_container_->delete_track(id);
 }
 
+bool MarkUp::interpolate_track(size_t track_id, size_t from_frame_idx, size_t to_frame_idx) {
+    if (track_container_ == nullptr) {
+        // TODO: Exceptions
+        std::cout << "First compute tracks!" << std::endl;
+        return false;
+    }
+
+    if (!this->track_container_->has_track(track_id)) {
+        // TODO: Exceptions
+        std::cout << "No such track found:" << track_id << std::endl;
+        return false;
+    }
+
+    if (to_frame_idx < from_frame_idx) {
+        std::swap(from_frame_idx, to_frame_idx);
+    }
+
+    if (to_frame_idx >= track_container_->get_video_len()) {
+        // TODO: Exceptions
+        std::cout << "No such frame:" << to_frame_idx
+                  << " Only has " << track_container_->get_video_len() << std::endl;
+        return false;
+    }
+
+    return track_container_->interpolate_track(track_id, from_frame_idx, to_frame_idx);
+}
+
 bool MarkUp::split_track(size_t track_id, size_t frame2split_idx) {
     if (track_container_ == nullptr) {
         // TODO: Exceptions

@@ -49,6 +49,8 @@ public:
 
     bool split_track(size_t track_id, size_t frame2split_idx);
 
+    bool interpolate_track(size_t track_id, size_t from_frame_idx, size_t to_frame_idx);
+
     bool unite_tracks(size_t track_id_one, size_t track_id_two);
 
     bool delete_track(size_t id);

@@ -35,6 +35,7 @@ public:
     bool delete_detection(size_t track_id, size_t frame_idx);
     bool unite_tracks(size_t id_A, size_t id_B);
     bool split_track(size_t track_id, size_t frame_idx);
+    bool interpolate_track(size_t track_id, size_t from_frame_idx, size_t to_frame_idx);
     size_t create_new_track(const Detection& det);
     std::vector<DetectionAndTrack> get_tracks_and_detections(size_t frame_idx_,
                                                              size_t max_frames_before,
