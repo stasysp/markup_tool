@@ -14,8 +14,8 @@ BOOST_AUTO_TEST_SUITE(video_suit)
 BOOST_AUTO_TEST_CASE( constructors ) {
     std::string test_video_dir = "../../../markup_tool/data/test/MOT16-04/img1/";
     std::string first_img_filename = "000001.jpg";
-    std::string last_img_filename = "000005.jpg";
-    size_t num_frames = 5;
+    std::string last_img_filename = "000050.jpg";
+    size_t num_frames = 50;
     cv::Size img_size(1920, 1080);
 
     std::unique_ptr<Video> video;

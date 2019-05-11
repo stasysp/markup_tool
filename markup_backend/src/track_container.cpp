@@ -45,6 +45,7 @@ void TrackContainer::add_track(const Track& track) {
         assert(it->frame < video_len_);
         assert(timeline_.size() == video_len_);
         timeline_[it->frame].push_back(&(*it));
+        assert(it->frame == timeline_[it->frame].back()->frame);
     }
 
     /*for (auto& saved_track : tracks_) {
@@ -188,9 +189,15 @@ bool TrackContainer::delete_track(size_t id) {
 
             // Delete fast
             for (const auto& det_iter : *track_iter) {
+                assert(det_iter.frame < timeline_.size());
+                assert(track_iter->get_id() == det_iter.id);
+
                 for (auto frame_ptr_it = timeline_[det_iter.frame].begin();
                          frame_ptr_it != timeline_[det_iter.frame].end();
                          ++frame_ptr_it) {
+
+                    assert((*frame_ptr_it)->frame == det_iter.frame);
+
                     if (id == (*frame_ptr_it)->id) {
                         timeline_[det_iter.frame].erase(frame_ptr_it);
                         break;
@@ -205,6 +212,13 @@ bool TrackContainer::delete_track(size_t id) {
         }
     }
 
+    for (size_t frame_idx = 0; frame_idx < timeline_.size(); ++frame_idx) {
+        for (const auto& det : timeline_[frame_idx]) {
+            assert(det != nullptr);
+            assert(det->frame == frame_idx);
+        }
+    }
+
     return false;
 }
 
@@ -214,7 +228,23 @@ bool TrackContainer::add_det2track(size_t track_id, const Detection& det) {
 
     for (auto track_iter = tracks_.begin(); track_iter != tracks_.end(); ++track_iter) {
         if (track_iter->get_id() == track_id) {
+            // delete det from timeline
+            this->delete_detection(track_id, det.frame);
+
+            /*{
+                for (auto det_it = timeline_[det.frame].begin();
+                         det_it != timeline_[det.frame].end();
+                         ++det_it) {
+                    if ((*det_it)->id == track_id) {
+                        timeline_[det.frame].erase(det_it);
+                        break;
+                    }
+                }
+            }*/
+
             Detection* det_ptr = track_iter->add(det);
+            assert(det.frame < timeline_.size());
+            assert(det.frame == det_ptr->frame);
             timeline_[det.frame].push_back(det_ptr);
             return true;
         }
@@ -229,6 +259,7 @@ std::vector<Detection> TrackContainer::get_detections(size_t frame_idx) const {
 
     std::vector<Detection> detections;
     for (const auto& detection_ptr : timeline_[frame_idx]) {
+        assert(detection_ptr->frame == frame_idx);
         detections.push_back(*detection_ptr);
     }
     return detections;
