@@ -4,6 +4,8 @@ Nowadays, pedestrian tracking is an important task in such fields as autonomous 
 
 ## [Linux Installation from Source](https://github.com/stasysp/markup_tool/wiki/Installation-from-sources-Linux)
 
+## [MacOS Installation from Source](https://github.com/stasysp/markup_tool/wiki/Installation-from-sources-MacOS)
+
 ## [User Manual](https://github.com/stasysp/markup_tool/wiki/User-Manual)
 
 
