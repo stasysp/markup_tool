@@ -62,7 +62,7 @@ std::unique_ptr<TrackContainer> MarkUp::run_pipeline(const Video& video) {
     return std::make_unique<TrackContainer>(tracks_filepath);
 }
 
-bool MarkUp::get_frame(size_t frame_idx, std::vector<Detection>* detections) {
+bool MarkUp::get_frame(size_t frame_idx, std::vector<Detection>* detections) const {
     if (detections == nullptr) {
         // TODO: Exceptions
         std::cout << "No return container 'detections' provided!" << std::endl;
@@ -85,6 +85,70 @@ bool MarkUp::get_frame(size_t frame_idx, std::vector<Detection>* detections) {
     }
 
     *detections = track_container_->get_detections(frame_idx);
+
+    return true;
+}
+
+bool MarkUp::get_frame(size_t frame_idx,
+               std::vector<DetectionAndTrack>* detections,
+               size_t max_frames_before, size_t max_frames_after) const {
+    if (detections == nullptr) {
+        // TODO: Exceptions
+        std::cout << "No return container 'detections' provided!" << std::endl;
+        return false;
+    }
+
+    detections->clear();
+
+    if (track_container_ == nullptr) {
+        // TODO: Exceptions
+        std::cout << "First compute tracks!" << std::endl;
+        return false;
+    }
+
+    if (frame_idx >= track_container_->get_video_len()) {
+        // TODO: Exceptions
+        std::cout << "No such frame:" << frame_idx
+                  << " Only has " << track_container_->get_video_len() << std::endl;
+        return false;
+    }
+
+    *detections = track_container_->get_tracks_and_detections(frame_idx, max_frames_before, max_frames_after);
+
+    return true;
+}
+
+bool MarkUp::get_slice(size_t min_frame_idx, size_t max_frame_idx,
+                std::map<size_t, std::vector<Detection>>* tracks) const {
+    if (tracks == nullptr) {
+        // TODO: Exceptions
+        std::cout << "No return container for tracks is provided!" << std::endl;
+        return false;
+    }
+
+    tracks->clear();
+
+    if (track_container_ == nullptr) {
+        // TODO: Exceptions
+        std::cout << "First compute tracks!" << std::endl;
+        return false;
+    }
+
+    if (max_frame_idx >= track_container_->get_video_len()) {
+        // TODO: Exceptions
+        std::cout << "No such frame:" << max_frame_idx
+                  << " Only has " << track_container_->get_video_len() << std::endl;
+        return false;
+    }
+
+    if (min_frame_idx > max_frame_idx) {
+        // TODO: Exceptions
+        std::cout << "min_frame_idx must be <= than max_frame_idx. Got:" << min_frame_idx
+                  << " <= " << max_frame_idx << std::endl;
+        return false;
+    }
+
+    *tracks = track_container_->get_slice(min_frame_idx, max_frame_idx);
 
     return true;
 }
@@ -223,6 +287,33 @@ bool MarkUp::delete_track(size_t id) {
     }
 
     return this->track_container_->delete_track(id);
+}
+
+bool MarkUp::interpolate_track(size_t track_id, size_t from_frame_idx, size_t to_frame_idx) {
+    if (track_container_ == nullptr) {
+        // TODO: Exceptions
+        std::cout << "First compute tracks!" << std::endl;
+        return false;
+    }
+
+    if (!this->track_container_->has_track(track_id)) {
+        // TODO: Exceptions
+        std::cout << "No such track found:" << track_id << std::endl;
+        return false;
+    }
+
+    if (to_frame_idx < from_frame_idx) {
+        std::swap(from_frame_idx, to_frame_idx);
+    }
+
+    if (to_frame_idx >= track_container_->get_video_len()) {
+        // TODO: Exceptions
+        std::cout << "No such frame:" << to_frame_idx
+                  << " Only has " << track_container_->get_video_len() << std::endl;
+        return false;
+    }
+
+    return track_container_->interpolate_track(track_id, from_frame_idx, to_frame_idx);
 }
 
 bool MarkUp::split_track(size_t track_id, size_t frame2split_idx) {

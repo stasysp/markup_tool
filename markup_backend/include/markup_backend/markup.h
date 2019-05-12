@@ -3,7 +3,7 @@
 #include <string>
 #include <tuple>
 
-#include "markup_backend/nn_model.h"
+#include "markup_backend/definitions.h"
 #include "markup_backend/tracks.h"
 #include "markup_backend/video.h"
 #include "markup_backend/utils.h"
@@ -28,7 +28,15 @@ struct PipelineRunParams {
 class MarkUp {
 public:
     bool get_frame(size_t frame_idx,
-                   std::vector<Detection>* detections);
+                   std::vector<Detection>* detections) const;
+
+    bool get_frame(size_t frame_idx,
+                   std::vector<DetectionAndTrack>* detections,
+                   size_t max_frames_before=20, size_t max_frames_after=20) const;
+
+    // Returns [a, b)
+    bool get_slice(size_t min_frame_idx, size_t max_frame_idx,
+                    std::map<size_t, std::vector<Detection>>* tracks) const;
 
     bool set_model(const std::string& model_path,
                    const std::string& weights_path);
@@ -40,6 +48,8 @@ public:
     bool run();
 
     bool split_track(size_t track_id, size_t frame2split_idx);
+
+    bool interpolate_track(size_t track_id, size_t from_frame_idx, size_t to_frame_idx);
 
     bool unite_tracks(size_t track_id_one, size_t track_id_two);
 
@@ -58,6 +68,8 @@ public:
     bool load_markup(const std::string& path2file);
 
     bool save_markup(const std::string& path2file);
+
+
 
 private:
     PipelineRunParams params_;

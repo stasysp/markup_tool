@@ -43,11 +43,16 @@ void FrameView::mousePressEvent(QMouseEvent *event) {
     }
 }
 
+// осторожно! магическая константа - минимальная диагональ равна 30
 void FrameView::mouseReleaseEvent(QMouseEvent *event) {
     if (mousePressed) {
         mousePressed = false;
         tempRect.setBottomRight(getImagePoint(event));
-        send_add_bbox(tempRect);
+        int hypot_sqr = tempRect.height() * tempRect.height() +
+                tempRect.width() * tempRect.width();
+        if (1000 < hypot_sqr) {
+            send_add_bbox(tempRect);
+        }
     }
 }
 
@@ -95,6 +100,15 @@ void FrameView::set_scene() {
                 scene->addRect(iter->getScaledRect(), pen, brush);
             } else {
                 scene->addRect(iter->getScaledRect(), pen);
+            }
+
+            auto track = iter->getTrackLine();
+            color = QColor::fromHsv((67 * key) % 360, 255, 255, 255);
+
+            int RADIUS = 6;
+            for (auto it = track.begin(); it != track.end(); ++it) {
+                scene->addEllipse(it->x() - RADIUS, it->y() - RADIUS,
+                                  2*RADIUS, 2*RADIUS, QPen(color, RADIUS));
             }
         }
 

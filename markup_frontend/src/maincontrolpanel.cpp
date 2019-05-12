@@ -11,17 +11,18 @@
 
 MainControlPanel::MainControlPanel(QWidget *parent) : QWidget(parent)
 {
-    selectmodel = new QComboBox();
-    selectmodel->addItem("SSD");
-    selectmodel->addItem("DarkNet");
+    //selectmodel = new QComboBox();
+    //selectmodel->addItem("SSD");
+    //selectmodel->addItem("DarkNet");
 
     loadvideo = new QPushButton("Load Video");
     loadtracks = new QPushButton("Load Tracks");
     savetracks = new QPushButton("Save Tracks");
     run = new QPushButton("Run Object Tracking");
     play = new QPushButton("Play Video");
+    step_forward = new QPushButton("Step Forward");
+    step_backward = new QPushButton("Step Backward");
 
-    // QGridLayout *layout = new QGridLayout(this);
     QVBoxLayout *layout = new QVBoxLayout(this);
     QLabel *lbl = new QLabel();
     lbl->setSizePolicy(QSizePolicy());
@@ -30,10 +31,10 @@ MainControlPanel::MainControlPanel(QWidget *parent) : QWidget(parent)
     int BIGSPACE = 2;
     int SMALLSPACE = 1;
 
-    layout->addStretch(SMALLSPACE);
-    layout->addWidget(lbl);
-    layout->addWidget(selectmodel);
-    layout->addStretch(BIGSPACE);
+    layout->addStretch(4 * SMALLSPACE);
+    //layout->addWidget(lbl);
+    //layout->addWidget(selectmodel);
+    //layout->addStretch(BIGSPACE);
     layout->addWidget(loadvideo);
     layout->addStretch(SMALLSPACE);
     layout->addWidget(loadtracks);
@@ -42,6 +43,10 @@ MainControlPanel::MainControlPanel(QWidget *parent) : QWidget(parent)
     layout->addStretch(SMALLSPACE);
     layout->addWidget(run);
     layout->addStretch(BIGSPACE);
+    layout->addWidget(step_forward);
+    layout->addStretch(SMALLSPACE);
+    layout->addWidget(step_backward);
+    layout->addStretch(SMALLSPACE);
     layout->addWidget(play);
     layout->addStretch(SMALLSPACE);
 
@@ -50,6 +55,8 @@ MainControlPanel::MainControlPanel(QWidget *parent) : QWidget(parent)
     connect(savetracks, &QPushButton::clicked, this, &MainControlPanel::slot_savetracks);
     connect(run, &QPushButton::clicked, this, &MainControlPanel::slot_run);
     connect(play, &QPushButton::clicked, this, &MainControlPanel::slot_play);
+    connect(step_forward, &QPushButton::clicked, this, &MainControlPanel::slot_step_forward);
+    connect(step_backward, &QPushButton::clicked, this, &MainControlPanel::slot_step_backward);
 }
 
 void MainControlPanel::slot_loadvideo() {
@@ -85,4 +92,12 @@ void MainControlPanel::slot_play() {
     // блокировать панели редактирования
     // запустить воспроизведение кадров (т.е. инкрементить кадры)
     // ждать сигнала стоп.
+}
+
+void MainControlPanel::slot_step_forward() {
+    emit send_move_all_frames(1);
+}
+
+void MainControlPanel::slot_step_backward() {
+    emit send_move_all_frames(-1);
 }

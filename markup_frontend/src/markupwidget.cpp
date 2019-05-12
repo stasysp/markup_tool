@@ -29,6 +29,7 @@ MarkupWidget::MarkupWidget(QWidget *parent)
     connect(maincontrol, &MainControlPanel::send_tracks_path, this, &MarkupWidget::slot_set_tracks_path);
     connect(maincontrol, &MainControlPanel::send_savetracks, this, &MarkupWidget::slot_savetracks);
     connect(maincontrol, &MainControlPanel::send_run, this, &MarkupWidget::slot_run);
+    connect(maincontrol, &MainControlPanel::send_move_all_frames, this, &MarkupWidget::slot_add_frame_idx_for_all_frameview);
 
     connect(fwcup, &FrameWithControl::send_framechanged, this, &MarkupWidget::slot_framechanged);
     connect(fwcup, &FrameWithControl::send_add_bbox, this, &MarkupWidget::slot_add_bbox);
@@ -36,6 +37,7 @@ MarkupWidget::MarkupWidget(QWidget *parent)
     connect(fwcup, &FrameWithControl::send_delete_track, this, &MarkupWidget::slot_delete_track);
     connect(fwcup, &FrameWithControl::send_split_track, this, &MarkupWidget::slot_split_track);
     connect(fwcup, &FrameWithControl::send_unite_tracks, this, &MarkupWidget::slot_unite_tracks);
+    connect(fwcup, &FrameWithControl::send_interpolate, this, &MarkupWidget::slot_interpolate);
 
     connect(fwcdn, &FrameWithControl::send_framechanged, this, &MarkupWidget::slot_framechanged);
     connect(fwcdn, &FrameWithControl::send_add_bbox, this, &MarkupWidget::slot_add_bbox);
@@ -43,6 +45,7 @@ MarkupWidget::MarkupWidget(QWidget *parent)
     connect(fwcdn, &FrameWithControl::send_delete_track, this, &MarkupWidget::slot_delete_track);
     connect(fwcdn, &FrameWithControl::send_split_track, this, &MarkupWidget::slot_split_track);
     connect(fwcdn, &FrameWithControl::send_unite_tracks, this, &MarkupWidget::slot_unite_tracks);
+    connect(fwcdn, &FrameWithControl::send_interpolate, this, &MarkupWidget::slot_interpolate);
 }
 
 void MarkupWidget::slot_set_video_path(QDir path) {
@@ -72,11 +75,18 @@ void MarkupWidget::slot_run() {
 void MarkupWidget::slot_framechanged(FrameWithControl *fwc) {
     int frameidx = fwc->getFrameIdx();
     QMap<int, ScaledBBox> bboxes;
-    std::vector<Detection> detections;
+    std::vector<DetectionAndTrack> detections;
 
     if (markup.get_frame(frameidx, &detections)) {
         for (auto det : detections) {
-            bboxes[det.id] = ScaledBBox(det);
+            ScaledBBox bbox = ScaledBBox(det);
+            QVector<QPoint> track_line;
+            for (auto point : det.track) {
+                track_line.push_back(QPoint(point.x, point.y));
+            }
+            // qDebug() << track_line;
+            bbox.setTrackLine(track_line, det.get_first_frame_idx());
+            bboxes[det.track_id] = bbox;
         }
     }
 
@@ -107,6 +117,18 @@ void MarkupWidget::slot_split_track(int track_id, int frameidx) {
 void MarkupWidget::slot_unite_tracks() {
     markup.unite_tracks(fwcup->getTrackOnFocus(), fwcdn->getTrackOnFocus());
     update();
+}
+
+void MarkupWidget::slot_interpolate() {
+    slot_unite_tracks();
+    markup.interpolate_track(fwcup->getTrackOnFocus(),
+                             fwcup->getFrameIdx(), fwcdn->getFrameIdx());
+    update();
+}
+
+void MarkupWidget::slot_add_frame_idx_for_all_frameview(int move) {
+    fwcup->addFrameIdx(move);
+    fwcdn->addFrameIdx(move);
 }
 
 void MarkupWidget::update() {

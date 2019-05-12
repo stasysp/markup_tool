@@ -2,6 +2,7 @@
 
 #include <list>
 #include <memory>
+#include <map>
 
 #include <iostream>
 
@@ -34,11 +35,17 @@ public:
     bool delete_detection(size_t track_id, size_t frame_idx);
     bool unite_tracks(size_t id_A, size_t id_B);
     bool split_track(size_t track_id, size_t frame_idx);
+    bool interpolate_track(size_t track_id, size_t from_frame_idx, size_t to_frame_idx);
     size_t create_new_track(const Detection& det);
+    std::vector<DetectionAndTrack> get_tracks_and_detections(size_t frame_idx_,
+                                                             size_t max_frames_before,
+                                                             size_t max_frames_after);
 
     std::unique_ptr<Track> get_track(size_t id);
 
     std::vector<Detection> get_detections(size_t frame_idx) const;
+
+    std::map<size_t, std::vector<Detection>> get_slice(size_t min_frame_idx, size_t max_frame_idx) const;
 
     size_t get_video_len() const;
     size_t get_num_tracks() const;

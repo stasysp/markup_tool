@@ -26,6 +26,7 @@ public:
     QPushButton *btn_del_track = nullptr;
     QPushButton *btn_unt_track = nullptr;
     QPushButton *btn_spl_track = nullptr;
+    QPushButton *btn_interpolate = nullptr;
     TimeLineControl *timeline = nullptr;
 
 private:

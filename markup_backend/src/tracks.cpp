@@ -25,6 +25,15 @@ void Track::del(size_t frame_idx) {
     }
 }
 
+bool Track::has(size_t frame_idx) const {
+    for (const auto& det : detections_) {
+        if (det.frame == frame_idx) {
+            return true;
+        }
+    }
+    return false;
+}
+
 std::unique_ptr<Detection> Track::get_last_detection() {
     if (detections_.empty()) {
         return nullptr;
@@ -92,3 +101,33 @@ std::unique_ptr<Detection> Track::get_detection(size_t frame_idx) {
     return nullptr;
 }
 
+DetectionAndTrack Track::make_detection_track(size_t frame_idx,
+                                       size_t max_frames_before,
+                                       size_t max_frames_after) {
+    DetectionAndTrack det_n_track;
+
+    det_n_track.track_id = this->get_id();
+    assert(this->has(frame_idx));
+
+    auto current_det = this->get_detection(frame_idx);
+    assert(current_det != nullptr);
+
+    det_n_track.frame_idx = frame_idx;
+
+    int min_frame = int(frame_idx) - int(max_frames_before);
+    int max_frame = int(frame_idx) + int(max_frames_after);
+
+    for (auto det : this->detections_) {
+        if (min_frame <= int(det.frame) && int(det.frame) <= max_frame) {
+            det_n_track.track_frames.push_back(det.frame);
+            det_n_track.track.emplace_back(cv::Point2i(det.bbox.x + det.bbox.width / 2, det.bbox.y + det.bbox.height / 2));
+        }
+    }
+
+    assert(!det_n_track.track_frames.empty());
+    assert(!det_n_track.track.empty());
+
+    det_n_track.bbox = current_det->bbox;
+
+    return det_n_track;
+}

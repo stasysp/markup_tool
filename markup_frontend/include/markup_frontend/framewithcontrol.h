@@ -22,6 +22,7 @@ signals:
     void send_delete_track(int track_id);
     void send_split_track(int track_id, int frameidx);
     void send_unite_tracks();
+    void send_interpolate();
 
 public slots:
     void slot_add_bbox(QRect bbox);
@@ -29,6 +30,7 @@ public slots:
     void slot_delete_track();
     void slot_split_track();
     void slot_unite_tracks();
+    void slot_interpolate();
     void setFrameIdx(int idx);
     void addFrameIdx(int move);
     void doOnFrameChange();
